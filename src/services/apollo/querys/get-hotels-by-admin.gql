@@ -1,0 +1,10 @@
+query hotelsByAdmin {
+  hotelsByAdmin {
+    id
+    name
+    summary
+    thumbnail
+    slug
+    address
+  }
+}
