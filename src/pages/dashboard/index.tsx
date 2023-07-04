@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 
-import { logoutAuthUser } from "../../services/apollo/variables/user";
+import { logoutAuthUser } from "../../services/apollo/user/variables/user";
 
 export const DashBoardPage = () => {
   return (

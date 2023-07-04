@@ -1,4 +1,4 @@
-type LocalStorageKeys = "token";
+type LocalStorageKeys = "token" | "user";
 
 export class LocalStorageService {
   private static instance: LocalStorageService;

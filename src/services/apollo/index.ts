@@ -1,12 +1,11 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
 import { LocalStorageService } from "../local-storage";
-
-import { authUser } from "./variables/user";
+import { authUser } from "./user/variables/user";
 
 export const client = new ApolloClient({
   link: new HttpLink({
-    uri: "https://fairland-resort-api.onrender.com/graphql",
+    uri: "http://localhost:5000/graphql",
     headers: {
       authorization: `Bearer ${LocalStorageService.getInstance().getItem(
         "token"
@@ -20,6 +19,14 @@ export const client = new ApolloClient({
         fields: {
           authUser: {
             read() {
+              // const user = LocalStorageService.getInstance().getItem("user");
+
+              // if (!user) {
+              //   return null;
+              // }
+
+              // return JSON.parse(user);
+
               return authUser();
             },
           },

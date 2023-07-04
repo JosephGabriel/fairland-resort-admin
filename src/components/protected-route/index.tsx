@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-import { useAuthUserQuery } from "../../services/apollo/variables/user";
+import { useAuthUserQuery } from "../../services/apollo/user/variables/user";
 
 export const ProtectedRoute = () => {
   const { data } = useAuthUserQuery();

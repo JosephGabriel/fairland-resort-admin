@@ -12,7 +12,7 @@ import {
 
 import { useLoginUserMutation } from "../../services/apollo/generated";
 import { LocalStorageService } from "../../services/local-storage";
-import { authUser } from "../../services/apollo/variables/user";
+import { authUser } from "../../services/apollo/user/variables/user";
 
 import { initialValues, validationSchema } from "./utils";
 
@@ -50,6 +50,11 @@ export const LoginPage = () => {
           LocalStorageService.getInstance().setItem(
             "token",
             `${data?.loginUser.token}`
+          );
+
+          LocalStorageService.getInstance().setItem(
+            "user",
+            JSON.stringify(data?.loginUser.user)
           );
 
           authUser(data?.loginUser.user);

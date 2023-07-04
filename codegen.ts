@@ -3,17 +3,27 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   overwrite: true,
   watch: true,
-  schema: "https://fairland-resort-api.onrender.com/graphql",
-  documents: "src/**/*.gql",
+  schema: "http://localhost:5000/graphql",
+  documents: "src/**/*.graphql",
   generates: {
-    "src/services/apollo/generated.tsx": {
+    "src/services/apollo/generated.ts": {
       plugins: [
         "typescript",
         "typescript-operations",
         "typescript-react-apollo",
       ],
       config: {
+        skipTypename: true,
         withHooks: true,
+        reactApolloVersion: 3,
+        strictScalars: true,
+        scalars: {
+          EmailAddress: "string",
+          Latitude: "number",
+          Longitude: "number",
+          Password: "string",
+          PostalCode: "string",
+        },
       },
     },
   },

@@ -15,21 +15,19 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  EmailAddress: { input: any; output: any; }
-  Latitude: { input: any; output: any; }
-  Longitude: { input: any; output: any; }
-  Password: { input: any; output: any; }
-  PostalCode: { input: any; output: any; }
+  EmailAddress: { input: string; output: string; }
+  Latitude: { input: number; output: number; }
+  Longitude: { input: number; output: number; }
+  Password: { input: string; output: string; }
+  PostalCode: { input: string; output: string; }
 };
 
 export type AuthPayload = {
-  __typename?: 'AuthPayload';
   token: Scalars['String']['output'];
   user: User;
 };
 
 export type Booking = {
-  __typename?: 'Booking';
   /** Data em qua a reserva foi feita */
   bookingDate: Scalars['String']['output'];
   /** Data de entrada da reserva */
@@ -90,7 +88,6 @@ export type CreateUserInput = {
 };
 
 export type Hotel = {
-  __typename?: 'Hotel';
   /** Endereço do hotel */
   address?: Maybe<Scalars['String']['output']>;
   /** Número residencial do hotel */
@@ -129,7 +126,6 @@ export type LoginUserInput = {
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
   /** Usada para criar um admin */
   createAdmin: AuthPayload;
   /** Usada para fazer uma reserva */
@@ -230,7 +226,6 @@ export type MutationUpdateUserPasswordArgs = {
 };
 
 export type Query = {
-  __typename?: 'Query';
   /** Usada para buscar uma reserva pelo id */
   booking: Booking;
   /** Usada para buscar reservas de um usuário */
@@ -282,7 +277,6 @@ export type QueryRoomsByHotelArgs = {
 };
 
 export type Review = {
-  __typename?: 'Review';
   /** Id da review */
   id: Scalars['ID']['output'];
   /** Classificação da review */
@@ -296,7 +290,6 @@ export type Review = {
 };
 
 export type Room = {
-  __typename?: 'Room';
   /** Uma descrição do quarto */
   description: Scalars['String']['output'];
   /** Hotel a qual o quarto pertence */
@@ -360,7 +353,6 @@ export type UpdateUserPasswordInput = {
 };
 
 export type User = {
-  __typename?: 'User';
   /** Mostra se o usuário esta ativo ou não */
   active: Scalars['Boolean']['output'];
   /** Url da imagem de perfil de cada usuário */
@@ -394,105 +386,59 @@ export enum UserRole {
   User = 'USER'
 }
 
-export type CreateAdminMutationVariables = Exact<{
-  data: CreateUserInput;
-}>;
-
-
-export type CreateAdminMutation = { __typename?: 'Mutation', createAdmin: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, firstName: string, lastName: string, userName: string, email: any, avatar?: string | null, password: any, passwordChangedAt?: string | null, role: UserRole, active: boolean, verified: boolean } } };
-
 export type CreateHotelMutationVariables = Exact<{
   data: CreateHotelInput;
 }>;
 
 
-export type CreateHotelMutation = { __typename?: 'Mutation', createHotel: { __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, slug: string, address?: string | null } };
+export type CreateHotelMutation = { createHotel: { id: string, name: string, summary: string, thumbnail: string, slug: string, address?: string | null } };
 
 export type DeleteHotelMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DeleteHotelMutation = { __typename?: 'Mutation', deleteHotel: string };
-
-export type LoginUserMutationVariables = Exact<{
-  data: LoginUserInput;
-}>;
-
-
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
+export type DeleteHotelMutation = { deleteHotel: string };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetHotelBySlugQuery = { __typename?: 'Query', hotelBySlug: { __typename?: 'Hotel', id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, slug: string, latitude?: any | null, longitude?: any | null, address?: string | null, addressNumber?: string | null, zipCode?: any | null } };
+export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, slug: string, latitude?: number | null, longitude?: number | null, address?: string | null, addressNumber?: string | null, zipCode?: string | null } };
 
 export type GetHotelQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetHotelQuery = { __typename?: 'Query', hotel: { __typename?: 'Hotel', id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude?: any | null } };
+export type GetHotelQuery = { hotel: { id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude?: number | null } };
 
 export type HotelsByAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HotelsByAdminQuery = { __typename?: 'Query', hotelsByAdmin?: Array<{ __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, slug: string, address?: string | null }> | null };
+export type HotelsByAdminQuery = { hotelsByAdmin?: Array<{ id: string, name: string, summary: string, thumbnail: string, slug: string, address?: string | null }> | null };
 
 export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllHotelsQuery = { __typename?: 'Query', hotels?: Array<{ __typename?: 'Hotel', id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude?: any | null, slug: string, address?: string | null, addressNumber?: string | null, zipCode?: any | null }> | null };
+export type GetAllHotelsQuery = { hotels?: Array<{ id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude?: number | null, slug: string, address?: string | null, addressNumber?: string | null, zipCode?: string | null }> | null };
+
+export type CreateAdminMutationVariables = Exact<{
+  data: CreateUserInput;
+}>;
 
 
-export const CreateAdminDocument = gql`
-    mutation CreateAdmin($data: CreateUserInput!) {
-  createAdmin(data: $data) {
-    token
-    user {
-      id
-      firstName
-      lastName
-      userName
-      email
-      avatar
-      password
-      passwordChangedAt
-      role
-      active
-      verified
-    }
-  }
-}
-    `;
-export type CreateAdminMutationFn = Apollo.MutationFunction<CreateAdminMutation, CreateAdminMutationVariables>;
+export type CreateAdminMutation = { createAdmin: { token: string, user: { id: string, firstName: string, lastName: string, userName: string, email: string, avatar?: string | null, password: string, passwordChangedAt?: string | null, role: UserRole, active: boolean, verified: boolean } } };
 
-/**
- * __useCreateAdminMutation__
- *
- * To run a mutation, you first call `useCreateAdminMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAdminMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createAdminMutation, { data, loading, error }] = useCreateAdminMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateAdminMutation(baseOptions?: Apollo.MutationHookOptions<CreateAdminMutation, CreateAdminMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAdminMutation, CreateAdminMutationVariables>(CreateAdminDocument, options);
-      }
-export type CreateAdminMutationHookResult = ReturnType<typeof useCreateAdminMutation>;
-export type CreateAdminMutationResult = Apollo.MutationResult<CreateAdminMutation>;
-export type CreateAdminMutationOptions = Apollo.BaseMutationOptions<CreateAdminMutation, CreateAdminMutationVariables>;
+export type LoginUserMutationVariables = Exact<{
+  data: LoginUserInput;
+}>;
+
+
+export type LoginUserMutation = { loginUser: { token: string, user: { id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
+
+
 export const CreateHotelDocument = gql`
     mutation CreateHotel($data: CreateHotelInput!) {
   createHotel(data: $data) {
@@ -562,48 +508,6 @@ export function useDeleteHotelMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteHotelMutationHookResult = ReturnType<typeof useDeleteHotelMutation>;
 export type DeleteHotelMutationResult = Apollo.MutationResult<DeleteHotelMutation>;
 export type DeleteHotelMutationOptions = Apollo.BaseMutationOptions<DeleteHotelMutation, DeleteHotelMutationVariables>;
-export const LoginUserDocument = gql`
-    mutation LoginUser($data: LoginUserInput!) {
-  loginUser(data: $data) {
-    token
-    user {
-      id
-      role
-      avatar
-      active
-      firstName
-      lastName
-      verified
-    }
-  }
-}
-    `;
-export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
-
-/**
- * __useLoginUserMutation__
- *
- * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
-      }
-export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
-export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
-export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
 export const GetHotelBySlugDocument = gql`
     query GetHotelBySlug($slug: String!) {
   hotelBySlug(slug: $slug) {
@@ -780,3 +684,91 @@ export function useGetAllHotelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetAllHotelsQueryHookResult = ReturnType<typeof useGetAllHotelsQuery>;
 export type GetAllHotelsLazyQueryHookResult = ReturnType<typeof useGetAllHotelsLazyQuery>;
 export type GetAllHotelsQueryResult = Apollo.QueryResult<GetAllHotelsQuery, GetAllHotelsQueryVariables>;
+export const CreateAdminDocument = gql`
+    mutation CreateAdmin($data: CreateUserInput!) {
+  createAdmin(data: $data) {
+    token
+    user {
+      id
+      firstName
+      lastName
+      userName
+      email
+      avatar
+      password
+      passwordChangedAt
+      role
+      active
+      verified
+    }
+  }
+}
+    `;
+export type CreateAdminMutationFn = Apollo.MutationFunction<CreateAdminMutation, CreateAdminMutationVariables>;
+
+/**
+ * __useCreateAdminMutation__
+ *
+ * To run a mutation, you first call `useCreateAdminMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAdminMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAdminMutation, { data, loading, error }] = useCreateAdminMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateAdminMutation(baseOptions?: Apollo.MutationHookOptions<CreateAdminMutation, CreateAdminMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAdminMutation, CreateAdminMutationVariables>(CreateAdminDocument, options);
+      }
+export type CreateAdminMutationHookResult = ReturnType<typeof useCreateAdminMutation>;
+export type CreateAdminMutationResult = Apollo.MutationResult<CreateAdminMutation>;
+export type CreateAdminMutationOptions = Apollo.BaseMutationOptions<CreateAdminMutation, CreateAdminMutationVariables>;
+export const LoginUserDocument = gql`
+    mutation LoginUser($data: LoginUserInput!) {
+  loginUser(data: $data) {
+    token
+    user {
+      id
+      role
+      avatar
+      active
+      firstName
+      lastName
+      verified
+    }
+  }
+}
+    `;
+export type LoginUserMutationFn = Apollo.MutationFunction<LoginUserMutation, LoginUserMutationVariables>;
+
+/**
+ * __useLoginUserMutation__
+ *
+ * To run a mutation, you first call `useLoginUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginUserMutation, { data, loading, error }] = useLoginUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<LoginUserMutation, LoginUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginUserMutation, LoginUserMutationVariables>(LoginUserDocument, options);
+      }
+export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
+export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
+export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;

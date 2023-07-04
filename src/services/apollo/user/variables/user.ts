@@ -1,6 +1,6 @@
 import { gql, makeVar, useQuery } from "@apollo/client";
 
-import { Maybe, LoginUserMutation as User } from "../generated";
+import { Maybe, LoginUserMutation as User } from "../../generated";
 
 interface AuthUserQuery {
   authUser: User["loginUser"]["user"];
