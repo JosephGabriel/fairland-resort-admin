@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 
 import { useLoginUserMutation } from "../../services/apollo/generated";
+import { LocalStorageService } from "../../services/local-storage";
+import { authUser } from "../../services/apollo/variables/user";
 
 import { initialValues, validationSchema } from "./utils";
 
@@ -44,8 +46,13 @@ export const LoginPage = () => {
           setErrorMessage(error.message);
           setIsOpen(true);
         },
-        onCompleted(data) {
-          alert(JSON.stringify(data));
+        update(_, { data }) {
+          LocalStorageService.getInstance().setItem(
+            "token",
+            `${data?.loginUser.token}`
+          );
+
+          authUser(data?.loginUser.user);
         },
       });
     },
