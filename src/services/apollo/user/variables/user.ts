@@ -1,5 +1,6 @@
 import { gql, makeVar, useQuery } from "@apollo/client";
 
+import { LocalStorageService } from "../../../local-storage";
 import { Maybe, LoginUserMutation as User } from "../../generated";
 
 interface AuthUserQuery {
@@ -20,8 +21,16 @@ export const AUTH_USER_QUERY = gql`
   }
 `;
 
-export const authUser = makeVar<Maybe<User["loginUser"]["user"]>>(null);
+export const authUser = makeVar<Maybe<User["loginUser"]["user"]>>(
+  LocalStorageService.getInstance().getItem("user")
+    ? JSON.parse(LocalStorageService.getInstance().getItem("user") ?? "")
+    : null
+);
 
 export const useAuthUserQuery = () => useQuery<AuthUserQuery>(AUTH_USER_QUERY);
 
-export const logoutAuthUser = () => authUser(null);
+export const logoutAuthUser = () => {
+  LocalStorageService.getInstance().removeItem("user");
+
+  authUser(null);
+};

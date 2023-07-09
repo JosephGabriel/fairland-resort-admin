@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -42,7 +42,7 @@ export const Navbar = () => {
     <>
       <Material.TopBar position="sticky">
         <Toolbar>
-          <IconButton onClick={() => setOpen(true)}>
+          <IconButton onClick={() => setOpen((prev) => !prev)}>
             <Menu />
           </IconButton>
         </Toolbar>
@@ -59,7 +59,7 @@ export const Navbar = () => {
         <Box>
           <List>
             {drawerItems.map((item, index) => (
-              <>
+              <Fragment key={index}>
                 <Link
                   to={`/dashboard${item.link}`}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -72,7 +72,7 @@ export const Navbar = () => {
                   </ListItem>
                 </Link>
                 {index === drawerItems.length - 1 ? null : <Divider />}
-              </>
+              </Fragment>
             ))}
           </List>
         </Box>

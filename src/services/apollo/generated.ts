@@ -56,12 +56,15 @@ export type CreateBookingInput = {
 export type CreateHotelInput = {
   address: Scalars['String']['input'];
   addressNumber: Scalars['String']['input'];
+  city: Scalars['String']['input'];
   description: Scalars['String']['input'];
-  images?: InputMaybe<Array<Scalars['String']['input']>>;
+  images: InputMaybe<Array<Scalars['String']['input']>>;
   latitude: Scalars['Latitude']['input'];
   logo: Scalars['String']['input'];
   longitude: Scalars['Longitude']['input'];
   name: Scalars['String']['input'];
+  neighborhood: Scalars['String']['input'];
+  state: Scalars['String']['input'];
   summary: Scalars['String']['input'];
   thumbnail: Scalars['String']['input'];
   zipCode: Scalars['PostalCode']['input'];
@@ -70,7 +73,7 @@ export type CreateHotelInput = {
 export type CreateRoomInput = {
   description: Scalars['String']['input'];
   hotel: Scalars['ID']['input'];
-  images?: InputMaybe<Array<Scalars['String']['input']>>;
+  images: InputMaybe<Array<Scalars['String']['input']>>;
   name: Scalars['String']['input'];
   price: Scalars['Float']['input'];
   summary: Scalars['String']['input'];
@@ -78,7 +81,7 @@ export type CreateRoomInput = {
 };
 
 export type CreateUserInput = {
-  avatar?: InputMaybe<Scalars['String']['input']>;
+  avatar: InputMaybe<Scalars['String']['input']>;
   email: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
@@ -88,36 +91,42 @@ export type CreateUserInput = {
 };
 
 export type Hotel = {
-  /** Endereço do hotel */
-  address?: Maybe<Scalars['String']['output']>;
+  /** Rua do hotel */
+  address: Scalars['String']['output'];
   /** Número residencial do hotel */
-  addressNumber?: Maybe<Scalars['String']['output']>;
+  addressNumber: Scalars['String']['output'];
+  /** Cidade do hotel */
+  city: Scalars['String']['output'];
   /** A descrição do hotel */
   description: Scalars['String']['output'];
   /** Id do hotel */
   id: Scalars['ID']['output'];
   /** Um array de url's de imagens de hoteis */
-  images?: Maybe<Array<Scalars['String']['output']>>;
+  images: Maybe<Array<Scalars['String']['output']>>;
   /** Latitude do hotel */
-  latitude?: Maybe<Scalars['Latitude']['output']>;
+  latitude: Scalars['Latitude']['output'];
   /** Url da logo do hotel */
   logo: Scalars['String']['output'];
   /** Longitude do hotel */
-  longitude?: Maybe<Scalars['Longitude']['output']>;
+  longitude: Scalars['Longitude']['output'];
   /** Nome do hotel */
   name: Scalars['String']['output'];
+  /** Bairro do hotel */
+  neighborhood: Scalars['String']['output'];
   /** Classificação do hotel ex: 5 estrelas */
-  rating?: Maybe<Scalars['Int']['output']>;
+  rating: Maybe<Scalars['Int']['output']>;
   /** Array com os quartos do hotel */
-  rooms?: Maybe<Array<Room>>;
+  rooms: Maybe<Array<Room>>;
   /** Slug do hotel baseado no nome */
   slug: Scalars['String']['output'];
+  /** Estado do hotel */
+  state: Scalars['String']['output'];
   /** Uma pequena descrição do hotel de 10 as 30 palavras */
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do hotel */
   thumbnail: Scalars['String']['output'];
   /** Cep do hotel */
-  zipCode?: Maybe<Scalars['PostalCode']['output']>;
+  zipCode: Scalars['PostalCode']['output'];
 };
 
 export type LoginUserInput = {
@@ -235,15 +244,15 @@ export type Query = {
   /** Usada para buscar um hotel pelo slug */
   hotelBySlug: Hotel;
   /** Usada para buscar hotéis */
-  hotels?: Maybe<Array<Hotel>>;
+  hotels: Maybe<Array<Hotel>>;
   /** Usada para buscar um hotel pelo slug */
-  hotelsByAdmin?: Maybe<Array<Hotel>>;
+  hotelsByAdmin: Maybe<Array<Hotel>>;
   /** Usada para buscar um quarto pelo id */
   room: Room;
   /** Usada para buscar um hotel pelo slug */
-  rooms?: Maybe<Array<Room>>;
+  rooms: Maybe<Array<Room>>;
   /** Usada para buscar um hotel pelo id do hotel */
-  roomsByHotel?: Maybe<Array<Room>>;
+  roomsByHotel: Maybe<Array<Room>>;
 };
 
 
@@ -268,7 +277,7 @@ export type QueryRoomArgs = {
 
 
 export type QueryRoomsArgs = {
-  filter?: InputMaybe<RoomFilter>;
+  filter: InputMaybe<RoomFilter>;
 };
 
 
@@ -297,13 +306,13 @@ export type Room = {
   /** Id do quarto */
   id: Scalars['ID']['output'];
   /** Um array de url's de imagens do quarto */
-  images?: Maybe<Array<Scalars['String']['output']>>;
+  images: Maybe<Array<Scalars['String']['output']>>;
   /** Nome do quarto */
   name: Scalars['String']['output'];
   /** Preço por noite do quarto */
   price: Scalars['Float']['output'];
   /** Classificação do quarto ex: 5 estrelas */
-  rating?: Maybe<Scalars['Int']['output']>;
+  rating: Maybe<Scalars['Int']['output']>;
   /** Uma pequena descrição do quarto */
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do quarto */
@@ -311,40 +320,43 @@ export type Room = {
 };
 
 export type RoomFilter = {
-  maxPrice?: InputMaybe<Scalars['Float']['input']>;
-  maxRating?: InputMaybe<Scalars['Int']['input']>;
-  minPrice?: InputMaybe<Scalars['Float']['input']>;
-  minRating?: InputMaybe<Scalars['Int']['input']>;
+  maxPrice: InputMaybe<Scalars['Float']['input']>;
+  maxRating: InputMaybe<Scalars['Int']['input']>;
+  minPrice: InputMaybe<Scalars['Float']['input']>;
+  minRating: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateHotelInput = {
-  address?: InputMaybe<Scalars['String']['input']>;
-  addressNumber?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  images?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  latitude?: InputMaybe<Scalars['Latitude']['input']>;
-  logo?: InputMaybe<Scalars['String']['input']>;
-  longitude?: InputMaybe<Scalars['Longitude']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  summary?: InputMaybe<Scalars['String']['input']>;
-  thumbnail?: InputMaybe<Scalars['String']['input']>;
-  zipCode?: InputMaybe<Scalars['PostalCode']['input']>;
+  address: InputMaybe<Scalars['String']['input']>;
+  addressNumber: InputMaybe<Scalars['String']['input']>;
+  city: InputMaybe<Scalars['String']['input']>;
+  description: InputMaybe<Scalars['String']['input']>;
+  images: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  latitude: InputMaybe<Scalars['Latitude']['input']>;
+  logo: InputMaybe<Scalars['String']['input']>;
+  longitude: InputMaybe<Scalars['Longitude']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
+  neighborhood: InputMaybe<Scalars['String']['input']>;
+  state: InputMaybe<Scalars['String']['input']>;
+  summary: InputMaybe<Scalars['String']['input']>;
+  thumbnail: InputMaybe<Scalars['String']['input']>;
+  zipCode: InputMaybe<Scalars['PostalCode']['input']>;
 };
 
 export type UpdateRoomInput = {
-  images?: InputMaybe<Array<Scalars['String']['input']>>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  price?: InputMaybe<Scalars['Float']['input']>;
-  summary?: InputMaybe<Scalars['String']['input']>;
-  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  images: InputMaybe<Array<Scalars['String']['input']>>;
+  name: InputMaybe<Scalars['String']['input']>;
+  price: InputMaybe<Scalars['Float']['input']>;
+  summary: InputMaybe<Scalars['String']['input']>;
+  thumbnail: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
-  avatar?: InputMaybe<Scalars['String']['input']>;
-  email?: InputMaybe<Scalars['EmailAddress']['input']>;
-  firstName?: InputMaybe<Scalars['String']['input']>;
-  lastName?: InputMaybe<Scalars['String']['input']>;
-  userName?: InputMaybe<Scalars['String']['input']>;
+  avatar: InputMaybe<Scalars['String']['input']>;
+  email: InputMaybe<Scalars['EmailAddress']['input']>;
+  firstName: InputMaybe<Scalars['String']['input']>;
+  lastName: InputMaybe<Scalars['String']['input']>;
+  userName: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserPasswordInput = {
@@ -356,9 +368,9 @@ export type User = {
   /** Mostra se o usuário esta ativo ou não */
   active: Scalars['Boolean']['output'];
   /** Url da imagem de perfil de cada usuário */
-  avatar?: Maybe<Scalars['String']['output']>;
+  avatar: Maybe<Scalars['String']['output']>;
   /** Reservas do usúario */
-  bookings?: Maybe<Array<Booking>>;
+  bookings: Maybe<Array<Booking>>;
   /** Email único de cada usuário */
   email: Scalars['EmailAddress']['output'];
   /** Primeiro nome do usuário */
@@ -370,9 +382,9 @@ export type User = {
   /** Senha criptografada de cada usuário */
   password: Scalars['Password']['output'];
   /** Timestamp do momento em que o usuário mudou a senha */
-  passwordChangedAt?: Maybe<Scalars['String']['output']>;
+  passwordChangedAt: Maybe<Scalars['String']['output']>;
   /** Review feitas pelo usuário */
-  reviews?: Maybe<Array<Review>>;
+  reviews: Maybe<Array<Review>>;
   /** Enum do tipo de função (ADMIN | USER) */
   role: UserRole;
   /** Nome de usuário único de cada usuário */
@@ -391,7 +403,7 @@ export type CreateHotelMutationVariables = Exact<{
 }>;
 
 
-export type CreateHotelMutation = { createHotel: { id: string, name: string, summary: string, thumbnail: string, slug: string, address?: string | null } };
+export type CreateHotelMutation = { createHotel: { id: string, name: string, summary: string, thumbnail: string, slug: string, address: string } };
 
 export type DeleteHotelMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -405,38 +417,38 @@ export type GetHotelBySlugQueryVariables = Exact<{
 }>;
 
 
-export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, slug: string, latitude?: number | null, longitude?: number | null, address?: string | null, addressNumber?: string | null, zipCode?: string | null } };
+export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
 
 export type GetHotelQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetHotelQuery = { hotel: { id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude?: number | null } };
+export type GetHotelQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, latitude: number } };
 
-export type HotelsByAdminQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetHotelsByAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HotelsByAdminQuery = { hotelsByAdmin?: Array<{ id: string, name: string, summary: string, thumbnail: string, slug: string, address?: string | null }> | null };
+export type GetHotelsByAdminQuery = { hotelsByAdmin: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> | null };
 
 export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllHotelsQuery = { hotels?: Array<{ id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude?: number | null, slug: string, address?: string | null, addressNumber?: string | null, zipCode?: string | null }> | null };
+export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> | null };
 
 export type CreateAdminMutationVariables = Exact<{
   data: CreateUserInput;
 }>;
 
 
-export type CreateAdminMutation = { createAdmin: { token: string, user: { id: string, firstName: string, lastName: string, userName: string, email: string, avatar?: string | null, password: string, passwordChangedAt?: string | null, role: UserRole, active: boolean, verified: boolean } } };
+export type CreateAdminMutation = { createAdmin: { token: string, user: { id: string, firstName: string, lastName: string, userName: string, email: string, avatar: string | null, password: string, passwordChangedAt: string | null, role: UserRole, active: boolean, verified: boolean } } };
 
 export type LoginUserMutationVariables = Exact<{
   data: LoginUserInput;
 }>;
 
 
-export type LoginUserMutation = { loginUser: { token: string, user: { id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
+export type LoginUserMutation = { loginUser: { token: string, user: { id: string, role: UserRole, avatar: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
 
 
 export const CreateHotelDocument = gql`
@@ -599,45 +611,45 @@ export function useGetHotelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetHotelQueryHookResult = ReturnType<typeof useGetHotelQuery>;
 export type GetHotelLazyQueryHookResult = ReturnType<typeof useGetHotelLazyQuery>;
 export type GetHotelQueryResult = Apollo.QueryResult<GetHotelQuery, GetHotelQueryVariables>;
-export const HotelsByAdminDocument = gql`
-    query hotelsByAdmin {
+export const GetHotelsByAdminDocument = gql`
+    query GetHotelsByAdmin {
   hotelsByAdmin {
     id
     name
     summary
     thumbnail
-    slug
-    address
+    city
+    state
   }
 }
     `;
 
 /**
- * __useHotelsByAdminQuery__
+ * __useGetHotelsByAdminQuery__
  *
- * To run a query within a React component, call `useHotelsByAdminQuery` and pass it any options that fit your needs.
- * When your component renders, `useHotelsByAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetHotelsByAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHotelsByAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useHotelsByAdminQuery({
+ * const { data, loading, error } = useGetHotelsByAdminQuery({
  *   variables: {
  *   },
  * });
  */
-export function useHotelsByAdminQuery(baseOptions?: Apollo.QueryHookOptions<HotelsByAdminQuery, HotelsByAdminQueryVariables>) {
+export function useGetHotelsByAdminQuery(baseOptions?: Apollo.QueryHookOptions<GetHotelsByAdminQuery, GetHotelsByAdminQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<HotelsByAdminQuery, HotelsByAdminQueryVariables>(HotelsByAdminDocument, options);
+        return Apollo.useQuery<GetHotelsByAdminQuery, GetHotelsByAdminQueryVariables>(GetHotelsByAdminDocument, options);
       }
-export function useHotelsByAdminLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HotelsByAdminQuery, HotelsByAdminQueryVariables>) {
+export function useGetHotelsByAdminLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHotelsByAdminQuery, GetHotelsByAdminQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<HotelsByAdminQuery, HotelsByAdminQueryVariables>(HotelsByAdminDocument, options);
+          return Apollo.useLazyQuery<GetHotelsByAdminQuery, GetHotelsByAdminQueryVariables>(GetHotelsByAdminDocument, options);
         }
-export type HotelsByAdminQueryHookResult = ReturnType<typeof useHotelsByAdminQuery>;
-export type HotelsByAdminLazyQueryHookResult = ReturnType<typeof useHotelsByAdminLazyQuery>;
-export type HotelsByAdminQueryResult = Apollo.QueryResult<HotelsByAdminQuery, HotelsByAdminQueryVariables>;
+export type GetHotelsByAdminQueryHookResult = ReturnType<typeof useGetHotelsByAdminQuery>;
+export type GetHotelsByAdminLazyQueryHookResult = ReturnType<typeof useGetHotelsByAdminLazyQuery>;
+export type GetHotelsByAdminQueryResult = Apollo.QueryResult<GetHotelsByAdminQuery, GetHotelsByAdminQueryVariables>;
 export const GetAllHotelsDocument = gql`
     query GetAllHotels {
   hotels {

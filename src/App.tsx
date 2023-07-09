@@ -1,4 +1,5 @@
 import { CssBaseline, ThemeProvider, colors, createTheme } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ApolloProvider } from "@apollo/client";
 
 import { Navigation } from "./navigation";
@@ -6,13 +7,15 @@ import { Navigation } from "./navigation";
 import { client } from "./services/apollo";
 
 export const App = () => {
+  const queryClient = new QueryClient();
+
   const theme = createTheme({
     palette: {
       mode: "dark",
       primary: {
-        light: colors.blueGrey[400],
-        main: colors.blueGrey[500],
-        dark: colors.blueGrey[600],
+        light: "#a6d4fa",
+        main: "#90caf9",
+        dark: "#648dae",
       },
       secondary: {
         light: colors.orange[400],
@@ -24,10 +27,12 @@ export const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Navigation />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Navigation />
+        </ThemeProvider>
+      </QueryClientProvider>
     </ApolloProvider>
   );
 };

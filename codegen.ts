@@ -17,6 +17,7 @@ const config: CodegenConfig = {
         withHooks: true,
         reactApolloVersion: 3,
         strictScalars: true,
+        avoidOptionals: true,
         scalars: {
           EmailAddress: "string",
           Latitude: "number",

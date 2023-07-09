@@ -1,10 +1,10 @@
-query hotelsByAdmin {
+query GetHotelsByAdmin {
   hotelsByAdmin {
     id
     name
     summary
     thumbnail
-    slug
-    address
+    city
+    state
   }
 }

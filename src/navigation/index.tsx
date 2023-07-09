@@ -4,6 +4,7 @@ import { ProtectedRoute } from "../components/protected-route";
 import { NonProtectedRoute } from "../components/non-protected-route";
 
 import { LoginPage } from "../pages/login";
+import { HotelsPage } from "../pages/hotels";
 import { DashBoardPage } from "../pages/dashboard";
 
 export const Navigation = () => {
@@ -15,6 +16,7 @@ export const Navigation = () => {
 
       <Route path="/dashboard" element={<ProtectedRoute />}>
         <Route index element={<DashBoardPage />} />
+        <Route path="hotels" element={<HotelsPage />} />
       </Route>
     </Routes>
   );
