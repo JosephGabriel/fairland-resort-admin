@@ -11,6 +11,7 @@ import {
 
 export const CardContainer = styled(Card)(() => ({
   position: "relative",
+  height: "100%",
 }));
 
 export const MenuButton = styled(IconButton)(() => ({

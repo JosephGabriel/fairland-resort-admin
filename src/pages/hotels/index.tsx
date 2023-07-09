@@ -31,12 +31,12 @@ export const HotelsPage = () => {
           Adicionar Hotel
         </Material.AddButton>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems={"stretch"}>
           {data &&
             data.hotelsByAdmin?.map((hotel) => (
-              <Grid item md={3} key={hotel.id}>
+              <Material.GridItemCard item md={3} key={hotel.id}>
                 <CardHotel hotel={hotel} />
-              </Grid>
+              </Material.GridItemCard>
             ))}
         </Grid>
       </Material.Container>

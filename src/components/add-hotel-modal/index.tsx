@@ -92,8 +92,8 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
         onClose();
       },
       onCompleted() {
-        setActiveStep(0);
         formikRef.current?.resetForm();
+        setActiveStep(0);
         onClose();
       },
     });

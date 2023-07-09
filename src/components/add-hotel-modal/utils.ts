@@ -1,9 +1,5 @@
-import { Faker, es, pt_BR } from "@faker-js/faker";
+import { fakerPT_BR as faker } from "@faker-js/faker";
 import * as yup from "yup";
-
-const faker = new Faker({
-  locale: [pt_BR, es],
-});
 
 export const initialValues = {
   name: faker.company.name(),

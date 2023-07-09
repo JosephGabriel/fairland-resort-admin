@@ -108,7 +108,7 @@ export const SearchAddressStep = ({ formik }: Props) => {
           )}
         />
 
-        <Typography variant="body1">Endereço: </Typography>
+        {/* <Material.FormTitle variant="body1">Endereço: </Material.FormTitle> */}
 
         <CustomInput name="address" label={"Logradouro"} />
 

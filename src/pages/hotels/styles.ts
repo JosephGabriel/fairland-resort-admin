@@ -1,4 +1,4 @@
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Box, Button, Grid, Typography, styled } from "@mui/material";
 
 export const Container = styled(Box)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -15,4 +15,8 @@ export const Subtitle = styled(Typography)(({ theme }) => ({
 
 export const AddButton = styled(Button)(({ theme }) => ({
   marginBottom: theme.spacing(4),
+}));
+
+export const GridItemCard = styled(Grid)(() => ({
+  flex: 1,
 }));
