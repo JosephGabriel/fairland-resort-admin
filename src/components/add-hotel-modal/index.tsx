@@ -111,9 +111,9 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
           <DialogTitle>Adicionar um hotel</DialogTitle>
 
           <DialogContent>
-            <DialogContentText sx={{ marginBottom: "3rem" }}>
+            <Material.DialogText>
               Preencha os campos abaixo para adicionar um hotel
-            </DialogContentText>
+            </Material.DialogText>
 
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((step) => (

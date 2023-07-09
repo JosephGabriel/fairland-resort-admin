@@ -1,4 +1,4 @@
-import { Grid, IconButton, Paper, styled } from "@mui/material";
+import { Grid, IconButton, Paper, Typography, styled } from "@mui/material";
 
 export const Container = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -65,4 +65,9 @@ export const RemoveImageButton = styled(IconButton)(({ theme }) => ({
 
 export const UploadButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(2),
+}));
+
+export const LabelText = styled(Typography)(({ theme }) => ({
+  textAlign: "center",
+  marginTop: theme.spacing(1),
 }));

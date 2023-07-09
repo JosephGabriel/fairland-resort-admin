@@ -10,6 +10,8 @@ import { InitialValues } from "../add-hotel-modal/utils";
 
 import { searchAddress, NominatimResult } from "../../services/api";
 
+import * as Material from "./styles";
+
 interface RecenterProps {
   coordinates: number[];
 }
@@ -54,7 +56,7 @@ export const SearchAddressStep = ({ formik }: Props) => {
   }, [postCode, refetch]);
 
   return (
-    <Grid container spacing={2} alignItems="stretch" sx={{ marginTop: "2rem" }}>
+    <Material.Container container spacing={2} alignItems="stretch">
       <Grid item md={6}>
         <Autocomplete
           open={isOpen}
@@ -95,13 +97,12 @@ export const SearchAddressStep = ({ formik }: Props) => {
           }}
           getOptionLabel={(option) => option?.display_name ?? "Não encontrada"}
           renderInput={(params) => (
-            <TextField
+            <Material.SearchInput
               {...params}
               variant="outlined"
               fullWidth
               label="Pesquisar endereço"
               value={postCode}
-              sx={{ marginBottom: "2rem" }}
               onChange={(e) => setPostCode(e.target.value)}
             />
           )}
@@ -143,6 +144,6 @@ export const SearchAddressStep = ({ formik }: Props) => {
           )}
         </MapContainer>
       </Grid>
-    </Grid>
+    </Material.Container>
   );
 };

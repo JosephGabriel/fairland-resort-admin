@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -38,11 +38,20 @@ const drawerItems = [
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
 
+  const navigate = useNavigate();
+
+  const toggleOpen = () => setOpen((prev) => !prev);
+
+  const onNavigate = (link: string) => {
+    toggleOpen();
+    navigate(`/dashboard${link}`);
+  };
+
   return (
     <>
       <Material.TopBar position="sticky">
         <Toolbar>
-          <IconButton onClick={() => setOpen((prev) => !prev)}>
+          <IconButton onClick={toggleOpen}>
             <Menu />
           </IconButton>
         </Toolbar>
@@ -52,7 +61,7 @@ export const Navbar = () => {
         open={open}
         variant="temporary"
         anchor="left"
-        onClose={() => setOpen(false)}
+        onClose={toggleOpen}
       >
         <Toolbar />
 
@@ -60,17 +69,17 @@ export const Navbar = () => {
           <List>
             {drawerItems.map((item, index) => (
               <Fragment key={index}>
-                <Link
-                  to={`/dashboard${item.link}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                <ListItem
+                  key={item.link}
+                  onClick={() => onNavigate(item.link)}
+                  disablePadding
                 >
-                  <ListItem key={item.link} disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText primary={item.name} />
-                    </ListItemButton>
-                  </ListItem>
-                </Link>
+                  <ListItemButton>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.name} />
+                  </ListItemButton>
+                </ListItem>
+
                 {index === drawerItems.length - 1 ? null : <Divider />}
               </Fragment>
             ))}

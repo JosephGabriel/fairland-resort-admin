@@ -17,3 +17,12 @@ export const GridItem = styled(Paper)(({ theme }) => ({
 export const GridContainer = styled(Grid)(({ theme }) => ({
   marginBottom: theme.spacing(4),
 }));
+
+export const GridFullItem = styled(Grid)(() => ({
+  display: "flex",
+  flex: 1,
+}));
+
+export const GridTitle = styled(Typography)(() => ({
+  marginBottom: "1rem",
+}));

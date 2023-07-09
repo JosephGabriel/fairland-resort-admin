@@ -79,13 +79,9 @@ export const ImageInputButton = ({
         )}
       </Material.UploadItem>
 
-      <Typography
-        variant="body2"
-        sx={{ textAlign: "center", marginTop: "1rem" }}
-        color="textSecondary"
-      >
+      <Material.LabelText variant="body2" color="textSecondary">
         {name}
-      </Typography>
+      </Material.LabelText>
     </Material.GridItem>
   );
 };

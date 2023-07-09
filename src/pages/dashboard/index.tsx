@@ -1,8 +1,9 @@
 import { Grid, Typography } from "@mui/material";
+import ReactApexChart from "react-apexcharts";
+
+import { useAuthUserQuery } from "../../services/apollo/user/variables/user";
 
 import * as Material from "./styles";
-import { useAuthUserQuery } from "../../services/apollo/user/variables/user";
-import ReactApexChart from "react-apexcharts";
 
 const series = [
   {
@@ -20,9 +21,9 @@ export const DashBoardPage = () => {
 
   return (
     <Material.Container>
-      {/* <Material.Title variant="h4">
+      <Material.Title variant="h4">
         Olá, {user?.authUser.firstName}
-      </Material.Title> */}
+      </Material.Title>
 
       <Material.GridContainer
         container
@@ -30,14 +31,7 @@ export const DashBoardPage = () => {
         justifyContent={"center"}
         alignItems={"stretch"}
       >
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={6}
-          sx={{ display: "flex", flex: 1 }}
-        >
+        <Material.GridFullItem item sm={12} md={6}>
           <Grid
             container
             spacing={2}
@@ -74,7 +68,7 @@ export const DashBoardPage = () => {
               </Material.GridItem>
             </Grid>
           </Grid>
-        </Grid>
+        </Material.GridFullItem>
 
         <Grid item xs={12} sm={6} md={4} lg={6}>
           <Material.GridItem>
@@ -208,9 +202,9 @@ export const DashBoardPage = () => {
 
         <Grid item xs={12} sm={6} md={4} lg={4}>
           <Material.GridItem>
-            <Typography variant="body1" sx={{ marginBottom: "1rem" }}>
+            <Material.GridTitle variant="body1">
               Relátorio de Ganhos
-            </Typography>
+            </Material.GridTitle>
 
             <ReactApexChart
               height={320}
