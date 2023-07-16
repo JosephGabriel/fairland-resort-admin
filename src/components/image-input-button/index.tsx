@@ -1,5 +1,4 @@
 import { Fragment, useRef } from "react";
-import { Typography } from "@mui/material";
 import { Photo, Close } from "@mui/icons-material";
 
 import { ImageUpload } from "../image-upload-step-add-hotel-modal";

@@ -7,11 +7,9 @@ const token = LocalStorageService.getInstance().getItem("token");
 
 export const client = new ApolloClient({
   link: new HttpLink({
-    uri: "http://localhost:5000/graphql",
+    uri: "https://fairland-resort-api-c5b3bb10838f.herokuapp.com/graphql",
     headers: {
-      authorization: `Bearer ${LocalStorageService.getInstance().getItem(
-        "token"
-      )}`,
+      authorization: `Bearer ${token}`,
     },
   }),
   connectToDevTools: true,
