@@ -1,0 +1,28 @@
+query GetHotelById($id: ID!) {
+  hotel(id: $id) {
+    id
+    name
+    rating
+    summary
+    description
+    images
+    thumbnail
+    logo
+    slug
+    longitude
+    latitude
+    address
+    addressNumber
+    zipCode
+    neighborhood
+    state
+    city
+
+    rooms {
+      name
+      summary
+      price
+      rating
+    }
+  }
+}

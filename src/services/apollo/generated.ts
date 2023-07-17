@@ -412,19 +412,19 @@ export type DeleteHotelMutationVariables = Exact<{
 
 export type DeleteHotelMutation = { deleteHotel: string };
 
+export type GetHotelByIdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, images: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string, rooms: Array<{ name: string, summary: string, price: number, rating: number | null }> | null } };
+
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
 export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
-
-export type GetHotelQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetHotelQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, latitude: number } };
 
 export type GetHotelsByAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -520,6 +520,63 @@ export function useDeleteHotelMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteHotelMutationHookResult = ReturnType<typeof useDeleteHotelMutation>;
 export type DeleteHotelMutationResult = Apollo.MutationResult<DeleteHotelMutation>;
 export type DeleteHotelMutationOptions = Apollo.BaseMutationOptions<DeleteHotelMutation, DeleteHotelMutationVariables>;
+export const GetHotelByIdDocument = gql`
+    query GetHotelById($id: ID!) {
+  hotel(id: $id) {
+    id
+    name
+    rating
+    summary
+    description
+    images
+    thumbnail
+    logo
+    slug
+    longitude
+    latitude
+    address
+    addressNumber
+    zipCode
+    neighborhood
+    state
+    city
+    rooms {
+      name
+      summary
+      price
+      rating
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetHotelByIdQuery__
+ *
+ * To run a query within a React component, call `useGetHotelByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHotelByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHotelByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetHotelByIdQuery(baseOptions: Apollo.QueryHookOptions<GetHotelByIdQuery, GetHotelByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHotelByIdQuery, GetHotelByIdQueryVariables>(GetHotelByIdDocument, options);
+      }
+export function useGetHotelByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHotelByIdQuery, GetHotelByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHotelByIdQuery, GetHotelByIdQueryVariables>(GetHotelByIdDocument, options);
+        }
+export type GetHotelByIdQueryHookResult = ReturnType<typeof useGetHotelByIdQuery>;
+export type GetHotelByIdLazyQueryHookResult = ReturnType<typeof useGetHotelByIdLazyQuery>;
+export type GetHotelByIdQueryResult = Apollo.QueryResult<GetHotelByIdQuery, GetHotelByIdQueryVariables>;
 export const GetHotelBySlugDocument = gql`
     query GetHotelBySlug($slug: String!) {
   hotelBySlug(slug: $slug) {
@@ -568,49 +625,6 @@ export function useGetHotelBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetHotelBySlugQueryHookResult = ReturnType<typeof useGetHotelBySlugQuery>;
 export type GetHotelBySlugLazyQueryHookResult = ReturnType<typeof useGetHotelBySlugLazyQuery>;
 export type GetHotelBySlugQueryResult = Apollo.QueryResult<GetHotelBySlugQuery, GetHotelBySlugQueryVariables>;
-export const GetHotelDocument = gql`
-    query GetHotel($id: ID!) {
-  hotel(id: $id) {
-    id
-    name
-    rating
-    summary
-    description
-    thumbnail
-    images
-    logo
-    latitude
-  }
-}
-    `;
-
-/**
- * __useGetHotelQuery__
- *
- * To run a query within a React component, call `useGetHotelQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetHotelQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetHotelQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetHotelQuery(baseOptions: Apollo.QueryHookOptions<GetHotelQuery, GetHotelQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetHotelQuery, GetHotelQueryVariables>(GetHotelDocument, options);
-      }
-export function useGetHotelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHotelQuery, GetHotelQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetHotelQuery, GetHotelQueryVariables>(GetHotelDocument, options);
-        }
-export type GetHotelQueryHookResult = ReturnType<typeof useGetHotelQuery>;
-export type GetHotelLazyQueryHookResult = ReturnType<typeof useGetHotelLazyQuery>;
-export type GetHotelQueryResult = Apollo.QueryResult<GetHotelQuery, GetHotelQueryVariables>;
 export const GetHotelsByAdminDocument = gql`
     query GetHotelsByAdmin {
   hotelsByAdmin {

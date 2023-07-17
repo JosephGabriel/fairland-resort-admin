@@ -74,9 +74,11 @@ export const CardHotel = ({ hotel }: Props) => {
       </Material.MenuButton>
 
       <CardContent>
-        <Typography gutterBottom variant="h5" marginBottom={0} component="h2">
-          {hotel?.name}
-        </Typography>
+        <Material.LinkTitle to={`${hotel?.id}`}>
+          <Typography gutterBottom variant="h5" marginBottom={0} component="h2">
+            {hotel?.name}
+          </Typography>
+        </Material.LinkTitle>
 
         <Material.CardSummary variant="body2" color="textSecondary">
           {hotel?.summary}

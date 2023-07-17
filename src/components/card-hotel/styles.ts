@@ -1,4 +1,5 @@
 import { Room } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 import {
   Card,
@@ -22,6 +23,11 @@ export const MenuButton = styled(IconButton)(() => ({
 
 export const CardImage = styled(CardMedia)(() => ({
   height: 140,
+}));
+
+export const LinkTitle = styled(Link)(({ theme }) => ({
+  textDecoration: "none",
+  color: theme.palette.text.primary,
 }));
 
 export const CardSummary = styled(Typography)(() => ({

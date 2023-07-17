@@ -3,7 +3,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   overwrite: true,
   watch: true,
-  schema: "http://localhost:5000/graphql",
+  schema: "https://fairland-resort-api-c5b3bb10838f.herokuapp.com/graphql",
   documents: "src/**/*.graphql",
   generates: {
     "src/services/apollo/generated.ts": {
