@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Form, Formik, FormikProps } from "formik";
+import { useState } from "react";
+import { Form, Formik } from "formik";
 
 import {
   Button,
@@ -14,8 +14,7 @@ import {
 } from "@mui/material";
 
 import { BasicInformationStepModal } from "../basic-information-step-add-hotel-modal";
-import { SearchAddressStep } from "../search-address-step-add-hotel-modal";
-import { ImageUploadStep } from "../image-upload-step-add-hotel-modal";
+import { RoomImageUploadStep } from "../room-image-step";
 
 import {
   InitialValues,
@@ -25,26 +24,25 @@ import {
 } from "./utils";
 
 import {
-  useCreateHotelMutation,
-  GetHotelsByAdminQuery,
-  GetHotelsByAdminDocument,
+  GetHotelByIdDocument,
+  GetHotelByIdQuery,
+  useCreateRoomMutation,
 } from "../../services/apollo/generated";
 
 import * as Material from "./styles";
 
 interface Props {
+  hotelId: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const steps = ["Informações básicas", "Localização", "Imagens"];
+const steps = ["Informações", "Imagens"];
 
-export const AddHotelModal = ({ isOpen, onClose }: Props) => {
+export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
 
-  const [createHotel, { loading }] = useCreateHotelMutation();
-
-  const formikRef = useRef<FormikProps<InitialValues> | null>(null);
+  const [createRoom, { loading }] = useCreateRoomMutation();
 
   const nextStep = () => {
     setActiveStep((prev) => prev + 1);
@@ -68,35 +66,41 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
   };
 
   const onSubmit = async (values: InitialValues) => {
-    await createHotel({
+    await createRoom({
       variables: {
-        data: {
-          ...values,
-        },
-      },
-      update: (cache, { data }) => {
-        const hotels = cache.readQuery<GetHotelsByAdminQuery>({
-          query: GetHotelsByAdminDocument,
-        });
-
-        cache.writeQuery({
-          query: GetHotelsByAdminDocument,
-          data: {
-            hotelsByAdmin: [
-              ...(hotels?.hotelsByAdmin ?? []),
-              data?.createHotel,
-            ],
-          },
-        });
+        data: { ...values, hotel: hotelId },
       },
       onError(error) {
         alert(JSON.stringify(error));
         setActiveStep(0);
-        formikRef.current?.resetForm();
         onClose();
       },
+      update: (cache, { data }) => {
+        const hotel = cache.readQuery<GetHotelByIdQuery>({
+          query: GetHotelByIdDocument,
+          variables: {
+            id: hotelId,
+          },
+        });
+
+        if (!hotel || !data?.createRoom) {
+          return;
+        }
+
+        const room = data.createRoom;
+
+        cache.writeQuery<GetHotelByIdQuery>({
+          query: GetHotelByIdDocument,
+          variables: { id: hotelId },
+          data: {
+            hotel: {
+              ...hotel?.hotel,
+              rooms: [...hotel.hotel.rooms, room],
+            },
+          },
+        });
+      },
       onCompleted() {
-        formikRef.current?.resetForm();
         setActiveStep(0);
         onClose();
       },
@@ -107,7 +111,6 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      innerRef={(ref) => (formikRef.current = ref)}
       onSubmit={onSubmit}
     >
       {(formik) => (
@@ -129,14 +132,12 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
 
             <Form onSubmit={formik.handleSubmit}>
               {activeStep === 0 && (
-                <BasicInformationStepModal fields={fields} />
+                <BasicInformationStepModal fields={fields.text} />
               )}
 
-              {activeStep === 1 && <SearchAddressStep formik={formik} />}
+              {activeStep === 1 && <RoomImageUploadStep formik={formik} />}
 
-              {activeStep === 2 && <ImageUploadStep formik={formik} />}
-
-              {activeStep === 3 && (
+              {activeStep === 2 && (
                 <Material.LoadingContainer>
                   <CircularProgress />
                 </Material.LoadingContainer>
@@ -150,10 +151,10 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
             </Button>
 
             <Button
-              onClick={activeStep === 2 ? formik.submitForm : nextStep}
-              disabled={activeStep === 3 || !formik.isValid}
+              onClick={activeStep === 1 ? formik.submitForm : nextStep}
+              disabled={activeStep === 2 || !formik.isValid}
             >
-              {activeStep === 2 ? "Adicionar" : "Próximo"}
+              {activeStep === 1 ? "Adicionar" : "Próximo"}
             </Button>
           </DialogActions>
         </Dialog>

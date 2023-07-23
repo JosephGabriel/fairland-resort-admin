@@ -1,0 +1,12 @@
+mutation CreateRoom($data: CreateRoomInput!) {
+  createRoom(data: $data) {
+    id
+    name
+    summary
+    description
+    thumbnail
+    images
+    price
+    rating
+  }
+}

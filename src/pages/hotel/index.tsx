@@ -1,18 +1,30 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Grid, Typography } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from "@mui/material";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
 import {
   ChevronLeft,
   ChevronRight,
   Star,
   StarOutline,
 } from "@mui/icons-material";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 import { useGetHotelByIdQuery } from "../../services/apollo/generated";
 
 import * as Material from "./styles";
+import { AddRoomModal } from "../../components/add-room-modal";
 
 export const HotelPage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const { id } = useParams();
 
   const { data } = useGetHotelByIdQuery({
@@ -23,6 +35,12 @@ export const HotelPage = () => {
 
   return (
     <Material.Container>
+      <AddRoomModal
+        hotelId={String(id)}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
+
       <Material.ThumbnailImage src={data?.hotel.thumbnail} />
 
       <Material.DetailContainer>
@@ -43,14 +61,14 @@ export const HotelPage = () => {
 
               {Array(Math.trunc(Number(data?.hotel.rating ?? 0)))
                 .fill(" ")
-                .map(() => (
-                  <Star />
+                .map((_, index) => (
+                  <Star key={index} />
                 ))}
 
               {Array(Math.trunc(5 - Number(data?.hotel.rating ?? 0)))
                 .fill(" ")
-                .map(() => (
-                  <StarOutline />
+                .map((_, index) => (
+                  <StarOutline key={index} />
                 ))}
             </Grid>
           </Material.TitleGrid>
@@ -107,8 +125,8 @@ export const HotelPage = () => {
             <ChevronRight />
           </Material.CarouselButton>
 
-          {data?.hotel.images?.map((image) => (
-            <Grid item md={3}>
+          {data?.hotel.images?.map((image, index) => (
+            <Grid item md={3} key={index}>
               <img src={image} style={{ height: "200px" }} />
             </Grid>
           ))}
@@ -117,15 +135,35 @@ export const HotelPage = () => {
         <Grid container>
           <Grid item md={12}>
             <Material.RoomTitle variant="h5">Quartos</Material.RoomTitle>
-            <Material.AddRoomButton variant="contained">
+            <Material.AddRoomButton
+              variant="contained"
+              onClick={() => setIsOpen(true)}
+            >
               Adicionar um quarto
             </Material.AddRoomButton>
 
             {data?.hotel.rooms?.length ? (
-              <Grid container>
+              <Grid container spacing={4}>
                 {data?.hotel.rooms?.map((room) => (
-                  <Grid item md={3}>
-                    <Typography>{room.name}</Typography>
+                  <Grid item md={3} key={room.id}>
+                    <Card sx={{ maxWidth: 345 }}>
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image={room.thumbnail}
+                          alt="green iguana"
+                        />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {room.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {room.summary}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                   </Grid>
                 ))}
               </Grid>

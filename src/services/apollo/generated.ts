@@ -116,7 +116,7 @@ export type Hotel = {
   /** Classificação do hotel ex: 5 estrelas */
   rating: Maybe<Scalars['Int']['output']>;
   /** Array com os quartos do hotel */
-  rooms: Maybe<Array<Room>>;
+  rooms: Array<Room>;
   /** Slug do hotel baseado no nome */
   slug: Scalars['String']['output'];
   /** Estado do hotel */
@@ -244,15 +244,15 @@ export type Query = {
   /** Usada para buscar um hotel pelo slug */
   hotelBySlug: Hotel;
   /** Usada para buscar hotéis */
-  hotels: Maybe<Array<Hotel>>;
+  hotels: Array<Hotel>;
   /** Usada para buscar um hotel pelo slug */
-  hotelsByAdmin: Maybe<Array<Hotel>>;
+  hotelsByAdmin: Array<Hotel>;
   /** Usada para buscar um quarto pelo id */
   room: Room;
   /** Usada para buscar um hotel pelo slug */
-  rooms: Maybe<Array<Room>>;
+  rooms: Array<Room>;
   /** Usada para buscar um hotel pelo id do hotel */
-  roomsByHotel: Maybe<Array<Room>>;
+  roomsByHotel: Array<Room>;
 };
 
 
@@ -417,7 +417,7 @@ export type GetHotelByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, images: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string, rooms: Array<{ name: string, summary: string, price: number, rating: number | null }> | null } };
+export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, images: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string, rooms: Array<{ id: string, name: string, summary: string, price: number, rating: number | null, thumbnail: string }> } };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -429,12 +429,19 @@ export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rat
 export type GetHotelsByAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetHotelsByAdminQuery = { hotelsByAdmin: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> | null };
+export type GetHotelsByAdminQuery = { hotelsByAdmin: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> };
 
 export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> | null };
+export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
+
+export type CreateRoomMutationVariables = Exact<{
+  data: CreateRoomInput;
+}>;
+
+
+export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images: Array<string> | null, price: number, rating: number | null } };
 
 export type CreateAdminMutationVariables = Exact<{
   data: CreateUserInput;
@@ -541,10 +548,12 @@ export const GetHotelByIdDocument = gql`
     state
     city
     rooms {
+      id
       name
       summary
       price
       rating
+      thumbnail
     }
   }
 }
@@ -710,6 +719,46 @@ export function useGetAllHotelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetAllHotelsQueryHookResult = ReturnType<typeof useGetAllHotelsQuery>;
 export type GetAllHotelsLazyQueryHookResult = ReturnType<typeof useGetAllHotelsLazyQuery>;
 export type GetAllHotelsQueryResult = Apollo.QueryResult<GetAllHotelsQuery, GetAllHotelsQueryVariables>;
+export const CreateRoomDocument = gql`
+    mutation CreateRoom($data: CreateRoomInput!) {
+  createRoom(data: $data) {
+    id
+    name
+    summary
+    description
+    thumbnail
+    images
+    price
+    rating
+  }
+}
+    `;
+export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutation, CreateRoomMutationVariables>;
+
+/**
+ * __useCreateRoomMutation__
+ *
+ * To run a mutation, you first call `useCreateRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRoomMutation, { data, loading, error }] = useCreateRoomMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateRoomMutation, CreateRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRoomMutation, CreateRoomMutationVariables>(CreateRoomDocument, options);
+      }
+export type CreateRoomMutationHookResult = ReturnType<typeof useCreateRoomMutation>;
+export type CreateRoomMutationResult = Apollo.MutationResult<CreateRoomMutation>;
+export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<CreateRoomMutation, CreateRoomMutationVariables>;
 export const CreateAdminDocument = gql`
     mutation CreateAdmin($data: CreateUserInput!) {
   createAdmin(data: $data) {

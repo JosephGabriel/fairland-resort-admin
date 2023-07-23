@@ -19,10 +19,12 @@ query GetHotelById($id: ID!) {
     city
 
     rooms {
+      id
       name
       summary
       price
       rating
+      thumbnail
     }
   }
 }

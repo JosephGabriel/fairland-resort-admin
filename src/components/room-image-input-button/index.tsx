@@ -2,7 +2,7 @@ import { Fragment, useRef } from "react";
 import { Photo, Close } from "@mui/icons-material";
 
 import { MultipleImageItem } from "../multiple-image-item";
-import { ImageUpload } from "../image-upload-step-add-hotel-modal";
+import { ImageUpload } from "../room-image-step";
 
 import { uploadImages } from "../../services/api";
 
@@ -16,7 +16,7 @@ interface Props {
   onImageUploaded: (url: string, name: string) => void;
 }
 
-export const ImageInputButton = ({
+export const RoomImageInputButton = ({
   name,
   images,
   isMultiple,

@@ -1,6 +1,19 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
 import * as yup from "yup";
 
+export const fields = {
+  name: {
+    label: "Nome",
+  },
+  summary: {
+    label: "Súmario",
+  },
+  description: {
+    label: "Descrição",
+    multline: true,
+  },
+};
+
 export const initialValues = {
   name: faker.company.name(),
   summary: faker.lorem.sentence(),
