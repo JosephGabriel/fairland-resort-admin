@@ -1,7 +1,5 @@
 import { FormikProps } from "formik";
 
-import { ImageInputButton } from "../image-input-button";
-
 import { InitialValues } from "../add-room-modal/utils";
 
 import * as Material from "./styles";
