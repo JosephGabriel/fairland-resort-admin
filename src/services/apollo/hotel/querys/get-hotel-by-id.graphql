@@ -1,5 +1,5 @@
-query GetHotelById($id: ID!, $roomOptions: Options) {
-  hotel(id: $id, roomOptions: $roomOptions) {
+query GetHotelById($id: ID!) {
+  hotel(id: $id) {
     id
     name
     rating
@@ -17,14 +17,5 @@ query GetHotelById($id: ID!, $roomOptions: Options) {
     neighborhood
     state
     city
-
-    rooms {
-      id
-      name
-      summary
-      price
-      rating
-      thumbnail
-    }
   }
 }

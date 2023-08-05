@@ -2,7 +2,15 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-import { Grid, Typography } from "@mui/material";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 
 import {
   ChevronLeft,
@@ -15,34 +23,48 @@ import { AddRoomModal } from "@components/add-room-modal";
 import { Card } from "@components/card";
 import { Loader } from "@components/loader";
 
+import { RoomRepository } from "@repositories/room";
+
 import {
   OrderBy,
   useDeleteRoomMutation,
   useGetHotelByIdQuery,
+  useGetRoomsByHotelQuery,
 } from "@services/apollo/hooks";
 
 import * as Material from "./styles";
-import { RoomRepository } from "@repositories/room";
 
 export const HotelPage = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const { id } = useParams();
 
   const repository = new RoomRepository(String(id));
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [orderBy, setOrderBy] = useState(OrderBy.Desc);
+
   const { data } = useGetHotelByIdQuery({
     variables: {
-      id: `${id}`,
-      roomOptions: {
+      id: String(id),
+    },
+  });
+
+  const { data: rooms, refetch } = useGetRoomsByHotelQuery({
+    variables: {
+      hotelId: String(id),
+      options: {
         skip: 0,
         take: 4,
-        orderBy: OrderBy.Desc,
+        orderBy: orderBy,
       },
     },
   });
 
   const [deleteRoom, { loading: isDeleting }] = useDeleteRoomMutation();
+
+  const handleChange = (event: SelectChangeEvent<OrderBy>) => {
+    setOrderBy(event.target.value as OrderBy);
+    refetch();
+  };
 
   const onDeleteRoom = async (roomId: string) => {
     await deleteRoom({
@@ -158,18 +180,48 @@ export const HotelPage = () => {
         </Material.ImageGrid>
 
         <Grid container>
-          <Grid item md={12}>
-            <Material.RoomTitle variant="h5">Quartos</Material.RoomTitle>
-            <Material.AddRoomButton
-              variant="contained"
-              onClick={() => setIsOpen(true)}
-            >
-              Adicionar um quarto
-            </Material.AddRoomButton>
+          <Grid
+            item
+            md={12}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <Material.RoomTitle variant="h5">Quartos</Material.RoomTitle>
 
-            {data?.hotel.rooms?.length ? (
+              <Material.AddRoomButton
+                variant="contained"
+                onClick={() => setIsOpen(true)}
+              >
+                Adicionar um quarto
+              </Material.AddRoomButton>
+            </div>
+
+            <div>
+              <FormControl variant="outlined">
+                <InputLabel id="select-outlined-label">Ordenar por</InputLabel>
+
+                <Select
+                  labelId="select-outlined-label"
+                  id="select-outlined"
+                  value={orderBy}
+                  onChange={handleChange}
+                  label="Ordenar por"
+                >
+                  <MenuItem value={OrderBy.Desc}>Decrescente</MenuItem>
+                  <MenuItem value={OrderBy.Asc}>Ascendente</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </Grid>
+
+          <Grid item md={12}>
+            {rooms?.roomsByHotel?.length ? (
               <Grid container spacing={4}>
-                {data?.hotel.rooms?.map((room) => (
+                {rooms?.roomsByHotel?.map((room) => (
                   <Grid item md={3} key={room.id}>
                     <Card
                       id={room.id}

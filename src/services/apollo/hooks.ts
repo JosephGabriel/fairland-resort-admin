@@ -263,9 +263,9 @@ export type Query = {
   hotelsByAdmin: Array<Hotel>;
   /** Usada para buscar um quarto pelo id */
   room: Room;
-  /** Usada para buscar um hotel pelo slug */
+  /** Usada para buscar um quartos */
   rooms: Array<Room>;
-  /** Usada para buscar um hotel pelo id do hotel */
+  /** Usada para buscar quartos pelo id do hotel */
   roomsByHotel: Array<Room>;
 };
 
@@ -303,6 +303,7 @@ export type QueryRoomsArgs = {
 
 export type QueryRoomsByHotelArgs = {
   hotel: Scalars['ID']['input'];
+  options: InputMaybe<Options>;
 };
 
 export type Review = {
@@ -438,11 +439,10 @@ export type DeleteHotelMutation = { deleteHotel: string };
 
 export type GetHotelByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
-  roomOptions: InputMaybe<Options>;
 }>;
 
 
-export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, images: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string, rooms: Array<{ id: string, name: string, summary: string, price: number, rating: number | null, thumbnail: string }> } };
+export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, images: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -474,6 +474,14 @@ export type DeleteRoomMutationVariables = Exact<{
 
 
 export type DeleteRoomMutation = { deleteRoom: string };
+
+export type GetRoomsByHotelQueryVariables = Exact<{
+  hotelId: Scalars['ID']['input'];
+  options: InputMaybe<Options>;
+}>;
+
+
+export type GetRoomsByHotelQuery = { roomsByHotel: Array<{ id: string, name: string, summary: string, thumbnail: string }> };
 
 export type CreateAdminMutationVariables = Exact<{
   data: CreateUserInput;
@@ -560,8 +568,8 @@ export type DeleteHotelMutationHookResult = ReturnType<typeof useDeleteHotelMuta
 export type DeleteHotelMutationResult = Apollo.MutationResult<DeleteHotelMutation>;
 export type DeleteHotelMutationOptions = Apollo.BaseMutationOptions<DeleteHotelMutation, DeleteHotelMutationVariables>;
 export const GetHotelByIdDocument = gql`
-    query GetHotelById($id: ID!, $roomOptions: Options) {
-  hotel(id: $id, roomOptions: $roomOptions) {
+    query GetHotelById($id: ID!) {
+  hotel(id: $id) {
     id
     name
     rating
@@ -579,14 +587,6 @@ export const GetHotelByIdDocument = gql`
     neighborhood
     state
     city
-    rooms {
-      id
-      name
-      summary
-      price
-      rating
-      thumbnail
-    }
   }
 }
     `;
@@ -604,7 +604,6 @@ export const GetHotelByIdDocument = gql`
  * const { data, loading, error } = useGetHotelByIdQuery({
  *   variables: {
  *      id: // value for 'id'
- *      roomOptions: // value for 'roomOptions'
  *   },
  * });
  */
@@ -823,6 +822,45 @@ export function useDeleteRoomMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteRoomMutationHookResult = ReturnType<typeof useDeleteRoomMutation>;
 export type DeleteRoomMutationResult = Apollo.MutationResult<DeleteRoomMutation>;
 export type DeleteRoomMutationOptions = Apollo.BaseMutationOptions<DeleteRoomMutation, DeleteRoomMutationVariables>;
+export const GetRoomsByHotelDocument = gql`
+    query GetRoomsByHotel($hotelId: ID!, $options: Options) {
+  roomsByHotel(hotel: $hotelId, options: $options) {
+    id
+    name
+    summary
+    thumbnail
+  }
+}
+    `;
+
+/**
+ * __useGetRoomsByHotelQuery__
+ *
+ * To run a query within a React component, call `useGetRoomsByHotelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRoomsByHotelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRoomsByHotelQuery({
+ *   variables: {
+ *      hotelId: // value for 'hotelId'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useGetRoomsByHotelQuery(baseOptions: Apollo.QueryHookOptions<GetRoomsByHotelQuery, GetRoomsByHotelQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRoomsByHotelQuery, GetRoomsByHotelQueryVariables>(GetRoomsByHotelDocument, options);
+      }
+export function useGetRoomsByHotelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRoomsByHotelQuery, GetRoomsByHotelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRoomsByHotelQuery, GetRoomsByHotelQueryVariables>(GetRoomsByHotelDocument, options);
+        }
+export type GetRoomsByHotelQueryHookResult = ReturnType<typeof useGetRoomsByHotelQuery>;
+export type GetRoomsByHotelLazyQueryHookResult = ReturnType<typeof useGetRoomsByHotelLazyQuery>;
+export type GetRoomsByHotelQueryResult = Apollo.QueryResult<GetRoomsByHotelQuery, GetRoomsByHotelQueryVariables>;
 export const CreateAdminDocument = gql`
     mutation CreateAdmin($data: CreateUserInput!) {
   createAdmin(data: $data) {

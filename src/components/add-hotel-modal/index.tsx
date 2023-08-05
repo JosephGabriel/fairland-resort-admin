@@ -26,7 +26,7 @@ import {
 
 import { useCreateHotelMutation } from "@services/apollo/hooks";
 
-import { GetHotelsByAdminDocument } from "@services/apollo/documents";
+import { HotelRepository } from "@repositories/hotel";
 
 import * as Material from "./styles";
 
@@ -41,6 +41,8 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const [createHotel, { loading }] = useCreateHotelMutation();
+
+  const repository = new HotelRepository();
 
   const formikRef = useRef<FormikProps<InitialValues> | null>(null);
 
@@ -67,26 +69,9 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
 
   const onSubmit = async (values: InitialValues) => {
     await createHotel({
-      variables: {
-        data: {
-          ...values,
-        },
-      },
+      variables: { data: values },
       update: (cache, { data }) => {
-        const hotels = cache.readQuery({
-          query: GetHotelsByAdminDocument,
-        });
-
-        if (!hotels?.hotelsByAdmin || !data?.createHotel) {
-          return;
-        }
-
-        cache.writeQuery({
-          query: GetHotelsByAdminDocument,
-          data: {
-            hotelsByAdmin: [...hotels.hotelsByAdmin, data.createHotel],
-          },
-        });
+        repository.onCreateHotel(data, cache);
       },
       onError(error) {
         alert(JSON.stringify(error));

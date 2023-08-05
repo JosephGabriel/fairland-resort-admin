@@ -4,7 +4,7 @@ import { Grid, Grow, LinearProgress } from "@mui/material";
 import { AddHotelModal } from "@components/add-hotel-modal";
 import { Card } from "@components/card";
 
-import { GetHotelsByAdminDocument } from "@services/apollo/documents";
+import { HotelRepository } from "@repositories/hotel";
 
 import {
   useDeleteHotelMutation,
@@ -18,26 +18,15 @@ export const HotelsPage = () => {
 
   const { data, loading } = useGetHotelsByAdminQuery();
 
+  const repository = new HotelRepository();
+
   const [deleteHotel] = useDeleteHotelMutation();
 
-  const onDeleteHotel = async (id: string) => {
+  const onDeleteHotel = async (hotelId: string) => {
     await deleteHotel({
-      variables: { id },
+      variables: { id: hotelId },
       update: (cache) => {
-        const hotels = cache.readQuery({
-          query: GetHotelsByAdminDocument,
-        });
-
-        if (!hotels) {
-          return;
-        }
-
-        cache.writeQuery({
-          query: GetHotelsByAdminDocument,
-          data: {
-            hotelsByAdmin: hotels?.hotelsByAdmin?.filter((h) => h.id !== id),
-          },
-        });
+        repository.onDeleteHotel(hotelId, cache);
       },
     });
   };

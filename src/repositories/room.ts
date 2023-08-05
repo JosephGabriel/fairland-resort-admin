@@ -3,7 +3,7 @@ import { ApolloCache } from "@apollo/client";
 import { GetHotelByIdDocument } from "@services/apollo/documents";
 import { CreateRoomMutation, OrderBy } from "@services/apollo/hooks";
 
-type CacheMutationData<T> = T | null | undefined;
+type MutationResult<T> = T | null | undefined;
 
 export class RoomRepository {
   constructor(private hotelId: string) {}
@@ -23,7 +23,7 @@ export class RoomRepository {
   }
 
   onAddRoom(
-    data: CacheMutationData<CreateRoomMutation>,
+    data: MutationResult<CreateRoomMutation>,
     cache: ApolloCache<unknown>
   ) {
     const hotel = cache.readQuery(this.getHotelByIdQuery);
