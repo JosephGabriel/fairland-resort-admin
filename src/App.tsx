@@ -2,9 +2,9 @@ import { CssBaseline, ThemeProvider, colors, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ApolloProvider } from "@apollo/client";
 
-import { Navigation } from "./navigation";
+import { Navigation } from "@navigation/.";
 
-import { client } from "./services/apollo";
+import { client } from "@services/apollo";
 
 export const App = () => {
   const queryClient = new QueryClient();
