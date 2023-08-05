@@ -23,8 +23,8 @@ import {
   validationSchema,
 } from "./utils";
 
-import { OrderBy, useCreateRoomMutation } from "@services/apollo/hooks";
-import { GetHotelByIdDocument } from "@services/apollo/documents";
+import { useCreateRoomMutation } from "@services/apollo/hooks";
+import { RoomRepository } from "@repositories/room";
 
 import * as Material from "./styles";
 
@@ -40,6 +40,8 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const [createRoom, { loading }] = useCreateRoomMutation();
+
+  const repository = new RoomRepository(hotelId);
 
   const nextStep = () => {
     setActiveStep((prev) => prev + 1);
@@ -73,41 +75,7 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
         onClose();
       },
       update: (cache, { data }) => {
-        const hotel = cache.readQuery({
-          query: GetHotelByIdDocument,
-          variables: {
-            id: hotelId,
-            roomOptions: {
-              skip: 0,
-              take: 4,
-              orderBy: OrderBy.Desc,
-            },
-          },
-        });
-
-        if (!hotel || !data?.createRoom) {
-          return;
-        }
-
-        const room = data.createRoom;
-
-        cache.writeQuery({
-          query: GetHotelByIdDocument,
-          variables: {
-            id: hotelId,
-            roomOptions: {
-              skip: 0,
-              take: 4,
-              orderBy: OrderBy.Desc,
-            },
-          },
-          data: {
-            hotel: {
-              ...hotel?.hotel,
-              rooms: [...hotel.hotel.rooms, room],
-            },
-          },
-        });
+        repository.onAddRoom(data, cache);
       },
       onCompleted() {
         setActiveStep(0);

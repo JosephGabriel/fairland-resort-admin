@@ -1,15 +1,18 @@
 import { ApolloCache } from "@apollo/client";
 
 import { GetHotelByIdDocument } from "@services/apollo/documents";
+import { CreateRoomMutation, OrderBy } from "@services/apollo/hooks";
 
-import { OrderBy } from "@services/apollo/hooks";
+type CacheMutationData<T> = T | null | undefined;
 
 export class RoomRepository {
-  private getHotelByIdQuery(id: string) {
+  constructor(private hotelId: string) {}
+
+  private get getHotelByIdQuery() {
     return {
       query: GetHotelByIdDocument,
       variables: {
-        id: `${id}`,
+        id: `${this.hotelId}`,
         roomOptions: {
           skip: 0,
           take: 4,
@@ -19,8 +22,31 @@ export class RoomRepository {
     };
   }
 
-  onDeleteRoom(hotelId: string, roomId: string, cache: ApolloCache<unknown>) {
-    const hotel = cache.readQuery(this.getHotelByIdQuery(hotelId));
+  onAddRoom(
+    data: CacheMutationData<CreateRoomMutation>,
+    cache: ApolloCache<unknown>
+  ) {
+    const hotel = cache.readQuery(this.getHotelByIdQuery);
+
+    if (!hotel || !data?.createRoom) {
+      return;
+    }
+
+    const room = data.createRoom;
+
+    cache.writeQuery({
+      ...this.getHotelByIdQuery,
+      data: {
+        hotel: {
+          ...hotel?.hotel,
+          rooms: [...hotel.hotel.rooms, room],
+        },
+      },
+    });
+  }
+
+  onDeleteRoom(roomId: string, cache: ApolloCache<unknown>) {
+    const hotel = cache.readQuery(this.getHotelByIdQuery);
 
     if (!hotel?.hotel) {
       return;
@@ -29,7 +55,7 @@ export class RoomRepository {
     const rooms = hotel?.hotel.rooms.filter((r) => r.id !== roomId);
 
     cache.writeQuery({
-      ...this.getHotelByIdQuery(hotelId),
+      ...this.getHotelByIdQuery,
       data: {
         hotel: {
           ...hotel?.hotel,

@@ -27,9 +27,9 @@ import { RoomRepository } from "@repositories/room";
 export const HotelPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const repository = new RoomRepository();
-
   const { id } = useParams();
+
+  const repository = new RoomRepository(String(id));
 
   const { data } = useGetHotelByIdQuery({
     variables: {
@@ -48,7 +48,7 @@ export const HotelPage = () => {
     await deleteRoom({
       variables: { id: roomId },
       update: (cache) => {
-        repository.onDeleteRoom(String(id), roomId, cache);
+        repository.onDeleteRoom(roomId, cache);
       },
       onError: (err) => {
         alert(JSON.stringify(err));
