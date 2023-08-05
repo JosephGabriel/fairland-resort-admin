@@ -13,8 +13,8 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStepModal } from "../basic-information-step-add-hotel-modal";
-import { RoomImageUploadStep } from "../room-image-step";
+import { BasicInformationStepModal } from "@components/basic-information-step-add-hotel-modal";
+import { RoomImageUploadStep } from "@components/room-image-step";
 
 import {
   InitialValues,
@@ -23,11 +23,8 @@ import {
   validationSchema,
 } from "./utils";
 
-import {
-  GetHotelByIdDocument,
-  GetHotelByIdQuery,
-  useCreateRoomMutation,
-} from "../../services/apollo/generated";
+import { OrderBy, useCreateRoomMutation } from "@services/apollo/hooks";
+import { GetHotelByIdDocument } from "@services/apollo/documents";
 
 import * as Material from "./styles";
 
@@ -76,10 +73,15 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
         onClose();
       },
       update: (cache, { data }) => {
-        const hotel = cache.readQuery<GetHotelByIdQuery>({
+        const hotel = cache.readQuery({
           query: GetHotelByIdDocument,
           variables: {
             id: hotelId,
+            roomOptions: {
+              skip: 0,
+              take: 4,
+              orderBy: OrderBy.Desc,
+            },
           },
         });
 
@@ -89,9 +91,16 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
 
         const room = data.createRoom;
 
-        cache.writeQuery<GetHotelByIdQuery>({
+        cache.writeQuery({
           query: GetHotelByIdDocument,
-          variables: { id: hotelId },
+          variables: {
+            id: hotelId,
+            roomOptions: {
+              skip: 0,
+              take: 4,
+              orderBy: OrderBy.Desc,
+            },
+          },
           data: {
             hotel: {
               ...hotel?.hotel,

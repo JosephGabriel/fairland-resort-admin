@@ -1,16 +1,46 @@
 import { useState } from "react";
 import { Grid, Grow, LinearProgress } from "@mui/material";
 
-import { AddHotelModal } from "../../components/add-hotel-modal";
-import { CardHotel } from "../../components/card-hotel";
+import { AddHotelModal } from "@components/add-hotel-modal";
+import { Card } from "@components/card";
+
+import { GetHotelsByAdminDocument } from "@services/apollo/documents";
+
+import {
+  useDeleteHotelMutation,
+  useGetHotelsByAdminQuery,
+} from "@services/apollo/hooks";
 
 import * as Material from "./styles";
-import { useGetHotelsByAdminQuery } from "../../services/apollo/generated";
 
 export const HotelsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { data, loading } = useGetHotelsByAdminQuery();
+
+  const [deleteHotel] = useDeleteHotelMutation();
+
+  const onDeleteHotel = async (id: string) => {
+    await deleteHotel({
+      variables: { id },
+      update: (cache) => {
+        const hotels = cache.readQuery({
+          query: GetHotelsByAdminDocument,
+        });
+
+        if (!hotels) {
+          return;
+        }
+
+        cache.writeQuery({
+          query: GetHotelsByAdminDocument,
+          data: {
+            hotelsByAdmin: hotels?.hotelsByAdmin?.filter((h) => h.id !== id),
+          },
+        });
+      },
+    });
+  };
 
   return (
     <>
@@ -35,7 +65,17 @@ export const HotelsPage = () => {
           {data &&
             data.hotelsByAdmin?.map((hotel) => (
               <Material.GridItemCard item md={3} key={hotel.id}>
-                <CardHotel hotel={hotel} />
+                <Card
+                  id={hotel.id}
+                  key={hotel.id}
+                  name={hotel.name}
+                  thumbnail={hotel.thumbnail}
+                  city={hotel.city}
+                  state={hotel.state}
+                  summary={hotel.summary}
+                  isLink={true}
+                  onRemove={onDeleteHotel}
+                />
               </Material.GridItemCard>
             ))}
         </Grid>

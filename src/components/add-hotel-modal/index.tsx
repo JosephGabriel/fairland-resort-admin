@@ -24,11 +24,9 @@ import {
   validationSchema,
 } from "./utils";
 
-import {
-  useCreateHotelMutation,
-  GetHotelsByAdminQuery,
-  GetHotelsByAdminDocument,
-} from "../../services/apollo/generated";
+import { useCreateHotelMutation } from "@services/apollo/hooks";
+
+import { GetHotelsByAdminDocument } from "@services/apollo/documents";
 
 import * as Material from "./styles";
 
@@ -75,17 +73,18 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
         },
       },
       update: (cache, { data }) => {
-        const hotels = cache.readQuery<GetHotelsByAdminQuery>({
+        const hotels = cache.readQuery({
           query: GetHotelsByAdminDocument,
         });
+
+        if (!hotels?.hotelsByAdmin || !data?.createHotel) {
+          return;
+        }
 
         cache.writeQuery({
           query: GetHotelsByAdminDocument,
           data: {
-            hotelsByAdmin: [
-              ...(hotels?.hotelsByAdmin ?? []),
-              data?.createHotel,
-            ],
+            hotelsByAdmin: [...hotels.hotelsByAdmin, data.createHotel],
           },
         });
       },

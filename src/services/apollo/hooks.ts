@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: Date; output: Date; }
   EmailAddress: { input: string; output: string; }
   Latitude: { input: number; output: number; }
   Longitude: { input: number; output: number; }
@@ -97,6 +98,7 @@ export type Hotel = {
   addressNumber: Scalars['String']['output'];
   /** Cidade do hotel */
   city: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['DateTime']['output']>;
   /** A descrição do hotel */
   description: Scalars['String']['output'];
   /** Id do hotel */
@@ -125,6 +127,7 @@ export type Hotel = {
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do hotel */
   thumbnail: Scalars['String']['output'];
+  updatedAt: Maybe<Scalars['DateTime']['output']>;
   /** Cep do hotel */
   zipCode: Scalars['PostalCode']['output'];
 };
@@ -234,6 +237,17 @@ export type MutationUpdateUserPasswordArgs = {
   data: UpdateUserPasswordInput;
 };
 
+export type Options = {
+  orderBy: InputMaybe<OrderBy>;
+  skip: InputMaybe<Scalars['Int']['input']>;
+  take: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum OrderBy {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
 export type Query = {
   /** Usada para buscar uma reserva pelo id */
   booking: Booking;
@@ -245,7 +259,7 @@ export type Query = {
   hotelBySlug: Hotel;
   /** Usada para buscar hotéis */
   hotels: Array<Hotel>;
-  /** Usada para buscar um hotel pelo slug */
+  /** Usada para buscar um hotel pelo id do admin */
   hotelsByAdmin: Array<Hotel>;
   /** Usada para buscar um quarto pelo id */
   room: Room;
@@ -263,11 +277,17 @@ export type QueryBookingArgs = {
 
 export type QueryHotelArgs = {
   id: Scalars['ID']['input'];
+  roomOptions: InputMaybe<Options>;
 };
 
 
 export type QueryHotelBySlugArgs = {
   slug: Scalars['String']['input'];
+};
+
+
+export type QueryHotelsArgs = {
+  roomOptions: InputMaybe<Options>;
 };
 
 
@@ -299,6 +319,8 @@ export type Review = {
 };
 
 export type Room = {
+  /** Data em que foi criado */
+  createdAt: Scalars['DateTime']['output'];
   /** Uma descrição do quarto */
   description: Scalars['String']['output'];
   /** Hotel a qual o quarto pertence */
@@ -317,6 +339,8 @@ export type Room = {
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do quarto */
   thumbnail: Scalars['String']['output'];
+  /** Data da ultima atualização */
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type RoomFilter = {
@@ -403,7 +427,7 @@ export type CreateHotelMutationVariables = Exact<{
 }>;
 
 
-export type CreateHotelMutation = { createHotel: { id: string, name: string, summary: string, thumbnail: string, slug: string, address: string } };
+export type CreateHotelMutation = { createHotel: { id: string, name: string, summary: string, thumbnail: string, city: string, state: string } };
 
 export type DeleteHotelMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -414,6 +438,7 @@ export type DeleteHotelMutation = { deleteHotel: string };
 
 export type GetHotelByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
+  roomOptions: InputMaybe<Options>;
 }>;
 
 
@@ -443,6 +468,13 @@ export type CreateRoomMutationVariables = Exact<{
 
 export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images: Array<string> | null, price: number, rating: number | null } };
 
+export type DeleteRoomMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteRoomMutation = { deleteRoom: string };
+
 export type CreateAdminMutationVariables = Exact<{
   data: CreateUserInput;
 }>;
@@ -465,8 +497,8 @@ export const CreateHotelDocument = gql`
     name
     summary
     thumbnail
-    slug
-    address
+    city
+    state
   }
 }
     `;
@@ -528,8 +560,8 @@ export type DeleteHotelMutationHookResult = ReturnType<typeof useDeleteHotelMuta
 export type DeleteHotelMutationResult = Apollo.MutationResult<DeleteHotelMutation>;
 export type DeleteHotelMutationOptions = Apollo.BaseMutationOptions<DeleteHotelMutation, DeleteHotelMutationVariables>;
 export const GetHotelByIdDocument = gql`
-    query GetHotelById($id: ID!) {
-  hotel(id: $id) {
+    query GetHotelById($id: ID!, $roomOptions: Options) {
+  hotel(id: $id, roomOptions: $roomOptions) {
     id
     name
     rating
@@ -572,6 +604,7 @@ export const GetHotelByIdDocument = gql`
  * const { data, loading, error } = useGetHotelByIdQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      roomOptions: // value for 'roomOptions'
  *   },
  * });
  */
@@ -759,6 +792,37 @@ export function useCreateRoomMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateRoomMutationHookResult = ReturnType<typeof useCreateRoomMutation>;
 export type CreateRoomMutationResult = Apollo.MutationResult<CreateRoomMutation>;
 export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<CreateRoomMutation, CreateRoomMutationVariables>;
+export const DeleteRoomDocument = gql`
+    mutation DeleteRoom($id: ID!) {
+  deleteRoom(id: $id)
+}
+    `;
+export type DeleteRoomMutationFn = Apollo.MutationFunction<DeleteRoomMutation, DeleteRoomMutationVariables>;
+
+/**
+ * __useDeleteRoomMutation__
+ *
+ * To run a mutation, you first call `useDeleteRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteRoomMutation, { data, loading, error }] = useDeleteRoomMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRoomMutation, DeleteRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRoomMutation, DeleteRoomMutationVariables>(DeleteRoomDocument, options);
+      }
+export type DeleteRoomMutationHookResult = ReturnType<typeof useDeleteRoomMutation>;
+export type DeleteRoomMutationResult = Apollo.MutationResult<DeleteRoomMutation>;
+export type DeleteRoomMutationOptions = Apollo.BaseMutationOptions<DeleteRoomMutation, DeleteRoomMutationVariables>;
 export const CreateAdminDocument = gql`
     mutation CreateAdmin($data: CreateUserInput!) {
   createAdmin(data: $data) {

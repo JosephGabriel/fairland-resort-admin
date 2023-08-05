@@ -1,5 +1,5 @@
-query GetHotelById($id: ID!) {
-  hotel(id: $id) {
+query GetHotelById($id: ID!, $roomOptions: Options) {
+  hotel(id: $id, roomOptions: $roomOptions) {
     id
     name
     rating

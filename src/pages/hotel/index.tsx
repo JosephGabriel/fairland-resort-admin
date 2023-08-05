@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-} from "@mui/material";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
+import { Grid, Typography } from "@mui/material";
 
 import {
   ChevronLeft,
@@ -17,24 +11,55 @@ import {
   StarOutline,
 } from "@mui/icons-material";
 
-import { useGetHotelByIdQuery } from "../../services/apollo/generated";
+import { AddRoomModal } from "@components/add-room-modal";
+import { Card } from "@components/card";
+import { Loader } from "@components/loader";
+
+import {
+  OrderBy,
+  useDeleteRoomMutation,
+  useGetHotelByIdQuery,
+} from "@services/apollo/hooks";
 
 import * as Material from "./styles";
-import { AddRoomModal } from "../../components/add-room-modal";
+import { RoomRepository } from "@repositories/room";
 
 export const HotelPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const repository = new RoomRepository();
 
   const { id } = useParams();
 
   const { data } = useGetHotelByIdQuery({
     variables: {
       id: `${id}`,
+      roomOptions: {
+        skip: 0,
+        take: 4,
+        orderBy: OrderBy.Desc,
+      },
     },
   });
 
+  const [deleteRoom, { loading: isDeleting }] = useDeleteRoomMutation();
+
+  const onDeleteRoom = async (roomId: string) => {
+    await deleteRoom({
+      variables: { id: roomId },
+      update: (cache) => {
+        repository.onDeleteRoom(String(id), roomId, cache);
+      },
+      onError: (err) => {
+        alert(JSON.stringify(err));
+      },
+    });
+  };
+
   return (
     <Material.Container>
+      <Loader variant="backdrop" isLoading={isDeleting} />
+
       <AddRoomModal
         hotelId={String(id)}
         isOpen={isOpen}
@@ -146,24 +171,14 @@ export const HotelPage = () => {
               <Grid container spacing={4}>
                 {data?.hotel.rooms?.map((room) => (
                   <Grid item md={3} key={room.id}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={room.thumbnail}
-                          alt="green iguana"
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {room.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {room.summary}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
+                    <Card
+                      id={room.id}
+                      name={room.name}
+                      thumbnail={room.thumbnail}
+                      summary={room.summary}
+                      onRemove={onDeleteRoom}
+                      isLink={false}
+                    />
                   </Grid>
                 ))}
               </Grid>

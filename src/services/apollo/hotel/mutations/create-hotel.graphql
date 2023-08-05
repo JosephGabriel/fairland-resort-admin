@@ -4,7 +4,7 @@ mutation CreateHotel($data: CreateHotelInput!) {
     name
     summary
     thumbnail
-    slug
-    address
+    city
+    state
   }
 }

@@ -10,9 +10,9 @@ import {
   Snackbar,
 } from "@mui/material";
 
-import { useLoginUserMutation } from "../../services/apollo/generated";
-import { LocalStorageService } from "../../services/local-storage";
-import { authUser } from "../../services/apollo/user/variables/user";
+import { useLoginUserMutation } from "@services/apollo/hooks";
+import { LocalStorageService } from "@services/local-storage";
+import { authUser } from "@services/apollo/user/variables/user";
 
 import { initialValues, validationSchema } from "./utils";
 
