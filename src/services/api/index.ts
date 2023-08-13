@@ -42,7 +42,9 @@ export const uploadImages = async (files: FileList) => {
   }
 
   const response = await fetch(
-    `http://localhost:5000/uploads/${isSingleFile ? "file" : "files"}`,
+    `${import.meta.env.VITE_BASE_URL}/uploads/${
+      isSingleFile ? "file" : "files"
+    }`,
     {
       body: formData,
       method: "POST",
