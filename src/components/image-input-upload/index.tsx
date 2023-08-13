@@ -1,29 +1,28 @@
 import { Fragment, useRef } from "react";
 import { Photo, Close } from "@mui/icons-material";
 
-import { MultipleImageItem } from "../multiple-image-item";
-import { ImageUpload } from "../image-upload-step-add-hotel-modal";
+import { MultipleImageItem } from "@components/multiple-image-item";
 
-import { uploadImages } from "../../services/api";
+import { uploadImages } from "@services/api";
 
 import * as Material from "./styles";
 
 interface Props {
-  images: ImageUpload;
   name: string;
-  isMultiple: boolean;
+  value: string | string[];
   onRemoveImage: (name: string) => void;
   onImageUploaded: (url: string, name: string) => void;
 }
 
-export const ImageInputButton = ({
+export const ImageInputUpload = ({
   name,
-  images,
-  isMultiple,
+  value,
   onRemoveImage,
   onImageUploaded,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const isMultiple = typeof value === "string";
 
   const onClick = () => {
     inputRef.current?.click();
@@ -46,20 +45,17 @@ export const ImageInputButton = ({
   return (
     <Material.GridItem item md={4}>
       <Material.UploadItem>
-        {images[name as keyof ImageUpload].length ? (
+        {value.length ? (
           <Fragment>
-            {name === "images" ? (
-              <MultipleImageItem images={images["images"]} />
+            {value instanceof Array ? (
+              <MultipleImageItem images={value} />
             ) : (
               <Fragment>
                 <Material.RemoveImageButton onClick={_onRemoveImage}>
                   <Close />
                 </Material.RemoveImageButton>
 
-                <Material.Image
-                  // @ts-expect-error ...
-                  src={images[name as keyof ImageUpload]}
-                />
+                <Material.Image src={value} />
               </Fragment>
             )}
           </Fragment>

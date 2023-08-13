@@ -13,13 +13,14 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStepModal } from "../basic-information-step-add-hotel-modal";
-import { SearchAddressStep } from "../search-address-step-add-hotel-modal";
-import { ImageUploadStep } from "../image-upload-step-add-hotel-modal";
+import { BasicInformationStepModal } from "@components/basic-information-step-add-hotel-modal";
+import { SearchAddressStep } from "@components/search-address-step-add-hotel-modal";
+import { ImageUploadStep } from "@components/image-upload-step";
 
 import {
   InitialValues,
   fields,
+  imagesFields,
   initialValues,
   validationSchema,
 } from "./utils";
@@ -42,9 +43,9 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
 
   const [createHotel, { loading }] = useCreateHotelMutation();
 
-  const repository = new HotelRepository();
-
   const formikRef = useRef<FormikProps<InitialValues> | null>(null);
+
+  const repository = new HotelRepository();
 
   const nextStep = () => {
     setActiveStep((prev) => prev + 1);
@@ -64,6 +65,7 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
       return;
     }
 
+    setActiveStep(0);
     onClose();
   };
 
@@ -75,24 +77,32 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
       },
       onError(error) {
         alert(JSON.stringify(error));
-        setActiveStep(0);
-        formikRef.current?.resetForm();
-        onClose();
+        onCloseModal();
       },
       onCompleted() {
-        formikRef.current?.resetForm();
-        setActiveStep(0);
-        onClose();
+        onCloseModal();
       },
     });
+  };
+
+  const onRemoveImage = (name: string) => {
+    const meta = formikRef.current?.getFieldMeta(name);
+
+    alert(JSON.stringify(meta));
+    return;
+    formikRef.current?.setFieldValue(name, "");
+  };
+
+  const onImageUploaded = (url: string, name: string) => {
+    formikRef.current?.setFieldValue(name, url);
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      innerRef={(ref) => (formikRef.current = ref)}
       onSubmit={onSubmit}
+      innerRef={formikRef}
     >
       {(formik) => (
         <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
@@ -118,7 +128,14 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
 
               {activeStep === 1 && <SearchAddressStep formik={formik} />}
 
-              {activeStep === 2 && <ImageUploadStep formik={formik} />}
+              {activeStep === 2 && (
+                <ImageUploadStep
+                  formik={formik}
+                  onRemoveImage={onRemoveImage}
+                  onImageUploaded={onImageUploaded}
+                  fields={imagesFields}
+                />
+              )}
 
               {activeStep === 3 && (
                 <Material.LoadingContainer>

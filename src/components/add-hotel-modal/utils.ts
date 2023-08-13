@@ -14,6 +14,12 @@ export const fields = {
   },
 };
 
+export const imagesFields = {
+  thumbnail: "",
+  logo: "",
+  images: [""],
+};
+
 export const initialValues = {
   name: faker.company.name(),
   summary: faker.lorem.sentence(),
