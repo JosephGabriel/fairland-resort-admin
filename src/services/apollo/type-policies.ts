@@ -38,6 +38,11 @@ export type HotelFieldPolicy = {
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	zipCode?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type HotelsPayloadKeySpecifier = ('count' | 'hotels' | HotelsPayloadKeySpecifier)[];
+export type HotelsPayloadFieldPolicy = {
+	count?: FieldPolicy<any> | FieldReadFunction<any>,
+	hotels?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type MutationKeySpecifier = ('createAdmin' | 'createBooking' | 'createHotel' | 'createRoom' | 'createUser' | 'deactivateUser' | 'deleteBooking' | 'deleteHotel' | 'deleteRoom' | 'loginUser' | 'updateHotel' | 'updateRoom' | 'updateUser' | 'updateUserPassword' | 'verifyUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	createAdmin?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -118,6 +123,10 @@ export type StrictTypedTypePolicies = {
 	Hotel?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | HotelKeySpecifier | (() => undefined | HotelKeySpecifier),
 		fields?: HotelFieldPolicy,
+	},
+	HotelsPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | HotelsPayloadKeySpecifier | (() => undefined | HotelsPayloadKeySpecifier),
+		fields?: HotelsPayloadFieldPolicy,
 	},
 	Mutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),

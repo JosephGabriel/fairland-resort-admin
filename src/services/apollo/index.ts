@@ -1,12 +1,26 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-import { LocalStorageService } from "../local-storage";
+import { LocalStorageService } from "@services/local-storage";
 import { authUser } from "./user/variables/user";
+import { TypedTypePolicies } from "./type-policies";
+
+const typePolicies: TypedTypePolicies = {
+  Query: {
+    fields: {
+      // @ts-expect-error ...
+      authUser: {
+        read: () => authUser(),
+      },
+      hotelsByAdmin: {
+        keyArgs: false,
+      },
+    },
+  },
+};
 
 const httpLink = createHttpLink({
-  uri: "https://fairland-resort-api-c5b3bb10838f.herokuapp.com/graphql",
-  //uri: "http://localhost:5000/graphql",
+  uri: `${import.meta.env.VITE_BASE_URL}/graphql`,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -24,24 +38,6 @@ export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   connectToDevTools: true,
   cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          authUser: {
-            read() {
-              // const user = LocalStorageService.getInstance().getItem("user");
-
-              // if (!user) {
-              //   return null;
-              // }
-
-              // return JSON.parse(user);
-
-              return authUser();
-            },
-          },
-        },
-      },
-    },
+    typePolicies,
   }),
 });

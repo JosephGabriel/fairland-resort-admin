@@ -1,10 +1,13 @@
-query GetHotelsByAdmin {
-  hotelsByAdmin {
-    id
-    name
-    summary
-    thumbnail
-    city
-    state
+query GetHotelsByAdmin($options: Options) {
+  hotelsByAdmin(options: $options) {
+    count
+    hotels {
+      id
+      name
+      summary
+      thumbnail
+      city
+      state
+    }
   }
 }

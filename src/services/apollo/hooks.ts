@@ -59,7 +59,7 @@ export type CreateHotelInput = {
   addressNumber: Scalars['String']['input'];
   city: Scalars['String']['input'];
   description: Scalars['String']['input'];
-  images: InputMaybe<Array<Scalars['String']['input']>>;
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
   latitude: Scalars['Latitude']['input'];
   logo: Scalars['String']['input'];
   longitude: Scalars['Longitude']['input'];
@@ -74,7 +74,7 @@ export type CreateHotelInput = {
 export type CreateRoomInput = {
   description: Scalars['String']['input'];
   hotel: Scalars['ID']['input'];
-  images: InputMaybe<Array<Scalars['String']['input']>>;
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
   name: Scalars['String']['input'];
   price: Scalars['Float']['input'];
   summary: Scalars['String']['input'];
@@ -82,7 +82,7 @@ export type CreateRoomInput = {
 };
 
 export type CreateUserInput = {
-  avatar: InputMaybe<Scalars['String']['input']>;
+  avatar?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
@@ -98,13 +98,13 @@ export type Hotel = {
   addressNumber: Scalars['String']['output'];
   /** Cidade do hotel */
   city: Scalars['String']['output'];
-  createdAt: Maybe<Scalars['DateTime']['output']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   /** A descrição do hotel */
   description: Scalars['String']['output'];
   /** Id do hotel */
   id: Scalars['ID']['output'];
   /** Um array de url's de imagens de hoteis */
-  images: Maybe<Array<Scalars['String']['output']>>;
+  images?: Maybe<Array<Scalars['String']['output']>>;
   /** Latitude do hotel */
   latitude: Scalars['Latitude']['output'];
   /** Url da logo do hotel */
@@ -116,7 +116,7 @@ export type Hotel = {
   /** Bairro do hotel */
   neighborhood: Scalars['String']['output'];
   /** Classificação do hotel ex: 5 estrelas */
-  rating: Maybe<Scalars['Int']['output']>;
+  rating?: Maybe<Scalars['Int']['output']>;
   /** Array com os quartos do hotel */
   rooms: Array<Room>;
   /** Slug do hotel baseado no nome */
@@ -127,9 +127,14 @@ export type Hotel = {
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do hotel */
   thumbnail: Scalars['String']['output'];
-  updatedAt: Maybe<Scalars['DateTime']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Cep do hotel */
   zipCode: Scalars['PostalCode']['output'];
+};
+
+export type HotelsPayload = {
+  count: Scalars['Int']['output'];
+  hotels: Array<Hotel>;
 };
 
 export type LoginUserInput = {
@@ -153,7 +158,7 @@ export type Mutation = {
   /** Usada para cancelar uma reserva */
   deleteBooking: Scalars['String']['output'];
   /** Usada para apagar um hotel */
-  deleteHotel: Scalars['String']['output'];
+  deleteHotel: Hotel;
   /** Usada para deletar um quarto de hotel */
   deleteRoom: Scalars['String']['output'];
   /** Usada para fazer login */
@@ -238,9 +243,9 @@ export type MutationUpdateUserPasswordArgs = {
 };
 
 export type Options = {
-  orderBy: InputMaybe<OrderBy>;
-  skip: InputMaybe<Scalars['Int']['input']>;
-  take: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<OrderBy>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum OrderBy {
@@ -260,7 +265,7 @@ export type Query = {
   /** Usada para buscar hotéis */
   hotels: Array<Hotel>;
   /** Usada para buscar um hotel pelo id do admin */
-  hotelsByAdmin: Array<Hotel>;
+  hotelsByAdmin: HotelsPayload;
   /** Usada para buscar um quarto pelo id */
   room: Room;
   /** Usada para buscar um quartos */
@@ -277,7 +282,7 @@ export type QueryBookingArgs = {
 
 export type QueryHotelArgs = {
   id: Scalars['ID']['input'];
-  roomOptions: InputMaybe<Options>;
+  roomOptions?: InputMaybe<Options>;
 };
 
 
@@ -287,7 +292,12 @@ export type QueryHotelBySlugArgs = {
 
 
 export type QueryHotelsArgs = {
-  roomOptions: InputMaybe<Options>;
+  roomOptions?: InputMaybe<Options>;
+};
+
+
+export type QueryHotelsByAdminArgs = {
+  options?: InputMaybe<Options>;
 };
 
 
@@ -297,13 +307,13 @@ export type QueryRoomArgs = {
 
 
 export type QueryRoomsArgs = {
-  filter: InputMaybe<RoomFilter>;
+  filter?: InputMaybe<RoomFilter>;
 };
 
 
 export type QueryRoomsByHotelArgs = {
   hotel: Scalars['ID']['input'];
-  options: InputMaybe<Options>;
+  options?: InputMaybe<Options>;
 };
 
 export type Review = {
@@ -329,13 +339,13 @@ export type Room = {
   /** Id do quarto */
   id: Scalars['ID']['output'];
   /** Um array de url's de imagens do quarto */
-  images: Maybe<Array<Scalars['String']['output']>>;
+  images?: Maybe<Array<Scalars['String']['output']>>;
   /** Nome do quarto */
   name: Scalars['String']['output'];
   /** Preço por noite do quarto */
   price: Scalars['Float']['output'];
   /** Classificação do quarto ex: 5 estrelas */
-  rating: Maybe<Scalars['Int']['output']>;
+  rating?: Maybe<Scalars['Int']['output']>;
   /** Uma pequena descrição do quarto */
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do quarto */
@@ -345,43 +355,43 @@ export type Room = {
 };
 
 export type RoomFilter = {
-  maxPrice: InputMaybe<Scalars['Float']['input']>;
-  maxRating: InputMaybe<Scalars['Int']['input']>;
-  minPrice: InputMaybe<Scalars['Float']['input']>;
-  minRating: InputMaybe<Scalars['Int']['input']>;
+  maxPrice?: InputMaybe<Scalars['Float']['input']>;
+  maxRating?: InputMaybe<Scalars['Int']['input']>;
+  minPrice?: InputMaybe<Scalars['Float']['input']>;
+  minRating?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateHotelInput = {
-  address: InputMaybe<Scalars['String']['input']>;
-  addressNumber: InputMaybe<Scalars['String']['input']>;
-  city: InputMaybe<Scalars['String']['input']>;
-  description: InputMaybe<Scalars['String']['input']>;
-  images: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  latitude: InputMaybe<Scalars['Latitude']['input']>;
-  logo: InputMaybe<Scalars['String']['input']>;
-  longitude: InputMaybe<Scalars['Longitude']['input']>;
-  name: InputMaybe<Scalars['String']['input']>;
-  neighborhood: InputMaybe<Scalars['String']['input']>;
-  state: InputMaybe<Scalars['String']['input']>;
-  summary: InputMaybe<Scalars['String']['input']>;
-  thumbnail: InputMaybe<Scalars['String']['input']>;
-  zipCode: InputMaybe<Scalars['PostalCode']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  addressNumber?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  images?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  latitude?: InputMaybe<Scalars['Latitude']['input']>;
+  logo?: InputMaybe<Scalars['String']['input']>;
+  longitude?: InputMaybe<Scalars['Longitude']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  neighborhood?: InputMaybe<Scalars['String']['input']>;
+  state?: InputMaybe<Scalars['String']['input']>;
+  summary?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  zipCode?: InputMaybe<Scalars['PostalCode']['input']>;
 };
 
 export type UpdateRoomInput = {
-  images: InputMaybe<Array<Scalars['String']['input']>>;
-  name: InputMaybe<Scalars['String']['input']>;
-  price: InputMaybe<Scalars['Float']['input']>;
-  summary: InputMaybe<Scalars['String']['input']>;
-  thumbnail: InputMaybe<Scalars['String']['input']>;
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Float']['input']>;
+  summary?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
-  avatar: InputMaybe<Scalars['String']['input']>;
-  email: InputMaybe<Scalars['EmailAddress']['input']>;
-  firstName: InputMaybe<Scalars['String']['input']>;
-  lastName: InputMaybe<Scalars['String']['input']>;
-  userName: InputMaybe<Scalars['String']['input']>;
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['EmailAddress']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  userName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserPasswordInput = {
@@ -393,9 +403,9 @@ export type User = {
   /** Mostra se o usuário esta ativo ou não */
   active: Scalars['Boolean']['output'];
   /** Url da imagem de perfil de cada usuário */
-  avatar: Maybe<Scalars['String']['output']>;
+  avatar?: Maybe<Scalars['String']['output']>;
   /** Reservas do usúario */
-  bookings: Maybe<Array<Booking>>;
+  bookings?: Maybe<Array<Booking>>;
   /** Email único de cada usuário */
   email: Scalars['EmailAddress']['output'];
   /** Primeiro nome do usuário */
@@ -407,9 +417,9 @@ export type User = {
   /** Senha criptografada de cada usuário */
   password: Scalars['Password']['output'];
   /** Timestamp do momento em que o usuário mudou a senha */
-  passwordChangedAt: Maybe<Scalars['String']['output']>;
+  passwordChangedAt?: Maybe<Scalars['String']['output']>;
   /** Review feitas pelo usuário */
-  reviews: Maybe<Array<Review>>;
+  reviews?: Maybe<Array<Review>>;
   /** Enum do tipo de função (ADMIN | USER) */
   role: UserRole;
   /** Nome de usuário único de cada usuário */
@@ -435,38 +445,40 @@ export type DeleteHotelMutationVariables = Exact<{
 }>;
 
 
-export type DeleteHotelMutation = { deleteHotel: string };
+export type DeleteHotelMutation = { deleteHotel: { id: string } };
 
 export type GetHotelByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number | null, summary: string, description: string, images: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
+export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating?: number | null, summary: string, description: string, images?: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string, rooms: Array<{ id: string, name: string, summary: string, thumbnail: string }> } };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
+export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
 
-export type GetHotelsByAdminQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetHotelsByAdminQueryVariables = Exact<{
+  options?: InputMaybe<Options>;
+}>;
 
 
-export type GetHotelsByAdminQuery = { hotelsByAdmin: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> };
+export type GetHotelsByAdminQuery = { hotelsByAdmin: { count: number, hotels: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> } };
 
 export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating: number | null, summary: string, description: string, thumbnail: string, images: Array<string> | null, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
+export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
 
 export type CreateRoomMutationVariables = Exact<{
   data: CreateRoomInput;
 }>;
 
 
-export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images: Array<string> | null, price: number, rating: number | null } };
+export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images?: Array<string> | null, price: number, rating?: number | null } };
 
 export type DeleteRoomMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -477,7 +489,7 @@ export type DeleteRoomMutation = { deleteRoom: string };
 
 export type GetRoomsByHotelQueryVariables = Exact<{
   hotelId: Scalars['ID']['input'];
-  options: InputMaybe<Options>;
+  options?: InputMaybe<Options>;
 }>;
 
 
@@ -488,14 +500,14 @@ export type CreateAdminMutationVariables = Exact<{
 }>;
 
 
-export type CreateAdminMutation = { createAdmin: { token: string, user: { id: string, firstName: string, lastName: string, userName: string, email: string, avatar: string | null, password: string, passwordChangedAt: string | null, role: UserRole, active: boolean, verified: boolean } } };
+export type CreateAdminMutation = { createAdmin: { token: string, user: { id: string, firstName: string, lastName: string, userName: string, email: string, avatar?: string | null, password: string, passwordChangedAt?: string | null, role: UserRole, active: boolean, verified: boolean } } };
 
 export type LoginUserMutationVariables = Exact<{
   data: LoginUserInput;
 }>;
 
 
-export type LoginUserMutation = { loginUser: { token: string, user: { id: string, role: UserRole, avatar: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
+export type LoginUserMutation = { loginUser: { token: string, user: { id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
 
 
 export const CreateHotelDocument = gql`
@@ -538,7 +550,9 @@ export type CreateHotelMutationResult = Apollo.MutationResult<CreateHotelMutatio
 export type CreateHotelMutationOptions = Apollo.BaseMutationOptions<CreateHotelMutation, CreateHotelMutationVariables>;
 export const DeleteHotelDocument = gql`
     mutation DeleteHotel($id: ID!) {
-  deleteHotel(id: $id)
+  deleteHotel(id: $id) {
+    id
+  }
 }
     `;
 export type DeleteHotelMutationFn = Apollo.MutationFunction<DeleteHotelMutation, DeleteHotelMutationVariables>;
@@ -587,6 +601,12 @@ export const GetHotelByIdDocument = gql`
     neighborhood
     state
     city
+    rooms {
+      id
+      name
+      summary
+      thumbnail
+    }
   }
 }
     `;
@@ -667,14 +687,17 @@ export type GetHotelBySlugQueryHookResult = ReturnType<typeof useGetHotelBySlugQ
 export type GetHotelBySlugLazyQueryHookResult = ReturnType<typeof useGetHotelBySlugLazyQuery>;
 export type GetHotelBySlugQueryResult = Apollo.QueryResult<GetHotelBySlugQuery, GetHotelBySlugQueryVariables>;
 export const GetHotelsByAdminDocument = gql`
-    query GetHotelsByAdmin {
-  hotelsByAdmin {
-    id
-    name
-    summary
-    thumbnail
-    city
-    state
+    query GetHotelsByAdmin($options: Options) {
+  hotelsByAdmin(options: $options) {
+    count
+    hotels {
+      id
+      name
+      summary
+      thumbnail
+      city
+      state
+    }
   }
 }
     `;
@@ -691,6 +714,7 @@ export const GetHotelsByAdminDocument = gql`
  * @example
  * const { data, loading, error } = useGetHotelsByAdminQuery({
  *   variables: {
+ *      options: // value for 'options'
  *   },
  * });
  */
