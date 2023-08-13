@@ -18,10 +18,15 @@ export class HotelRepository {
       return;
     }
 
+    const newHotels = [...hotels.hotelsByAdmin.hotels, data.createHotel];
+
     cache.writeQuery({
       query: GetHotelsByAdminDocument,
       data: {
-        hotelsByAdmin: [...hotels.hotelsByAdmin, data.createHotel],
+        hotelsByAdmin: {
+          count: newHotels.length,
+          hotels: newHotels,
+        },
       },
     });
   }
@@ -34,11 +39,21 @@ export class HotelRepository {
     if (!hotels) {
       return;
     }
+    alert(hotels?.hotelsByAdmin.hotels.length);
+
+    const newHotels = hotels?.hotelsByAdmin.hotels?.filter(
+      (h) => h.id !== hotelId
+    );
+
+    alert(newHotels.length);
 
     cache.writeQuery({
       query: GetHotelsByAdminDocument,
       data: {
-        hotelsByAdmin: hotels?.hotelsByAdmin?.filter((h) => h.id !== hotelId),
+        hotelsByAdmin: {
+          count: newHotels.length,
+          hotels: newHotels,
+        },
       },
     });
   }
