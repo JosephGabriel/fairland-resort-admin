@@ -17,7 +17,7 @@ const scalars = {
 const config: CodegenConfig = {
   overwrite: true,
   watch: true,
-  schema: process.env.VITE_BASE_URL,
+  schema: `${process.env.VITE_BASE_URL}/graphql`,
   documents: "src/**/*.graphql",
   generates: {
     "src/services/apollo/hooks.ts": {
