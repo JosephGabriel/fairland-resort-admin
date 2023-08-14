@@ -38,7 +38,6 @@ const config: CodegenConfig = {
       plugins: ["typescript", "typescript-operations", "typed-document-node"],
       config: {
         strictScalars: true,
-        avoidOptionals: true,
         scalars,
       },
     },
@@ -46,7 +45,6 @@ const config: CodegenConfig = {
       plugins: ["typescript-apollo-client-helpers"],
       config: {
         strictScalars: true,
-        avoidOptionals: true,
         scalars,
       },
     },
