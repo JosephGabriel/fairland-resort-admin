@@ -12,7 +12,7 @@ const typePolicies: TypedTypePolicies = {
       authUser: {
         read: () => authUser(),
       },
-      hotelsByAdmin: {
+      roomsByHotel: {
         keyArgs: false,
       },
     },

@@ -1,8 +1,12 @@
 query GetRoomsByHotel($hotelId: ID!, $options: Options) {
   roomsByHotel(hotel: $hotelId, options: $options) {
-    id
-    name
-    summary
-    thumbnail
+    count
+    rooms {
+      id
+      name
+      summary
+      thumbnail
+      createdAt
+    }
   }
 }

@@ -1,16 +1,8 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-import {
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { Grid, Pagination, SelectChangeEvent, Typography } from "@mui/material";
 
 import {
   ChevronLeft,
@@ -20,7 +12,8 @@ import {
 } from "@mui/icons-material";
 
 import { AddRoomModal } from "@components/add-room-modal";
-import { Card } from "@components/card";
+import { RoomCarousel } from "@components/room-carousel";
+import { CustomSelectInput } from "@components/custom-select-input";
 import { Loader } from "@components/loader";
 
 import { RoomRepository } from "@repositories/room";
@@ -32,15 +25,22 @@ import {
   useGetRoomsByHotelQuery,
 } from "@services/apollo/hooks";
 
+import { selectOptions } from "./utils";
+
 import * as Material from "./styles";
 
 export const HotelPage = () => {
   const { id } = useParams();
 
+  const perPage = 12 / 3;
+
   const repository = new RoomRepository(String(id));
 
   const [isOpen, setIsOpen] = useState(false);
   const [orderBy, setOrderBy] = useState(OrderBy.Desc);
+
+  const [totalItems, setItemsCount] = useState(0);
+  const [page, setPage] = useState(1);
 
   const { data } = useGetHotelByIdQuery({
     variables: {
@@ -48,14 +48,21 @@ export const HotelPage = () => {
     },
   });
 
-  const { data: rooms, refetch } = useGetRoomsByHotelQuery({
+  const {
+    data: rooms,
+    loading,
+    refetch,
+  } = useGetRoomsByHotelQuery({
     variables: {
       hotelId: String(id),
       options: {
-        skip: 0,
-        take: 4,
+        take: perPage,
         orderBy: orderBy,
+        skip: page * perPage - perPage,
       },
+    },
+    onCompleted(data) {
+      setItemsCount(Math.ceil(data.roomsByHotel.count / 4));
     },
   });
 
@@ -63,7 +70,28 @@ export const HotelPage = () => {
 
   const handleChange = (event: SelectChangeEvent<OrderBy>) => {
     setOrderBy(event.target.value as OrderBy);
-    refetch();
+
+    refetch({
+      hotelId: String(id),
+      options: {
+        take: perPage,
+        orderBy: orderBy,
+        skip: 0,
+      },
+    });
+  };
+
+  const onPageChange = async (_: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+
+    refetch({
+      hotelId: String(id),
+      options: {
+        take: perPage,
+        orderBy: orderBy,
+        skip: page * perPage - perPage,
+      },
+    });
   };
 
   const onDeleteRoom = async (roomId: string) => {
@@ -180,15 +208,7 @@ export const HotelPage = () => {
         </Material.ImageGrid>
 
         <Grid container>
-          <Grid
-            item
-            md={12}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <Material.RoomGridItemOptions item md={12}>
             <div>
               <Material.RoomTitle variant="h5">Quartos</Material.RoomTitle>
 
@@ -201,48 +221,36 @@ export const HotelPage = () => {
             </div>
 
             <div>
-              <FormControl variant="outlined">
-                <InputLabel id="select-outlined-label">Ordenar por</InputLabel>
-
-                <Select
-                  labelId="select-outlined-label"
-                  id="select-outlined"
-                  value={orderBy}
-                  onChange={handleChange}
-                  label="Ordenar por"
-                >
-                  <MenuItem value={OrderBy.Desc}>Decrescente</MenuItem>
-                  <MenuItem value={OrderBy.Asc}>Ascendente</MenuItem>
-                </Select>
-              </FormControl>
+              <CustomSelectInput<OrderBy>
+                value={orderBy}
+                label="Ordenar por"
+                id="select-outlined-label"
+                labelId="select-outlined-label"
+                options={selectOptions}
+                onChange={handleChange}
+              />
             </div>
+          </Material.RoomGridItemOptions>
+
+          <Grid item md={12}>
+            <RoomCarousel
+              rooms={rooms?.roomsByHotel.rooms}
+              onDeleteRoom={onDeleteRoom}
+              isLoading={loading}
+            />
           </Grid>
 
           <Grid item md={12}>
-            {rooms?.roomsByHotel?.length ? (
-              <Grid container spacing={4}>
-                {rooms?.roomsByHotel?.map((room) => (
-                  <Grid item md={3} key={room.id}>
-                    <Card
-                      id={room.id}
-                      name={room.name}
-                      thumbnail={room.thumbnail}
-                      summary={room.summary}
-                      onRemove={onDeleteRoom}
-                      isLink={false}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            ) : (
-              <Grid item md={12}>
-                <Material.NoRoomPaper>
-                  <Material.NoRoomPaperText variant="body1">
-                    Nenhum quarto adicionado
-                  </Material.NoRoomPaperText>
-                </Material.NoRoomPaper>
-              </Grid>
-            )}
+            <Material.PaginationContainer>
+              <Pagination
+                color="primary"
+                defaultPage={1}
+                siblingCount={0}
+                count={totalItems}
+                page={page}
+                onChange={onPageChange}
+              />
+            </Material.PaginationContainer>
           </Grid>
         </Grid>
       </Material.DetailContainer>

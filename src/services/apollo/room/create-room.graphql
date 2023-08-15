@@ -8,5 +8,6 @@ mutation CreateRoom($data: CreateRoomInput!) {
     images
     price
     rating
+    createdAt
   }
 }

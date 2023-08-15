@@ -95,6 +95,11 @@ export type RoomFieldPolicy = {
 	thumbnail?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type RoomPayloadKeySpecifier = ('count' | 'rooms' | RoomPayloadKeySpecifier)[];
+export type RoomPayloadFieldPolicy = {
+	count?: FieldPolicy<any> | FieldReadFunction<any>,
+	rooms?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type UserKeySpecifier = ('active' | 'avatar' | 'bookings' | 'email' | 'firstName' | 'id' | 'lastName' | 'password' | 'passwordChangedAt' | 'reviews' | 'role' | 'userName' | 'verified' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
 	active?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -143,6 +148,10 @@ export type StrictTypedTypePolicies = {
 	Room?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | RoomKeySpecifier | (() => undefined | RoomKeySpecifier),
 		fields?: RoomFieldPolicy,
+	},
+	RoomPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | RoomPayloadKeySpecifier | (() => undefined | RoomPayloadKeySpecifier),
+		fields?: RoomPayloadFieldPolicy,
 	},
 	User?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier),

@@ -103,3 +103,19 @@ export const CarouselButton = styled(IconButton)(
     right: isLeft ? "auto" : 0,
   })
 );
+
+export const RoomGridItemOptions = styled(Grid)(() => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+}));
+
+export const GridItemCard = styled(Grid)(() => ({
+  flex: 1,
+}));
+
+export const PaginationContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  marginTop: theme.spacing(3),
+}));

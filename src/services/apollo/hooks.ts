@@ -271,7 +271,7 @@ export type Query = {
   /** Usada para buscar um quartos */
   rooms: Array<Room>;
   /** Usada para buscar quartos pelo id do hotel */
-  roomsByHotel: Array<Room>;
+  roomsByHotel: RoomPayload;
 };
 
 
@@ -359,6 +359,11 @@ export type RoomFilter = {
   maxRating?: InputMaybe<Scalars['Int']['input']>;
   minPrice?: InputMaybe<Scalars['Float']['input']>;
   minRating?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomPayload = {
+  count: Scalars['Int']['output'];
+  rooms: Array<Room>;
 };
 
 export type UpdateHotelInput = {
@@ -452,7 +457,7 @@ export type GetHotelByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating?: number | null, summary: string, description: string, images?: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string, rooms: Array<{ id: string, name: string, summary: string, thumbnail: string }> } };
+export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating?: number | null, summary: string, description: string, images?: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -478,7 +483,7 @@ export type CreateRoomMutationVariables = Exact<{
 }>;
 
 
-export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images?: Array<string> | null, price: number, rating?: number | null } };
+export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images?: Array<string> | null, price: number, rating?: number | null, createdAt: Date } };
 
 export type DeleteRoomMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -493,7 +498,7 @@ export type GetRoomsByHotelQueryVariables = Exact<{
 }>;
 
 
-export type GetRoomsByHotelQuery = { roomsByHotel: Array<{ id: string, name: string, summary: string, thumbnail: string }> };
+export type GetRoomsByHotelQuery = { roomsByHotel: { count: number, rooms: Array<{ id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
 
 export type CreateAdminMutationVariables = Exact<{
   data: CreateUserInput;
@@ -601,12 +606,6 @@ export const GetHotelByIdDocument = gql`
     neighborhood
     state
     city
-    rooms {
-      id
-      name
-      summary
-      thumbnail
-    }
   }
 }
     `;
@@ -786,6 +785,7 @@ export const CreateRoomDocument = gql`
     images
     price
     rating
+    createdAt
   }
 }
     `;
@@ -849,10 +849,14 @@ export type DeleteRoomMutationOptions = Apollo.BaseMutationOptions<DeleteRoomMut
 export const GetRoomsByHotelDocument = gql`
     query GetRoomsByHotel($hotelId: ID!, $options: Options) {
   roomsByHotel(hotel: $hotelId, options: $options) {
-    id
-    name
-    summary
-    thumbnail
+    count
+    rooms {
+      id
+      name
+      summary
+      thumbnail
+      createdAt
+    }
   }
 }
     `;

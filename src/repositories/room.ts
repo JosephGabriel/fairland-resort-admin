@@ -1,19 +1,25 @@
 import { ApolloCache } from "@apollo/client";
 
-import { GetHotelByIdDocument } from "@services/apollo/documents";
-import { CreateRoomMutation, OrderBy } from "@services/apollo/hooks";
+import { GetRoomsByHotelDocument } from "@services/apollo/documents";
+
+import {
+  CreateRoomMutation,
+  GetRoomsByHotelQuery,
+  OrderBy,
+} from "@services/apollo/hooks";
 
 type MutationResult<T> = T | null | undefined;
+type QueryResult = GetRoomsByHotelQuery["roomsByHotel"]["rooms"];
 
 export class RoomRepository {
   constructor(private hotelId: string) {}
 
   private get getHotelByIdQuery() {
     return {
-      query: GetHotelByIdDocument,
+      query: GetRoomsByHotelDocument,
       variables: {
-        id: `${this.hotelId}`,
-        roomOptions: {
+        hotelId: this.hotelId,
+        options: {
           skip: 0,
           take: 4,
           orderBy: OrderBy.Desc,
@@ -26,40 +32,40 @@ export class RoomRepository {
     data: MutationResult<CreateRoomMutation>,
     cache: ApolloCache<unknown>
   ) {
-    const hotel = cache.readQuery(this.getHotelByIdQuery);
+    const rooms = cache.readQuery(this.getHotelByIdQuery);
 
-    if (!hotel || !data?.createRoom) {
+    if (!rooms || !data?.createRoom) {
       return;
     }
 
-    const room = data.createRoom;
+    const newRooms = [...rooms.roomsByHotel.rooms, data.createRoom];
 
     cache.writeQuery({
       ...this.getHotelByIdQuery,
       data: {
-        hotel: {
-          ...hotel?.hotel,
-          rooms: [...hotel.hotel.rooms, room],
+        roomsByHotel: {
+          count: newRooms.length,
+          rooms: newRooms,
         },
       },
     });
   }
 
   onDeleteRoom(roomId: string, cache: ApolloCache<unknown>) {
-    const hotel = cache.readQuery(this.getHotelByIdQuery);
+    const rooms = cache.readQuery(this.getHotelByIdQuery);
 
-    if (!hotel?.hotel) {
+    if (!rooms?.roomsByHotel) {
       return;
     }
 
-    const rooms = hotel?.hotel.rooms.filter((r) => r.id !== roomId);
+    const newRooms = rooms?.roomsByHotel.rooms.filter((r) => r.id !== roomId);
 
     cache.writeQuery({
       ...this.getHotelByIdQuery,
       data: {
-        hotel: {
-          ...hotel?.hotel,
-          rooms,
+        roomsByHotel: {
+          count: newRooms.length,
+          rooms: newRooms,
         },
       },
     });

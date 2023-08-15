@@ -17,12 +17,5 @@ query GetHotelById($id: ID!) {
     neighborhood
     state
     city
-
-    rooms {
-      id
-      name
-      summary
-      thumbnail
-    }
   }
 }
