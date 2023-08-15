@@ -2,16 +2,12 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 import { LocalStorageService } from "@services/local-storage";
-import { authUser } from "./user/variables/user";
+
 import { TypedTypePolicies } from "./type-policies";
 
 const typePolicies: TypedTypePolicies = {
   Query: {
     fields: {
-      // @ts-expect-error ...
-      authUser: {
-        read: () => authUser(),
-      },
       roomsByHotel: {
         keyArgs: false,
       },

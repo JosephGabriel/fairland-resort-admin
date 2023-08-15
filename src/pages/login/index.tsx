@@ -12,7 +12,8 @@ import {
 
 import { useLoginUserMutation } from "@services/apollo/hooks";
 import { LocalStorageService } from "@services/local-storage";
-import { authUser } from "@services/apollo/user/variables/user";
+
+import { useUserContext } from "@contexts/user";
 
 import { initialValues, validationSchema } from "./utils";
 
@@ -24,6 +25,8 @@ export const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
+
+  const { setUser } = useUserContext();
 
   const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
@@ -47,17 +50,16 @@ export const LoginPage = () => {
           setIsOpen(true);
         },
         update(_, { data }) {
+          if (!data?.loginUser.user) {
+            return;
+          }
+
           LocalStorageService.getInstance().setItem(
             "token",
             `${data?.loginUser.token}`
           );
 
-          LocalStorageService.getInstance().setItem(
-            "user",
-            JSON.stringify(data?.loginUser.user)
-          );
-
-          authUser(data?.loginUser.user);
+          setUser(data?.loginUser.user);
         },
       });
     },

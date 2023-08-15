@@ -6,6 +6,8 @@ import { Navigation } from "@navigation/.";
 
 import { client } from "@services/apollo";
 
+import { UserContextProvider } from "@contexts/user";
+
 export const App = () => {
   const queryClient = new QueryClient();
 
@@ -26,13 +28,15 @@ export const App = () => {
   });
 
   return (
-    <ApolloProvider client={client}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Navigation />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </ApolloProvider>
+    <UserContextProvider>
+      <ApolloProvider client={client}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Navigation />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </ApolloProvider>
+    </UserContextProvider>
   );
 };

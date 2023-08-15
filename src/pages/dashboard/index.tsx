@@ -1,9 +1,8 @@
 import { Grid, Typography } from "@mui/material";
 import ReactApexChart from "react-apexcharts";
 
-import { useAuthUserQuery } from "../../services/apollo/user/variables/user";
-
 import * as Material from "./styles";
+import { useUserContext } from "@contexts/user";
 
 const series = [
   {
@@ -17,13 +16,11 @@ const series = [
 ];
 
 export const DashBoardPage = () => {
-  const { data: user } = useAuthUserQuery();
+  const { user } = useUserContext();
 
   return (
     <Material.Container>
-      <Material.Title variant="h4">
-        Olá, {user?.authUser.firstName}
-      </Material.Title>
+      <Material.Title variant="h4">Olá, {user?.firstName}</Material.Title>
 
       <Material.GridContainer
         container

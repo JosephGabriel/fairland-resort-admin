@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-import { useAuthUserQuery } from "../../services/apollo/user/variables/user";
+import { useUserContext } from "@contexts/user";
 
 export const NonProtectedRoute = () => {
-  const { data } = useAuthUserQuery();
+  const { user } = useUserContext();
 
-  return !data?.authUser ? <Outlet /> : <Navigate to={"/dashboard"} replace />;
+  return !user ? <Outlet /> : <Navigate to={"/dashboard"} replace />;
 };

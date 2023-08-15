@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-import { useAuthUserQuery } from "../../services/apollo/user/variables/user";
+import { useUserContext } from "@contexts/user";
 
 import { Navbar } from "../navbar";
 
 export const ProtectedRoute = () => {
-  const { data } = useAuthUserQuery();
+  const { user } = useUserContext();
 
-  return data?.authUser ? (
+  return user ? (
     <>
       <Navbar />
       <Outlet />
