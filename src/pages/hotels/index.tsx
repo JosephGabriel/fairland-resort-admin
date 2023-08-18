@@ -23,7 +23,7 @@ export const HotelsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [orderBy, setOrderBy] = useState(OrderBy.Desc);
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(12);
 
   const [totalItems, setItemsCount] = useState(0);
   const [page, setPage] = useState(1);
