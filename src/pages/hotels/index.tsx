@@ -23,12 +23,12 @@ export const HotelsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [orderBy, setOrderBy] = useState(OrderBy.Desc);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(2);
 
   const [totalItems, setItemsCount] = useState(0);
   const [page, setPage] = useState(1);
 
-  const { data, loading, refetch } = useGetHotelsByAdminQuery({
+  const { data, loading, refetch, fetchMore } = useGetHotelsByAdminQuery({
     variables: {
       options: {
         orderBy: orderBy,
@@ -36,7 +36,6 @@ export const HotelsPage = () => {
         skip: page * perPage - perPage,
       },
     },
-    fetchPolicy: "network-only",
     onCompleted(data) {
       setItemsCount(Math.ceil(data.hotelsByAdmin.count / perPage));
     },
@@ -48,20 +47,43 @@ export const HotelsPage = () => {
 
   const handleChange = (event: SelectChangeEvent<OrderBy>) => {
     setOrderBy(event.target.value as OrderBy);
+
     setPage(1);
-    refetch();
+
+    refetch({
+      options: {
+        orderBy: orderBy,
+        take: perPage,
+        skip: page * perPage - perPage,
+      },
+    });
   };
 
-  const onPageChange = (_: ChangeEvent<unknown>, page: number) => {
+  const onPageChange = async (_: ChangeEvent<unknown>, page: number) => {
     setPage(page);
 
-    refetch();
+    await fetchMore({
+      variables: {
+        options: {
+          take: perPage,
+          skip: page * perPage - perPage,
+        },
+      },
+    });
   };
 
   const handlePerPageChange = (event: SelectChangeEvent<string>) => {
     setPerPage(parseInt(event.target.value));
+
     setPage(1);
-    refetch();
+
+    refetch({
+      options: {
+        orderBy: orderBy,
+        take: perPage,
+        skip: page * perPage - perPage,
+      },
+    });
   };
 
   const onDeleteHotel = async (hotelId: string) => {
