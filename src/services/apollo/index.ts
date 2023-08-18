@@ -5,15 +5,7 @@ import { LocalStorageService } from "@services/local-storage";
 
 import { TypedTypePolicies } from "./type-policies";
 
-const typePolicies: TypedTypePolicies = {
-  Query: {
-    fields: {
-      roomsByHotel: {
-        keyArgs: false,
-      },
-    },
-  },
-};
+const typePolicies: TypedTypePolicies = {};
 
 const httpLink = createHttpLink({
   uri: `${import.meta.env.VITE_BASE_URL}/graphql`,

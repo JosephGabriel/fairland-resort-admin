@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 interface CarouselButtonProps {
-  isLeft?: boolean;
+  isleft?: string;
 }
 
 export const Container = styled(Box)(({ theme }) => ({
@@ -97,10 +97,10 @@ export const NoRoomPaperText = styled(Typography)(() => ({
 }));
 
 export const CarouselButton = styled(IconButton)(
-  ({ isLeft }: CarouselButtonProps) => ({
+  ({ isleft }: CarouselButtonProps) => ({
     position: "absolute",
-    left: isLeft ? 0 : "auto",
-    right: isLeft ? "auto" : 0,
+    left: isleft ? 0 : "auto",
+    right: isleft ? "auto" : 0,
   })
 );
 
