@@ -18,8 +18,8 @@ export const RoomCarousel = ({ isLoading, rooms, onDeleteRoom }: Props) => {
     <Grid container spacing={4}>
       {isLoading && (
         <>
-          {new Array(4).fill(" ").map((d) => (
-            <Material.GridItemCard item md={3} key={d}>
+          {new Array(4).fill(" ").map((_, idx) => (
+            <Material.GridItemCard item md={3} key={idx}>
               <CustomSkeleton variant="card" />
             </Material.GridItemCard>
           ))}

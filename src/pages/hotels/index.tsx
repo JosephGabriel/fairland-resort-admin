@@ -144,8 +144,8 @@ export const HotelsPage = () => {
         <Grid container spacing={2} alignItems={"stretch"}>
           {loading && (
             <>
-              {new Array(4).fill(" ").map((d) => (
-                <Material.GridItemCard item md={3} key={d}>
+              {new Array(4).fill(" ").map((_, idx) => (
+                <Material.GridItemCard item md={3} key={idx}>
                   <CustomSkeleton variant="card" />
                 </Material.GridItemCard>
               ))}
