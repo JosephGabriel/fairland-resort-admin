@@ -1,6 +1,7 @@
 import { CssBaseline, ThemeProvider, colors, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ApolloProvider } from "@apollo/client";
+import { SnackbarProvider } from "notistack";
 
 import { Navigation } from "@navigation/.";
 
@@ -31,10 +32,12 @@ export const App = () => {
     <UserContextProvider>
       <ApolloProvider client={client}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Navigation />
-          </ThemeProvider>
+          <SnackbarProvider autoHideDuration={3000}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Navigation />
+            </ThemeProvider>
+          </SnackbarProvider>
         </QueryClientProvider>
       </ApolloProvider>
     </UserContextProvider>

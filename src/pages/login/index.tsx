@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Close, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
 import { useFormik } from "formik";
 
 import {
@@ -7,11 +8,9 @@ import {
   IconButton,
   InputAdornment,
   LinearProgress,
-  Snackbar,
 } from "@mui/material";
 
 import { useLoginUserMutation } from "@services/apollo/hooks";
-import { LocalStorageService } from "@services/local-storage";
 
 import { useUserContext } from "@contexts/user";
 
@@ -22,47 +21,45 @@ import * as Material from "./styles";
 export const LoginPage = () => {
   const [loginUser, { loading }] = useLoginUserMutation();
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
   const { setUser } = useUserContext();
 
-  const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const { enqueueSnackbar } = useSnackbar();
 
-    setIsOpen(false);
+  const onSubmit = async (values: typeof initialValues) => {
+    await loginUser({
+      variables: { data: values },
+      onError(error) {
+        if (error.networkError) {
+          enqueueSnackbar("Erro ao fazer login, tente novamente mais tarde", {
+            variant: "error",
+          });
+        }
+
+        if (error.graphQLErrors) {
+          error.graphQLErrors.map((err) => {
+            enqueueSnackbar(err.message, {
+              variant: "error",
+            });
+          });
+        }
+      },
+      update(_, { data }) {
+        if (!data?.loginUser.user) {
+          return;
+        }
+
+        setUser(data?.loginUser.user);
+      },
+    });
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     validateOnMount: false,
-    validateOnBlur: true,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      await loginUser({
-        variables: { data: values },
-        onError(error) {
-          setErrorMessage(error.message);
-          setIsOpen(true);
-        },
-        update(_, { data }) {
-          if (!data?.loginUser.user) {
-            return;
-          }
-
-          LocalStorageService.getInstance().setItem(
-            "token",
-            `${data?.loginUser.token}`
-          );
-
-          setUser(data?.loginUser.user);
-        },
-      });
-    },
+    onSubmit,
   });
 
   return (
@@ -71,24 +68,6 @@ export const LoginPage = () => {
       alignItems={"center"}
       justifyContent={"center"}
     >
-      <Snackbar
-        open={isOpen}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={errorMessage}
-        action={
-          <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={handleClose}
-          >
-            <Close fontSize="small" />
-          </IconButton>
-        }
-      />
-
       <Material.FormContainer item>
         <Grow in={loading}>
           <LinearProgress />
