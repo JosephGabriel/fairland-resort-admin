@@ -28,9 +28,10 @@ export const ImageUploadStep = ({
 
   return (
     <Material.Container container spacing={2} alignItems={"stretch"}>
-      {Object.keys(fields).map((name) => (
+      {Object.keys(fields).map((name, idx) => (
         <ImageInputUpload
           name={name}
+          key={idx}
           // @ts-expect-error ...
           value={formik.values[name]}
           onRemoveImage={onRemovedImage}
