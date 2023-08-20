@@ -3,7 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 
 import { LocalStorageService } from "@services/local-storage";
 
-import { TypedTypePolicies } from "./type-policies";
+import { TypedTypePolicies } from "./generated/type-policies";
 
 const typePolicies: TypedTypePolicies = {};
 

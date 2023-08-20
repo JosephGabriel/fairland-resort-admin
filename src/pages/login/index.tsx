@@ -45,6 +45,11 @@ export const LoginPage = () => {
           });
         }
       },
+      onCompleted() {
+        enqueueSnackbar("Login Concluido", {
+          variant: "success",
+        });
+      },
       update(_, { data }) {
         if (!data?.loginUser.user) {
           return;
@@ -90,6 +95,9 @@ export const LoginPage = () => {
             onBlur={formik.handleBlur}
             variant="outlined"
             fullWidth
+            inputProps={{
+              "data-testid": "email-input",
+            }}
           />
 
           <Material.Input
@@ -103,6 +111,9 @@ export const LoginPage = () => {
             onBlur={formik.handleBlur}
             variant="outlined"
             fullWidth
+            inputProps={{
+              "data-testid": "password-input",
+            }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -118,6 +129,7 @@ export const LoginPage = () => {
             size="large"
             variant="contained"
             fullWidth
+            data-testid="submit-btn"
             disabled={!formik.isValid}
             onClick={formik.submitForm}
           >
