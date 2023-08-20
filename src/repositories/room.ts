@@ -3,13 +3,10 @@ import { ApolloCache } from "@apollo/client";
 import { GetRoomsByHotelDocument } from "@services/apollo/documents";
 
 import {
-  CreateRoomMutation,
-  GetRoomsByHotelQuery,
-  OrderBy,
+  CreateRoomMutation, OrderBy,
 } from "@services/apollo/hooks";
 
 type MutationResult<T> = T | null | undefined;
-type QueryResult = GetRoomsByHotelQuery["roomsByHotel"]["rooms"];
 
 export class RoomRepository {
   constructor(private hotelId: string) {}
