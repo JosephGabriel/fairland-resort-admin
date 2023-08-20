@@ -26,7 +26,7 @@ export const RoomCarousel = ({ isLoading, rooms, onDeleteRoom }: Props) => {
         </>
       )}
 
-      {!isLoading && rooms?.length && (
+      {!isLoading && rooms?.length !== 0 && (
         <>
           {rooms?.map((room) => (
             <Grid item md={3} key={room.id}>
@@ -43,7 +43,7 @@ export const RoomCarousel = ({ isLoading, rooms, onDeleteRoom }: Props) => {
         </>
       )}
 
-      {!isLoading && !rooms && (
+      {!isLoading && rooms?.length === 0 && (
         <Grid item md={12}>
           <Material.NoRoomPaper>
             <Material.NoRoomPaperText variant="body1">

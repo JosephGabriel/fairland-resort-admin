@@ -90,7 +90,7 @@ export const HotelsPage = () => {
     await deleteHotel({
       variables: { id: hotelId },
       update: (cache, { data }) => {
-        repository.onDeleteHotel(data, cache);
+        repository.onDeleteHotel(String(data?.deleteHotel.id), cache);
       },
     });
   };

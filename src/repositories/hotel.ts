@@ -1,6 +1,5 @@
 import { ApolloCache, Reference } from "@apollo/client";
 
-import { GetHotelsByAdminDocument } from "@services/apollo/generated/documents";
 import {
   CreateHotelMutation,
   DeleteHotelMutation,
@@ -31,21 +30,14 @@ export class HotelRepository {
     });
   }
 
-  onDeleteHotel(
-    data: MutationResult<DeleteHotelMutation>,
-    cache: ApolloCache<unknown>
-  ) {
-    if (!data) {
-      return;
-    }
-
+  onDeleteHotel(hotelId: string, cache: ApolloCache<unknown>) {
     cache.modify({
       fields: {
         hotelsByAdmin: (previous, { readField }) => {
           return {
             count: previous.count.length - 1,
             hotels: previous.hotels.filter(
-              (ref: Reference) => data.deleteHotel.id !== readField("id", ref)
+              (ref: Reference) => hotelId !== readField("id", ref)
             ),
           };
         },
