@@ -17,6 +17,7 @@ import { useUserContext } from "@contexts/user";
 import { initialValues, validationSchema } from "./utils";
 
 import * as Material from "./styles";
+import { LocalStorageService } from "@services/local-storage";
 
 export const LoginPage = () => {
   const [loginUser, { loading }] = useLoginUserMutation();
@@ -54,6 +55,11 @@ export const LoginPage = () => {
         if (!data?.loginUser.user) {
           return;
         }
+
+        LocalStorageService.getInstance().setItem(
+          "token",
+          data?.loginUser.token
+        );
 
         setUser(data?.loginUser.user);
       },

@@ -89,8 +89,8 @@ export const HotelsPage = () => {
   const onDeleteHotel = async (hotelId: string) => {
     await deleteHotel({
       variables: { id: hotelId },
-      update: (cache) => {
-        repository.onDeleteHotel(hotelId, cache);
+      update: (cache, { data }) => {
+        repository.onDeleteHotel(data, cache);
       },
     });
   };

@@ -14,7 +14,7 @@ type User = LoginUserMutation["loginUser"]["user"];
 
 interface UserContext {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
 }
 
 interface Props {
@@ -37,7 +37,7 @@ export const UserContextProvider: FC<Props> = ({ children }) => {
     setUserLocal(user ? (JSON.parse(user) as User) : null);
   };
 
-  const setUser = (user: User) => {
+  const setUser = (user: User | null) => {
     if (!user) {
       LocalStorageService.getInstance().removeItem("user");
     }

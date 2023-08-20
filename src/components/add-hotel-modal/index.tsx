@@ -30,6 +30,7 @@ import { useCreateHotelMutation } from "@services/apollo/generated/hooks";
 import { HotelRepository } from "@repositories/hotel";
 
 import * as Material from "./styles";
+import { useSnackbar } from "notistack";
 
 interface Props {
   isOpen: boolean;
@@ -42,6 +43,8 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const [createHotel, { loading }] = useCreateHotelMutation();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const formikRef = useRef<FormikProps<InitialValues> | null>(null);
 
@@ -76,10 +79,21 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
         repository.onCreateHotel(data, cache);
       },
       onError(error) {
-        alert(JSON.stringify(error));
+        if (error.graphQLErrors) {
+          error.graphQLErrors.map((error) => {
+            enqueueSnackbar(error.message, {
+              variant: "error",
+            });
+          });
+        }
+
         onCloseModal();
       },
       onCompleted() {
+        enqueueSnackbar("Hotel criado com sucesso", {
+          variant: "success",
+        });
+
         onCloseModal();
       },
     });

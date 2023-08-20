@@ -1,7 +1,10 @@
-import { ApolloCache } from "@apollo/client";
+import { ApolloCache, Reference } from "@apollo/client";
 
 import { GetHotelsByAdminDocument } from "@services/apollo/generated/documents";
-import { CreateHotelMutation } from "@services/apollo/generated/hooks";
+import {
+  CreateHotelMutation,
+  DeleteHotelMutation,
+} from "@services/apollo/generated/hooks";
 
 type MutationResult<T> = T | null | undefined;
 
@@ -10,49 +13,41 @@ export class HotelRepository {
     data: MutationResult<CreateHotelMutation>,
     cache: ApolloCache<unknown>
   ) {
-    const hotels = cache.readQuery({
-      query: GetHotelsByAdminDocument,
-    });
-
-    if (!hotels?.hotelsByAdmin || !data?.createHotel) {
+    if (!data) {
       return;
     }
 
-    const newHotels = [...hotels.hotelsByAdmin.hotels, data.createHotel];
+    const id = cache.identify(data?.createHotel);
 
-    cache.writeQuery({
-      query: GetHotelsByAdminDocument,
-      data: {
-        hotelsByAdmin: {
-          count: newHotels.length,
-          hotels: newHotels,
+    cache.modify({
+      fields: {
+        hotelsByAdmin: (previous, { toReference }) => {
+          return {
+            count: previous.count.length + 1,
+            hotels: [...previous.hotels, toReference(String(id))],
+          };
         },
       },
     });
   }
 
-  onDeleteHotel(hotelId: string, cache: ApolloCache<unknown>) {
-    const hotels = cache.readQuery({
-      query: GetHotelsByAdminDocument,
-    });
-
-    if (!hotels) {
+  onDeleteHotel(
+    data: MutationResult<DeleteHotelMutation>,
+    cache: ApolloCache<unknown>
+  ) {
+    if (!data) {
       return;
     }
-    alert(hotels?.hotelsByAdmin.hotels.length);
 
-    const newHotels = hotels?.hotelsByAdmin.hotels?.filter(
-      (h) => h.id !== hotelId
-    );
-
-    alert(newHotels.length);
-
-    cache.writeQuery({
-      query: GetHotelsByAdminDocument,
-      data: {
-        hotelsByAdmin: {
-          count: newHotels.length,
-          hotels: newHotels,
+    cache.modify({
+      fields: {
+        hotelsByAdmin: (previous, { readField }) => {
+          return {
+            count: previous.count.length - 1,
+            hotels: previous.hotels.filter(
+              (ref: Reference) => data.deleteHotel.id !== readField("id", ref)
+            ),
+          };
         },
       },
     });

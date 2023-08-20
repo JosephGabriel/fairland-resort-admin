@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Divider,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -13,9 +14,10 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import { Gite, Menu, Explore, Luggage } from "@mui/icons-material";
+import { Gite, Menu, Logout, Explore, Luggage } from "@mui/icons-material";
 
 import * as Material from "./styles";
+import { useUserContext } from "@contexts/user";
 
 const drawerItems = [
   {
@@ -40,7 +42,11 @@ export const Navbar = () => {
 
   const navigate = useNavigate();
 
+  const { setUser } = useUserContext();
+
   const toggleOpen = () => setOpen((prev) => !prev);
+
+  const logOut = () => setUser(null);
 
   const onNavigate = (link: string) => {
     toggleOpen();
@@ -51,9 +57,23 @@ export const Navbar = () => {
     <>
       <Material.TopBar position="sticky">
         <Toolbar>
-          <IconButton onClick={toggleOpen}>
-            <Menu />
-          </IconButton>
+          <Grid
+            container
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <Grid item>
+              <IconButton onClick={toggleOpen}>
+                <Menu />
+              </IconButton>
+            </Grid>
+
+            <Grid item>
+              <IconButton onClick={logOut}>
+                <Logout />
+              </IconButton>
+            </Grid>
+          </Grid>
         </Toolbar>
       </Material.TopBar>
 
