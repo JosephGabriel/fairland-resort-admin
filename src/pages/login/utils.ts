@@ -20,6 +20,11 @@ export const validationSchema = yup.object().shape({
       'A senha não deve conter a palavra "password"',
       (value) => !value.toLowerCase().includes("password")
     )
+    .test(
+      "contains-password",
+      'A senha não deve conter a palavra "senha"',
+      (value) => !value.toLowerCase().includes("senha")
+    )
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
       "Para a senha ser válida, ela deve ter no mínimo 8 caracteres, ter no mínimo 1 caractere especial, 1 letra maiúscula e 1 número"
