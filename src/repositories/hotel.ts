@@ -1,9 +1,6 @@
 import { ApolloCache, Reference } from "@apollo/client";
 
-import {
-  CreateHotelMutation,
-  DeleteHotelMutation,
-} from "@services/apollo/generated/hooks";
+import { CreateHotelMutation } from "@services/apollo/generated/hooks";
 
 type MutationResult<T> = T | null | undefined;
 
