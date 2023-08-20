@@ -3,7 +3,7 @@ import { Grid } from "@mui/material";
 import { CustomSkeleton } from "@components/skeleton";
 import { Card } from "@components/card";
 
-import { GetRoomsByHotelQuery } from "@services/apollo/hooks";
+import { GetRoomsByHotelQuery } from "@services/apollo/generated/hooks";
 
 import * as Material from "./styles";
 

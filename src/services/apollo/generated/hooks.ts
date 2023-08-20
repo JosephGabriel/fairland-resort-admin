@@ -500,13 +500,6 @@ export type GetRoomsByHotelQueryVariables = Exact<{
 
 export type GetRoomsByHotelQuery = { roomsByHotel: { count: number, rooms: Array<{ id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
 
-export type CreateAdminMutationVariables = Exact<{
-  data: CreateUserInput;
-}>;
-
-
-export type CreateAdminMutation = { createAdmin: { token: string, user: { id: string, firstName: string, lastName: string, userName: string, email: string, avatar?: string | null, password: string, passwordChangedAt?: string | null, role: UserRole, active: boolean, verified: boolean } } };
-
 export type LoginUserMutationVariables = Exact<{
   data: LoginUserInput;
 }>;
@@ -889,52 +882,6 @@ export function useGetRoomsByHotelLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetRoomsByHotelQueryHookResult = ReturnType<typeof useGetRoomsByHotelQuery>;
 export type GetRoomsByHotelLazyQueryHookResult = ReturnType<typeof useGetRoomsByHotelLazyQuery>;
 export type GetRoomsByHotelQueryResult = Apollo.QueryResult<GetRoomsByHotelQuery, GetRoomsByHotelQueryVariables>;
-export const CreateAdminDocument = gql`
-    mutation CreateAdmin($data: CreateUserInput!) {
-  createAdmin(data: $data) {
-    token
-    user {
-      id
-      firstName
-      lastName
-      userName
-      email
-      avatar
-      password
-      passwordChangedAt
-      role
-      active
-      verified
-    }
-  }
-}
-    `;
-export type CreateAdminMutationFn = Apollo.MutationFunction<CreateAdminMutation, CreateAdminMutationVariables>;
-
-/**
- * __useCreateAdminMutation__
- *
- * To run a mutation, you first call `useCreateAdminMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAdminMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createAdminMutation, { data, loading, error }] = useCreateAdminMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateAdminMutation(baseOptions?: Apollo.MutationHookOptions<CreateAdminMutation, CreateAdminMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAdminMutation, CreateAdminMutationVariables>(CreateAdminDocument, options);
-      }
-export type CreateAdminMutationHookResult = ReturnType<typeof useCreateAdminMutation>;
-export type CreateAdminMutationResult = Apollo.MutationResult<CreateAdminMutation>;
-export type CreateAdminMutationOptions = Apollo.BaseMutationOptions<CreateAdminMutation, CreateAdminMutationVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($data: LoginUserInput!) {
   loginUser(data: $data) {

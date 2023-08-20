@@ -9,7 +9,7 @@ import {
   useDeleteRoomMutation,
   useGetHotelByIdQuery,
   useGetRoomsByHotelQuery,
-} from "@services/apollo/hooks";
+} from "@services/apollo/generated/hooks";
 
 import { HotelView } from "./view";
 

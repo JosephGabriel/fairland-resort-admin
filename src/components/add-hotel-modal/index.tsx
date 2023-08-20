@@ -25,7 +25,7 @@ import {
   validationSchema,
 } from "./utils";
 
-import { useCreateHotelMutation } from "@services/apollo/hooks";
+import { useCreateHotelMutation } from "@services/apollo/generated/hooks";
 
 import { HotelRepository } from "@repositories/hotel";
 

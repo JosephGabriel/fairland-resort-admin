@@ -14,7 +14,7 @@ import { RoomCarousel } from "@components/room-carousel";
 import { CustomSelectInput } from "@components/custom-select-input";
 import { Loader } from "@components/loader";
 
-import { OrderBy } from "@services/apollo/hooks";
+import { OrderBy } from "@services/apollo/generated/hooks";
 
 import { Props } from "./utils";
 

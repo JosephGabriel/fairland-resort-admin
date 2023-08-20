@@ -20,7 +20,7 @@ const config: CodegenConfig = {
   schema: `${process.env.VITE_BASE_URL}/graphql`,
   documents: "src/**/*.graphql",
   generates: {
-    "src/services/apollo/hooks.ts": {
+    "src/services/apollo/generated/hooks.ts": {
       plugins: [
         "typescript",
         "typescript-operations",
@@ -34,14 +34,14 @@ const config: CodegenConfig = {
         scalars,
       },
     },
-    "src/services/apollo/documents.ts": {
+    "src/services/apollo/generated/documents.ts": {
       plugins: ["typescript", "typescript-operations", "typed-document-node"],
       config: {
         strictScalars: true,
         scalars,
       },
     },
-    "src/services/apollo/type-policies.ts": {
+    "src/services/apollo/generated/type-policies.ts": {
       plugins: ["typescript-apollo-client-helpers"],
       config: {
         strictScalars: true,

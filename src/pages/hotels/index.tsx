@@ -13,7 +13,7 @@ import {
   OrderBy,
   useDeleteHotelMutation,
   useGetHotelsByAdminQuery,
-} from "@services/apollo/hooks";
+} from "@services/apollo/generated/hooks";
 
 import { perPageOptions, selectOptions } from "./utils";
 

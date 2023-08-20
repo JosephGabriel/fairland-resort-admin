@@ -10,7 +10,7 @@ import {
   LinearProgress,
 } from "@mui/material";
 
-import { useLoginUserMutation } from "@services/apollo/hooks";
+import { useLoginUserMutation } from "@services/apollo/generated/hooks";
 
 import { useUserContext } from "@contexts/user";
 

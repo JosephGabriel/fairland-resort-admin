@@ -1,4 +1,4 @@
-import { OrderBy } from "@services/apollo/hooks";
+import { OrderBy } from "@services/apollo/generated/hooks";
 
 export const selectOptions = [
   { label: "Decrescente", value: OrderBy.Desc },

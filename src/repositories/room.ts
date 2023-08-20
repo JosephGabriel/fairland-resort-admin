@@ -1,10 +1,8 @@
 import { ApolloCache } from "@apollo/client";
 
-import { GetRoomsByHotelDocument } from "@services/apollo/documents";
+import { GetRoomsByHotelDocument } from "@services/apollo/generated/documents";
 
-import {
-  CreateRoomMutation, OrderBy,
-} from "@services/apollo/hooks";
+import { CreateRoomMutation, OrderBy } from "@services/apollo/generated/hooks";
 
 type MutationResult<T> = T | null | undefined;
 

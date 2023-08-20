@@ -23,7 +23,7 @@ import {
   validationSchema,
 } from "./utils";
 
-import { useCreateRoomMutation } from "@services/apollo/hooks";
+import { useCreateRoomMutation } from "@services/apollo/generated/hooks";
 import { RoomRepository } from "@repositories/room";
 
 import * as Material from "./styles";
