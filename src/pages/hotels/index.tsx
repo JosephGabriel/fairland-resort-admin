@@ -18,6 +18,7 @@ import {
 import { perPageOptions, selectOptions } from "./utils";
 
 import * as Material from "./styles";
+import { enqueueSnackbar } from "notistack";
 
 export const HotelsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,6 +105,11 @@ export const HotelsPage = () => {
       variables: { id: hotelId },
       update: (cache, { data }) => {
         repository.onDeleteHotel(String(data?.deleteHotel.id), cache);
+      },
+      onCompleted: () => {
+        enqueueSnackbar("Hotél apagado com sucesso", {
+          variant: "success",
+        });
       },
     });
   };

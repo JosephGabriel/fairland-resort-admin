@@ -112,10 +112,6 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
   };
 
   const onRemoveImage = (name: string) => {
-    const meta = formikRef.current?.getFieldMeta(name);
-
-    alert(JSON.stringify(meta));
-    return;
     formikRef.current?.setFieldValue(name, "");
   };
 
