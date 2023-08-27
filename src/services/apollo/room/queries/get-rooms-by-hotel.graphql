@@ -1,7 +1,7 @@
 query GetRoomsByHotel($hotelId: ID!, $options: Options) {
   roomsByHotel(hotel: $hotelId, options: $options) {
     count
-    rooms {
+    nodes {
       id
       name
       summary

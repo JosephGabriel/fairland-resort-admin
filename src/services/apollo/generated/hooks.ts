@@ -98,13 +98,14 @@ export type Hotel = {
   addressNumber: Scalars['String']['output'];
   /** Cidade do hotel */
   city: Scalars['String']['output'];
+  /** Data de criação do hotel */
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   /** A descrição do hotel */
   description: Scalars['String']['output'];
   /** Id do hotel */
   id: Scalars['ID']['output'];
   /** Um array de url's de imagens de hoteis */
-  images?: Maybe<Array<Scalars['String']['output']>>;
+  images: Array<Scalars['String']['output']>;
   /** Latitude do hotel */
   latitude: Scalars['Latitude']['output'];
   /** Url da logo do hotel */
@@ -116,7 +117,7 @@ export type Hotel = {
   /** Bairro do hotel */
   neighborhood: Scalars['String']['output'];
   /** Classificação do hotel ex: 5 estrelas */
-  rating?: Maybe<Scalars['Int']['output']>;
+  rating: Scalars['Int']['output'];
   /** Array com os quartos do hotel */
   rooms: Array<Room>;
   /** Slug do hotel baseado no nome */
@@ -127,14 +128,17 @@ export type Hotel = {
   summary: Scalars['String']['output'];
   /** Thumbnail a ser exibida do hotel */
   thumbnail: Scalars['String']['output'];
+  /** Data da ultima atualização do hotel */
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Cep do hotel */
   zipCode: Scalars['PostalCode']['output'];
 };
 
-export type HotelsPayload = {
+export type HotelsPayload = QueryPayload & {
+  /** Quantidade total de hotéis criados */
   count: Scalars['Int']['output'];
-  hotels: Array<Hotel>;
+  /** Array com hotéis */
+  nodes: Array<Hotel>;
 };
 
 export type LoginUserInput = {
@@ -316,6 +320,10 @@ export type QueryRoomsByHotelArgs = {
   options?: InputMaybe<Options>;
 };
 
+export type QueryPayload = {
+  count: Scalars['Int']['output'];
+};
+
 export type Review = {
   /** Id da review */
   id: Scalars['ID']['output'];
@@ -361,9 +369,11 @@ export type RoomFilter = {
   minRating?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type RoomPayload = {
+export type RoomPayload = QueryPayload & {
+  /** Quantidade total de quartos criados */
   count: Scalars['Int']['output'];
-  rooms: Array<Room>;
+  /** Array com quartos */
+  nodes: Array<Room>;
 };
 
 export type UpdateHotelInput = {
@@ -457,26 +467,26 @@ export type GetHotelByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating?: number | null, summary: string, description: string, images?: Array<string> | null, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
+export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number, summary: string, description: string, images: Array<string>, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
+export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
 
 export type GetHotelsByAdminQueryVariables = Exact<{
   options?: InputMaybe<Options>;
 }>;
 
 
-export type GetHotelsByAdminQuery = { hotelsByAdmin: { count: number, hotels: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> } };
+export type GetHotelsByAdminQuery = { hotelsByAdmin: { count: number, nodes: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> } };
 
 export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating?: number | null, summary: string, description: string, thumbnail: string, images?: Array<string> | null, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
+export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
 
 export type CreateRoomMutationVariables = Exact<{
   data: CreateRoomInput;
@@ -498,7 +508,7 @@ export type GetRoomsByHotelQueryVariables = Exact<{
 }>;
 
 
-export type GetRoomsByHotelQuery = { roomsByHotel: { count: number, rooms: Array<{ id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
+export type GetRoomsByHotelQuery = { roomsByHotel: { count: number, nodes: Array<{ id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
 
 export type LoginUserMutationVariables = Exact<{
   data: LoginUserInput;
@@ -682,7 +692,7 @@ export const GetHotelsByAdminDocument = gql`
     query GetHotelsByAdmin($options: Options) {
   hotelsByAdmin(options: $options) {
     count
-    hotels {
+    nodes {
       id
       name
       summary
@@ -843,7 +853,7 @@ export const GetRoomsByHotelDocument = gql`
     query GetRoomsByHotel($hotelId: ID!, $options: Options) {
   roomsByHotel(hotel: $hotelId, options: $options) {
     count
-    rooms {
+    nodes {
       id
       name
       summary

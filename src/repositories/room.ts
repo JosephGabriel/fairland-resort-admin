@@ -1,14 +1,10 @@
 import { ApolloCache, Reference } from "@apollo/client";
 
-import { GetRoomsByHotelDocument } from "@services/apollo/generated/documents";
-
-import { CreateRoomMutation, OrderBy } from "@services/apollo/generated/hooks";
+import { CreateRoomMutation } from "@services/apollo/generated/hooks";
 
 type MutationResult<T> = T | null | undefined;
 
 export class RoomRepository {
-  constructor(private hotelId: string) {}
-
   onAddRoom(
     data: MutationResult<CreateRoomMutation>,
     cache: ApolloCache<unknown>
@@ -44,5 +40,11 @@ export class RoomRepository {
         },
       },
     });
+
+    cache.evict({
+      id: `Room:${roomId}`,
+    });
+
+    cache.gc();
   }
 }

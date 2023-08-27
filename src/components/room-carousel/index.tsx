@@ -9,7 +9,7 @@ import * as Material from "./styles";
 
 interface Props {
   isLoading: boolean;
-  rooms: GetRoomsByHotelQuery["roomsByHotel"]["rooms"] | undefined;
+  rooms: GetRoomsByHotelQuery["roomsByHotel"]["nodes"] | undefined;
   onDeleteRoom: (id: string) => void;
 }
 

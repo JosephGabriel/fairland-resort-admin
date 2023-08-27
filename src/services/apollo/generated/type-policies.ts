@@ -38,10 +38,10 @@ export type HotelFieldPolicy = {
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	zipCode?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type HotelsPayloadKeySpecifier = ('count' | 'hotels' | HotelsPayloadKeySpecifier)[];
+export type HotelsPayloadKeySpecifier = ('count' | 'nodes' | HotelsPayloadKeySpecifier)[];
 export type HotelsPayloadFieldPolicy = {
 	count?: FieldPolicy<any> | FieldReadFunction<any>,
-	hotels?: FieldPolicy<any> | FieldReadFunction<any>
+	nodes?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type MutationKeySpecifier = ('createAdmin' | 'createBooking' | 'createHotel' | 'createRoom' | 'createUser' | 'deactivateUser' | 'deleteBooking' | 'deleteHotel' | 'deleteRoom' | 'loginUser' | 'updateHotel' | 'updateRoom' | 'updateUser' | 'updateUserPassword' | 'verifyUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
@@ -73,6 +73,10 @@ export type QueryFieldPolicy = {
 	rooms?: FieldPolicy<any> | FieldReadFunction<any>,
 	roomsByHotel?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type QueryPayloadKeySpecifier = ('count' | QueryPayloadKeySpecifier)[];
+export type QueryPayloadFieldPolicy = {
+	count?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type ReviewKeySpecifier = ('id' | 'rating' | 'review' | 'room' | 'user' | ReviewKeySpecifier)[];
 export type ReviewFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -95,10 +99,10 @@ export type RoomFieldPolicy = {
 	thumbnail?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type RoomPayloadKeySpecifier = ('count' | 'rooms' | RoomPayloadKeySpecifier)[];
+export type RoomPayloadKeySpecifier = ('count' | 'nodes' | RoomPayloadKeySpecifier)[];
 export type RoomPayloadFieldPolicy = {
 	count?: FieldPolicy<any> | FieldReadFunction<any>,
-	rooms?: FieldPolicy<any> | FieldReadFunction<any>
+	nodes?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type UserKeySpecifier = ('active' | 'avatar' | 'bookings' | 'email' | 'firstName' | 'id' | 'lastName' | 'password' | 'passwordChangedAt' | 'reviews' | 'role' | 'userName' | 'verified' | UserKeySpecifier)[];
 export type UserFieldPolicy = {
@@ -140,6 +144,10 @@ export type StrictTypedTypePolicies = {
 	Query?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | QueryKeySpecifier | (() => undefined | QueryKeySpecifier),
 		fields?: QueryFieldPolicy,
+	},
+	QueryPayload?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | QueryPayloadKeySpecifier | (() => undefined | QueryPayloadKeySpecifier),
+		fields?: QueryPayloadFieldPolicy,
 	},
 	Review?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | ReviewKeySpecifier | (() => undefined | ReviewKeySpecifier),

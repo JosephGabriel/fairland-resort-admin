@@ -153,7 +153,7 @@ export const HotelsPage = () => {
           )}
 
           {data &&
-            data.hotelsByAdmin?.hotels.map((hotel) => (
+            data.hotelsByAdmin?.nodes.map((hotel) => (
               <Material.GridItemCard item md={3} key={hotel.id}>
                 <Card
                   id={hotel.id}

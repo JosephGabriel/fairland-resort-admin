@@ -22,7 +22,7 @@ export const HotelContainer = () => {
 
   const perPage = 12 / 3;
 
-  const repository = new RoomRepository(hotelId);
+  const repository = new RoomRepository();
 
   const [isOpen, setIsOpen] = useState(false);
   const [orderBy, setOrderBy] = useState(OrderBy.Desc);
@@ -106,7 +106,7 @@ export const HotelContainer = () => {
       isDeletingRoom={loading}
       onDeleteRoom={onDeleteRoom}
       page={page}
-      rooms={data?.roomsByHotel.rooms}
+      rooms={data?.roomsByHotel.nodes}
       totalItems={totalItems}
       onPageChange={onPageChange}
     />

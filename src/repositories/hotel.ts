@@ -20,7 +20,7 @@ export class HotelRepository {
         hotelsByAdmin: (previous, { toReference }) => {
           return {
             count: previous.count.length + 1,
-            hotels: [...previous.hotels, toReference(String(id))],
+            nodes: [...previous.nodes, toReference(String(id))],
           };
         },
       },
@@ -33,12 +33,18 @@ export class HotelRepository {
         hotelsByAdmin: (previous, { readField }) => {
           return {
             count: previous.count.length - 1,
-            hotels: previous.hotels.filter(
+            nodes: previous.nodes.filter(
               (ref: Reference) => hotelId !== readField("id", ref)
             ),
           };
         },
       },
     });
+
+    cache.evict({
+      id: `Hotel:${hotelId}`,
+    });
+
+    cache.gc();
   }
 }
