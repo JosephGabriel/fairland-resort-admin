@@ -13,7 +13,7 @@ interface Props {
   city?: string;
   state?: string;
   isLink: boolean;
-  onEdit?: () => void;
+  onEdit?: (id: string) => void;
   onRemove?: (id: string) => void;
 }
 
@@ -47,7 +47,7 @@ export const Card = ({
 
   const handleEdit = () => {
     if (onEdit) {
-      onEdit();
+      onEdit(id);
     }
 
     handleClose();

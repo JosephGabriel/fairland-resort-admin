@@ -1,11 +1,11 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Grid, Pagination, SelectChangeEvent } from "@mui/material";
 
 import { AddHotelModal } from "@components/add-hotel-modal";
+import { EditHotelModal } from "@components/edit-hotel-modal";
 import { CustomSelectInput } from "@components/custom-select-input";
-import { CustomSkeleton } from "@components/skeleton";
+import { HotelCarousel } from "@components/hotel-carousel";
 import { Loader } from "@components/loader";
-import { Card } from "@components/card";
 
 import { HotelRepository } from "@repositories/hotel";
 
@@ -21,6 +21,9 @@ import * as Material from "./styles";
 
 export const HotelsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+
+  const [hotelToEditId, setHotelToEditId] = useState("");
 
   const [orderBy, setOrderBy] = useState(OrderBy.Desc);
   const [perPage, setPerPage] = useState(12);
@@ -28,7 +31,7 @@ export const HotelsPage = () => {
   const [totalItems, setItemsCount] = useState(0);
   const [page, setPage] = useState(1);
 
-  const { data, loading, refetch, fetchMore } = useGetHotelsByAdminQuery({
+  const { data, loading, refetch } = useGetHotelsByAdminQuery({
     variables: {
       options: {
         orderBy: orderBy,
@@ -36,6 +39,7 @@ export const HotelsPage = () => {
         skip: page * perPage - perPage,
       },
     },
+    fetchPolicy: "network-only",
     onCompleted(data) {
       setItemsCount(Math.ceil(data.hotelsByAdmin.count / perPage));
     },
@@ -44,6 +48,17 @@ export const HotelsPage = () => {
   const repository = new HotelRepository();
 
   const [deleteHotel] = useDeleteHotelMutation();
+
+  const openAddModal = () => setIsOpen(true);
+
+  const onCloseAddModal = () => setIsOpen(false);
+
+  const onEditModal = () => setIsOpenEdit(true);
+
+  const onCloseEditModal = () => {
+    setHotelToEditId("");
+    setIsOpenEdit(false);
+  };
 
   const handleChange = (event: SelectChangeEvent<OrderBy>) => {
     setOrderBy(event.target.value as OrderBy);
@@ -62,12 +77,10 @@ export const HotelsPage = () => {
   const onPageChange = async (_: ChangeEvent<unknown>, page: number) => {
     setPage(page);
 
-    await fetchMore({
-      variables: {
-        options: {
-          take: perPage,
-          skip: page * perPage - perPage,
-        },
+    await refetch({
+      options: {
+        take: perPage,
+        skip: page * perPage - perPage,
       },
     });
   };
@@ -95,12 +108,31 @@ export const HotelsPage = () => {
     });
   };
 
+  const onEditHotel = async (id: string) => {
+    setHotelToEditId(id);
+  };
+
+  useEffect(() => {
+    if (hotelToEditId) {
+      onEditModal();
+      return;
+    }
+
+    onCloseEditModal();
+  }, [hotelToEditId]);
+
   return (
     <>
       <Loader variant="linear" isLoading={loading} />
 
       <Material.Container>
-        <AddHotelModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <AddHotelModal isOpen={isOpen} onClose={onCloseAddModal} />
+
+        <EditHotelModal
+          hotelId={hotelToEditId}
+          isOpen={isOpenEdit}
+          onClose={onCloseEditModal}
+        />
 
         <Grid container justifyContent={"space-between"} alignItems={"center"}>
           <Grid item md={"auto"}>
@@ -112,10 +144,7 @@ export const HotelsPage = () => {
               aqui você poderá adicionar, atualizar e apagar hotéis
             </Material.Subtitle>
 
-            <Material.AddButton
-              variant="contained"
-              onClick={() => setIsOpen(true)}
-            >
+            <Material.AddButton variant="contained" onClick={openAddModal}>
               Adicionar Hotel
             </Material.AddButton>
           </Grid>
@@ -142,31 +171,12 @@ export const HotelsPage = () => {
         </Grid>
 
         <Grid container spacing={2} alignItems={"stretch"}>
-          {loading && (
-            <>
-              {new Array(4).fill(" ").map((_, idx) => (
-                <Material.GridItemCard item md={3} key={idx}>
-                  <CustomSkeleton variant="card" />
-                </Material.GridItemCard>
-              ))}
-            </>
-          )}
-
-          {data &&
-            data.hotelsByAdmin?.nodes.map((hotel) => (
-              <Material.GridItemCard item md={3} key={hotel.id}>
-                <Card
-                  id={hotel.id}
-                  name={hotel.name}
-                  thumbnail={hotel.thumbnail}
-                  city={hotel.city}
-                  state={hotel.state}
-                  summary={hotel.summary}
-                  isLink={true}
-                  onRemove={onDeleteHotel}
-                />
-              </Material.GridItemCard>
-            ))}
+          <HotelCarousel
+            isLoading={loading}
+            hotels={data?.hotelsByAdmin.nodes}
+            onDeleteHotel={onDeleteHotel}
+            onEditModal={onEditHotel}
+          />
 
           <Grid item sm={12}>
             <Material.PaginationContainer>

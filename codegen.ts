@@ -27,7 +27,6 @@ const config: CodegenConfig = {
         "typescript-react-apollo",
       ],
       config: {
-        skipTypename: true,
         withHooks: true,
         reactApolloVersion: 3,
         strictScalars: true,

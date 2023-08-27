@@ -17,6 +17,7 @@ import {
 import { BasicInformationStepModal } from "@components/basic-information-step-add-hotel-modal";
 import { SearchAddressStep } from "@components/search-address-step-add-hotel-modal";
 import { ImageUploadStep } from "@components/image-upload-step";
+import { Loader } from "@components/loader";
 
 import {
   InitialValues,
@@ -26,29 +27,43 @@ import {
   validationSchema,
 } from "./utils";
 
-import { useCreateHotelMutation } from "@services/apollo/generated/hooks";
-
-import { HotelRepository } from "@repositories/hotel";
+import {
+  useGetHotelByIdQuery,
+  useUpdateHotelMutation,
+} from "@services/apollo/generated/hooks";
 
 import * as Material from "./styles";
 
 interface Props {
+  hotelId: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
 const steps = ["Informações básicas", "Localização", "Imagens"];
 
-export const AddHotelModal = ({ isOpen, onClose }: Props) => {
+export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
 
-  const [createHotel, { loading }] = useCreateHotelMutation();
+  const [updateHotel, { loading }] = useUpdateHotelMutation();
+
+  const { loading: isLoading } = useGetHotelByIdQuery({
+    variables: {
+      id: hotelId,
+    },
+    onCompleted(data) {
+      Object.keys(initialValues).map((key) => {
+        formikRef.current?.setFieldValue(
+          key,
+          data.hotel[key as keyof typeof data.hotel]
+        );
+      });
+    },
+  });
 
   const { enqueueSnackbar } = useSnackbar();
 
   const formikRef = useRef<FormikProps<InitialValues> | null>(null);
-
-  const repository = new HotelRepository();
 
   const nextStep = () => {
     setActiveStep((prev) => prev + 1);
@@ -73,11 +88,8 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
   };
 
   const onSubmit = async (values: InitialValues) => {
-    await createHotel({
-      variables: { data: values },
-      update: (cache, { data }) => {
-        repository.onCreateHotel(data, cache);
-      },
+    await updateHotel({
+      variables: { data: values, id: hotelId },
       onError(error) {
         if (error.graphQLErrors) {
           error.graphQLErrors.map((error) => {
@@ -90,7 +102,7 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
         onCloseModal();
       },
       onCompleted() {
-        enqueueSnackbar("Hotel criado com sucesso", {
+        enqueueSnackbar("Hotel atualizado com sucesso", {
           variant: "success",
         });
 
@@ -120,11 +132,13 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
     >
       {(formik) => (
         <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
-          <DialogTitle>Adicionar um hotel</DialogTitle>
+          <Loader variant="linear" isLoading={isLoading} />
+
+          <DialogTitle>Editar um hotel</DialogTitle>
 
           <DialogContent>
             <Material.DialogText>
-              Preencha os campos abaixo para adicionar um hotel
+              Preencha os campos abaixo para Editar um hotel
             </Material.DialogText>
 
             <Stepper activeStep={activeStep} alternativeLabel>
@@ -168,7 +182,7 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
               onClick={activeStep === 2 ? formik.submitForm : nextStep}
               disabled={activeStep === 3 || !formik.isValid}
             >
-              {activeStep === 2 ? "Adicionar" : "Próximo"}
+              {activeStep === 2 ? "Editar" : "Próximo"}
             </Button>
           </DialogActions>
         </Dialog>

@@ -20,7 +20,7 @@ export class RoomRepository {
         roomsByHotel: (previous, { toReference }) => {
           return {
             count: previous.count.length + 1,
-            rooms: [...previous.rooms, toReference(String(id))],
+            nodes: [...previous.nodes, toReference(String(id))],
           };
         },
       },
@@ -31,11 +31,15 @@ export class RoomRepository {
     cache.modify({
       fields: {
         roomsByHotel: (previous, { readField }) => {
+          const nodes = previous.nodes.length
+            ? previous.nodes.filter(
+                (ref: Reference) => roomId !== readField("id", ref)
+              )
+            : [];
+
           return {
             count: previous.count.length - 1,
-            hotels: previous.rooms.filter(
-              (ref: Reference) => roomId !== readField("id", ref)
-            ),
+            nodes,
           };
         },
       },

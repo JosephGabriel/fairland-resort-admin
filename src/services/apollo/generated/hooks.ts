@@ -24,11 +24,13 @@ export type Scalars = {
 };
 
 export type AuthPayload = {
+  __typename?: 'AuthPayload';
   token: Scalars['String']['output'];
   user: User;
 };
 
 export type Booking = {
+  __typename?: 'Booking';
   /** Data em qua a reserva foi feita */
   bookingDate: Scalars['String']['output'];
   /** Data de entrada da reserva */
@@ -92,6 +94,7 @@ export type CreateUserInput = {
 };
 
 export type Hotel = {
+  __typename?: 'Hotel';
   /** Rua do hotel */
   address: Scalars['String']['output'];
   /** Número residencial do hotel */
@@ -135,6 +138,7 @@ export type Hotel = {
 };
 
 export type HotelsPayload = QueryPayload & {
+  __typename?: 'HotelsPayload';
   /** Quantidade total de hotéis criados */
   count: Scalars['Int']['output'];
   /** Array com hotéis */
@@ -147,6 +151,7 @@ export type LoginUserInput = {
 };
 
 export type Mutation = {
+  __typename?: 'Mutation';
   /** Usada para criar um admin */
   createAdmin: AuthPayload;
   /** Usada para fazer uma reserva */
@@ -258,6 +263,7 @@ export enum OrderBy {
 }
 
 export type Query = {
+  __typename?: 'Query';
   /** Usada para buscar uma reserva pelo id */
   booking: Booking;
   /** Usada para buscar reservas de um usuário */
@@ -325,6 +331,7 @@ export type QueryPayload = {
 };
 
 export type Review = {
+  __typename?: 'Review';
   /** Id da review */
   id: Scalars['ID']['output'];
   /** Classificação da review */
@@ -338,6 +345,7 @@ export type Review = {
 };
 
 export type Room = {
+  __typename?: 'Room';
   /** Data em que foi criado */
   createdAt: Scalars['DateTime']['output'];
   /** Uma descrição do quarto */
@@ -370,6 +378,7 @@ export type RoomFilter = {
 };
 
 export type RoomPayload = QueryPayload & {
+  __typename?: 'RoomPayload';
   /** Quantidade total de quartos criados */
   count: Scalars['Int']['output'];
   /** Array com quartos */
@@ -415,6 +424,7 @@ export type UpdateUserPasswordInput = {
 };
 
 export type User = {
+  __typename?: 'User';
   /** Mostra se o usuário esta ativo ou não */
   active: Scalars['Boolean']['output'];
   /** Url da imagem de perfil de cada usuário */
@@ -453,54 +463,62 @@ export type CreateHotelMutationVariables = Exact<{
 }>;
 
 
-export type CreateHotelMutation = { createHotel: { id: string, name: string, summary: string, thumbnail: string, city: string, state: string } };
+export type CreateHotelMutation = { __typename?: 'Mutation', createHotel: { __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, city: string, state: string } };
 
 export type DeleteHotelMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DeleteHotelMutation = { deleteHotel: { id: string } };
+export type DeleteHotelMutation = { __typename?: 'Mutation', deleteHotel: { __typename?: 'Hotel', id: string } };
+
+export type UpdateHotelMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  data: UpdateHotelInput;
+}>;
+
+
+export type UpdateHotelMutation = { __typename?: 'Mutation', updateHotel: { __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, city: string, state: string } };
 
 export type GetHotelByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetHotelByIdQuery = { hotel: { id: string, name: string, rating: number, summary: string, description: string, images: Array<string>, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
+export type GetHotelByIdQuery = { __typename?: 'Query', hotel: { __typename?: 'Hotel', id: string, name: string, rating: number, summary: string, description: string, images: Array<string>, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
 
 export type GetHotelBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type GetHotelBySlugQuery = { hotelBySlug: { id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
+export type GetHotelBySlugQuery = { __typename?: 'Query', hotelBySlug: { __typename?: 'Hotel', id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
 
 export type GetHotelsByAdminQueryVariables = Exact<{
   options?: InputMaybe<Options>;
 }>;
 
 
-export type GetHotelsByAdminQuery = { hotelsByAdmin: { count: number, nodes: Array<{ id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> } };
+export type GetHotelsByAdminQuery = { __typename?: 'Query', hotelsByAdmin: { __typename?: 'HotelsPayload', count: number, nodes: Array<{ __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> } };
 
 export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllHotelsQuery = { hotels: Array<{ id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
+export type GetAllHotelsQuery = { __typename?: 'Query', hotels: Array<{ __typename?: 'Hotel', id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
 
 export type CreateRoomMutationVariables = Exact<{
   data: CreateRoomInput;
 }>;
 
 
-export type CreateRoomMutation = { createRoom: { id: string, name: string, summary: string, description: string, thumbnail: string, images?: Array<string> | null, price: number, rating?: number | null, createdAt: Date } };
+export type CreateRoomMutation = { __typename?: 'Mutation', createRoom: { __typename?: 'Room', id: string, name: string, summary: string, description: string, thumbnail: string, images?: Array<string> | null, price: number, rating?: number | null, createdAt: Date } };
 
 export type DeleteRoomMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DeleteRoomMutation = { deleteRoom: string };
+export type DeleteRoomMutation = { __typename?: 'Mutation', deleteRoom: string };
 
 export type GetRoomsByHotelQueryVariables = Exact<{
   hotelId: Scalars['ID']['input'];
@@ -508,14 +526,14 @@ export type GetRoomsByHotelQueryVariables = Exact<{
 }>;
 
 
-export type GetRoomsByHotelQuery = { roomsByHotel: { count: number, nodes: Array<{ id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
+export type GetRoomsByHotelQuery = { __typename?: 'Query', roomsByHotel: { __typename?: 'RoomPayload', count: number, nodes: Array<{ __typename?: 'Room', id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
 
 export type LoginUserMutationVariables = Exact<{
   data: LoginUserInput;
 }>;
 
 
-export type LoginUserMutation = { loginUser: { token: string, user: { id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
 
 
 export const CreateHotelDocument = gql`
@@ -589,6 +607,45 @@ export function useDeleteHotelMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteHotelMutationHookResult = ReturnType<typeof useDeleteHotelMutation>;
 export type DeleteHotelMutationResult = Apollo.MutationResult<DeleteHotelMutation>;
 export type DeleteHotelMutationOptions = Apollo.BaseMutationOptions<DeleteHotelMutation, DeleteHotelMutationVariables>;
+export const UpdateHotelDocument = gql`
+    mutation UpdateHotel($id: ID!, $data: UpdateHotelInput!) {
+  updateHotel(id: $id, data: $data) {
+    id
+    name
+    summary
+    thumbnail
+    city
+    state
+  }
+}
+    `;
+export type UpdateHotelMutationFn = Apollo.MutationFunction<UpdateHotelMutation, UpdateHotelMutationVariables>;
+
+/**
+ * __useUpdateHotelMutation__
+ *
+ * To run a mutation, you first call `useUpdateHotelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateHotelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateHotelMutation, { data, loading, error }] = useUpdateHotelMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateHotelMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHotelMutation, UpdateHotelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHotelMutation, UpdateHotelMutationVariables>(UpdateHotelDocument, options);
+      }
+export type UpdateHotelMutationHookResult = ReturnType<typeof useUpdateHotelMutation>;
+export type UpdateHotelMutationResult = Apollo.MutationResult<UpdateHotelMutation>;
+export type UpdateHotelMutationOptions = Apollo.BaseMutationOptions<UpdateHotelMutation, UpdateHotelMutationVariables>;
 export const GetHotelByIdDocument = gql`
     query GetHotelById($id: ID!) {
   hotel(id: $id) {

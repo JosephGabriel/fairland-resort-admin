@@ -3,10 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "@components/protected-route";
 import { NonProtectedRoute } from "@components/non-protected-route";
 
-import { LoginPage } from "@pages/login";
-import { HotelsPage } from "@pages/hotels";
-import { DashBoardPage } from "@pages/dashboard";
-import { HotelPage } from "@pages/hotel";
+import { LoginPage } from "@pages/login/index";
+import { HotelsPage } from "@pages/hotels/index";
+import { DashBoardPage } from "@pages/dashboard/index";
+import { HotelPage } from "@pages/hotel/index";
 
 export const Navigation = () => {
   return (
