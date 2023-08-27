@@ -9,6 +9,8 @@ import { client } from "@services/apollo";
 
 import { UserContextProvider } from "@contexts/user";
 
+import "react-photo-view/dist/react-photo-view.css";
+
 export const App = () => {
   const queryClient = new QueryClient();
 

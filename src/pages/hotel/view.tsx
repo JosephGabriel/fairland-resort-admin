@@ -12,6 +12,7 @@ import {
 import { AddRoomModal } from "@components/add-room-modal";
 import { RoomCarousel } from "@components/room-carousel";
 import { CustomSelectInput } from "@components/custom-select-input";
+import { ImageGridCarousel as ImageGridCarousel } from "@components/image-grid-viewer";
 import { Loader } from "@components/loader";
 
 import { OrderBy } from "@services/apollo/generated/hooks";
@@ -116,21 +117,7 @@ export const HotelView = (props: Props) => {
 
         <Typography variant="h5">Imagens</Typography>
 
-        <Material.ImageGrid container>
-          <Material.CarouselButton isleft="true">
-            <ChevronLeft />
-          </Material.CarouselButton>
-
-          <Material.CarouselButton>
-            <ChevronRight />
-          </Material.CarouselButton>
-
-          {props.hotel?.images?.map((image, index) => (
-            <Grid item md={3} key={index}>
-              <img src={image} style={{ height: "200px" }} />
-            </Grid>
-          ))}
-        </Material.ImageGrid>
+        <ImageGridCarousel images={props.hotel?.images} />
 
         <Grid container>
           <Material.RoomGridItemOptions item md={12}>
