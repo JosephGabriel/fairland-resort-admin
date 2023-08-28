@@ -2,12 +2,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 import { Grid, Pagination, Typography } from "@mui/material";
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  StarOutline,
-} from "@mui/icons-material";
+import { Star, StarOutline } from "@mui/icons-material";
 
 import { AddRoomModal } from "@components/add-room-modal";
 import { RoomCarousel } from "@components/room-carousel";

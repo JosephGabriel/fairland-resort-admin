@@ -41,7 +41,7 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
 
   const [createRoom, { loading }] = useCreateRoomMutation();
 
-  const repository = new RoomRepository(hotelId);
+  const repository = new RoomRepository();
 
   const nextStep = () => {
     setActiveStep((prev) => prev + 1);

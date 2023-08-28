@@ -1,4 +1,3 @@
-import { UpdateHotelInput } from "@services/apollo/generated/hooks";
 import * as yup from "yup";
 
 export const fields = {

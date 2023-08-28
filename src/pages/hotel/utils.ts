@@ -20,7 +20,7 @@ export interface Props {
   onDeleteRoom: (id: string) => void;
   handleChange: (event: SelectChangeEvent<OrderBy>) => void;
   hotel: GetHotelByIdQuery["hotel"] | undefined;
-  rooms: GetRoomsByHotelQuery["roomsByHotel"]["rooms"] | undefined;
+  rooms: GetRoomsByHotelQuery["roomsByHotel"]["nodes"] | undefined;
   isDeleting: boolean;
   isDeletingRoom: boolean;
   orderBy: OrderBy;
