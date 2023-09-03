@@ -1,45 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { useEffect, useState } from "react";
 import { Grid, Autocomplete } from "@mui/material";
 import { useQuery } from "react-query";
 import { FormikProps } from "formik";
 
-import { CustomInput } from "../custom-input";
+import { InitialValues } from "@components/add-hotel-modal/utils";
+import { CustomInput } from "@components/custom-input";
+import { CustomMap } from "@components/map-container";
 
-import { InitialValues } from "../add-hotel-modal/utils";
-
-import { searchAddress, NominatimResult } from "../../services/api";
+import { searchAddress, NominatimResult } from "@services/api";
 
 import * as Material from "./styles";
-
-interface RecenterProps {
-  coordinates: number[];
-}
 
 interface Props {
   formik: FormikProps<InitialValues>;
 }
 
-const Recenter = ({ coordinates }: RecenterProps) => {
-  const map = useMap();
-
-  React.useEffect(() => {
-    map.setZoom(20);
-
-    // @ts-expect-error ...
-    map.fitBounds([coordinates, coordinates], {
-      padding: [100, 100],
-      animate: true,
-    });
-  }, [coordinates, map]);
-  return null;
-};
-
 export const SearchAddressStep = ({ formik }: Props) => {
   const [isOpen, setOpen] = useState(false);
   const [postCode, setPostCode] = useState("");
   const [options, setOptions] = useState<NominatimResult[]>([]);
-  const [coordinates, setCoordinates] = useState<number[]>([0, 0]);
   const [selectedAddress, setAddress] = useState<NominatimResult>();
 
   const { isLoading, refetch } = useQuery<NominatimResult[]>({
@@ -74,8 +53,6 @@ export const SearchAddressStep = ({ formik }: Props) => {
               return;
             }
 
-            setCoordinates([parseFloat(value.lat), parseFloat(value.lon)]);
-
             formik.setFieldValue("latitude", parseFloat(value.lat));
             formik.setFieldValue("longitude", parseFloat(value.lon));
             formik.setFieldValue("address", value.address["road"]);
@@ -90,6 +67,7 @@ export const SearchAddressStep = ({ formik }: Props) => {
                 value.address["town"] ??
                 value.address["city_district"]
             );
+
             formik.setFieldValue("zipCode", value.address["postcode"]);
             formik.setFieldValue("addressNumber", "");
 
@@ -108,8 +86,6 @@ export const SearchAddressStep = ({ formik }: Props) => {
           )}
         />
 
-        {/* <Material.FormTitle variant="body1">Endereço: </Material.FormTitle> */}
-
         <CustomInput name="address" label={"Logradouro"} />
 
         <CustomInput name="neighborhood" label={"Bairro"} />
@@ -124,25 +100,7 @@ export const SearchAddressStep = ({ formik }: Props) => {
       </Grid>
 
       <Grid item md={6}>
-        <MapContainer
-          id="map"
-          // @ts-expect-error ....
-          center={coordinates}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {selectedAddress && (
-            <>
-              <Marker
-                // @ts-expect-error ...
-                position={coordinates}
-              >
-                <Popup>{selectedAddress.display_name}</Popup>
-              </Marker>
-
-              <Recenter coordinates={coordinates} />
-            </>
-          )}
-        </MapContainer>
+        <CustomMap selectedAddress={selectedAddress} />
       </Grid>
     </Material.Container>
   );

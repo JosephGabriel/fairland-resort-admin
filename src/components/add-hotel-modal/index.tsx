@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { Form, Formik, FormikProps } from "formik";
+import { useState } from "react";
+import { Form, Formik } from "formik";
 import { useSnackbar } from "notistack";
 
 import {
@@ -18,15 +18,12 @@ import { BasicInformationStepModal } from "@components/basic-information-step-ad
 import { SearchAddressStep } from "@components/search-address-step-add-hotel-modal";
 import { ImageUploadStep } from "@components/image-upload-step";
 
-import {
-  InitialValues,
-  fields,
-  imagesFields,
-  initialValues,
-  validationSchema,
-} from "./utils";
+import { fields, imagesFields, initialValues, validationSchema } from "./utils";
 
-import { useCreateHotelMutation } from "@services/apollo/generated/hooks";
+import {
+  CreateHotelInput,
+  useCreateHotelMutation,
+} from "@services/apollo/generated/hooks";
 
 import { HotelRepository } from "@repositories/hotel";
 
@@ -45,8 +42,6 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
   const [createHotel, { loading }] = useCreateHotelMutation();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const formikRef = useRef<FormikProps<InitialValues> | null>(null);
 
   const repository = new HotelRepository();
 
@@ -72,7 +67,7 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
     onClose();
   };
 
-  const onSubmit = async (values: InitialValues) => {
+  const onSubmit = async (values: CreateHotelInput) => {
     await createHotel({
       variables: { data: values },
       update: (cache, { data }) => {
@@ -99,20 +94,11 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
     });
   };
 
-  const onRemoveImage = (name: string) => {
-    formikRef.current?.setFieldValue(name, "");
-  };
-
-  const onImageUploaded = (url: string, name: string) => {
-    formikRef.current?.setFieldValue(name, url);
-  };
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      innerRef={formikRef}
     >
       {(formik) => (
         <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
@@ -139,12 +125,7 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
               {activeStep === 1 && <SearchAddressStep formik={formik} />}
 
               {activeStep === 2 && (
-                <ImageUploadStep
-                  formik={formik}
-                  onRemoveImage={onRemoveImage}
-                  onImageUploaded={onImageUploaded}
-                  fields={imagesFields}
-                />
+                <ImageUploadStep formik={formik} fields={imagesFields} />
               )}
 
               {activeStep === 3 && (

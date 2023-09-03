@@ -7,23 +7,16 @@ import * as Material from "./styles";
 
 interface Props {
   formik: FormikProps<InitialValues>;
-  fields: { [name: string]: string | string[] };
-  onRemoveImage: (name: string) => void;
-  onImageUploaded: (url: string, name: string) => void;
+  fields: Partial<InitialValues>;
 }
 
-export const ImageUploadStep = ({
-  fields,
-  formik,
-  onRemoveImage,
-  onImageUploaded,
-}: Props) => {
-  const onImageUpload = (url: string, name: string) => {
-    onImageUploaded(url, name);
+export const ImageUploadStep = ({ fields, formik }: Props) => {
+  const onRemoveImage = (name: string) => {
+    formik.setFieldValue(name, "");
   };
 
-  const onRemovedImage = (name: string) => {
-    onRemoveImage(name);
+  const onImageUploaded = (url: string, name: string) => {
+    formik.setFieldValue(name, url);
   };
 
   return (
@@ -34,8 +27,8 @@ export const ImageUploadStep = ({
           key={idx}
           // @ts-expect-error ...
           value={formik.values[name]}
-          onRemoveImage={onRemovedImage}
-          onImageUploaded={onImageUpload}
+          onRemoveImage={onRemoveImage}
+          onImageUploaded={onImageUploaded}
         />
       ))}
     </Material.Container>

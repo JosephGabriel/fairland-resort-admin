@@ -1,4 +1,5 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
+import { CreateHotelInput } from "@services/apollo/generated/hooks";
 import * as yup from "yup";
 
 export const fields = {
@@ -14,13 +15,7 @@ export const fields = {
   },
 };
 
-export const imagesFields = {
-  thumbnail: "",
-  logo: "",
-  images: [""],
-};
-
-export const initialValues = {
+export const initialValues: CreateHotelInput = {
   name: faker.company.name(),
   summary: faker.lorem.sentence(),
   description: faker.lorem.paragraphs(),
@@ -43,23 +38,31 @@ export const initialValues = {
   logo: faker.image.urlLoremFlickr({ category: "business" }),
 };
 
-export const validationSchema = yup.object().shape({
-  name: yup.string().required(),
-  summary: yup.string().required(),
-  description: yup.string().required(),
+export const validationSchema: yup.ObjectSchema<CreateHotelInput> = yup
+  .object()
+  .shape({
+    name: yup.string().required(),
+    summary: yup.string().required(),
+    description: yup.string().required(),
 
-  address: yup.string().required(),
-  zipCode: yup.string().required(),
-  neighborhood: yup.string().required(),
-  addressNumber: yup.string().required(),
-  state: yup.string().required(),
-  city: yup.string().required(),
-  longitude: yup.number().required(),
-  latitude: yup.number().required(),
+    address: yup.string().required(),
+    zipCode: yup.string().required(),
+    neighborhood: yup.string().required(),
+    addressNumber: yup.string().required(),
+    state: yup.string().required(),
+    city: yup.string().required(),
+    longitude: yup.number().required(),
+    latitude: yup.number().required(),
 
-  thumbnail: yup.string().required(),
-  images: yup.array(yup.string().required()).required(),
-  logo: yup.string().required(),
-});
+    thumbnail: yup.string().required(),
+    images: yup.array(yup.string().required()).required(),
+    logo: yup.string().required(),
+  });
+
+export const imagesFields: Partial<InitialValues> = {
+  thumbnail: "",
+  logo: "",
+  images: [""],
+};
 
 export type InitialValues = typeof initialValues;
