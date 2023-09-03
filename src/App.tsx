@@ -31,17 +31,17 @@ export const App = () => {
   });
 
   return (
-    <UserContextProvider>
-      <ApolloProvider client={client}>
-        <QueryClientProvider client={queryClient}>
-          <SnackbarProvider autoHideDuration={3000}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
+    <ApolloProvider client={client}>
+      <QueryClientProvider client={queryClient}>
+        <SnackbarProvider autoHideDuration={3000}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <UserContextProvider>
               <Navigation />
-            </ThemeProvider>
-          </SnackbarProvider>
-        </QueryClientProvider>
-      </ApolloProvider>
-    </UserContextProvider>
+            </UserContextProvider>
+          </ThemeProvider>
+        </SnackbarProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
   );
 };
