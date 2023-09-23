@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
-import { useFormik } from "formik";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Grow,
@@ -10,14 +11,17 @@ import {
   LinearProgress,
 } from "@mui/material";
 
-import { useLoginUserMutation } from "@services/apollo/generated/hooks";
-
+import { LocalStorageService } from "@services/local-storage";
 import { useUserContext } from "@contexts/user";
 
-import { initialValues, validationSchema } from "./utils";
+import {
+  LoginUserInput,
+  useLoginUserMutation,
+} from "@services/apollo/generated/hooks";
+
+import { LoginSchema, TLoginSchema } from "./utils";
 
 import * as Material from "./styles";
-import { LocalStorageService } from "@services/local-storage";
 
 export const LoginPage = () => {
   const [loginUser, { loading }] = useLoginUserMutation();
@@ -28,7 +32,7 @@ export const LoginPage = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = async (values: typeof initialValues) => {
+  const onSubmit = async (values: LoginUserInput) => {
     await loginUser({
       variables: { data: values },
       onError(error) {
@@ -61,16 +65,16 @@ export const LoginPage = () => {
           data?.loginUser.token
         );
 
-        setUser(data?.loginUser.user);
+        setTimeout(() => {
+          setUser(data?.loginUser.user);
+        }, 1000);
       },
     });
   };
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    validateOnMount: false,
-    onSubmit,
+  const { register, handleSubmit, formState } = useForm<TLoginSchema>({
+    resolver: zodResolver(LoginSchema),
+    mode: "onChange",
   });
 
   return (
@@ -84,7 +88,7 @@ export const LoginPage = () => {
           <LinearProgress />
         </Grow>
 
-        <Material.Form onSubmit={formik.handleSubmit}>
+        <Material.Form onSubmit={handleSubmit(onSubmit)}>
           <Material.Title variant="h4">Login</Material.Title>
 
           <Material.Subtitle variant="body1">
@@ -93,12 +97,9 @@ export const LoginPage = () => {
 
           <Material.Input
             label="Email"
-            name="email"
-            value={formik.values.email}
-            error={!!formik.errors.email}
-            helperText={formik.errors.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            {...register("email")}
+            error={!!formState.errors.email}
+            helperText={formState.errors.email?.message}
             variant="outlined"
             fullWidth
             inputProps={{
@@ -108,13 +109,10 @@ export const LoginPage = () => {
 
           <Material.Input
             label="Senha"
-            name="password"
             type={isHidden ? "text" : "password"}
-            value={formik.values.password}
-            error={!!formik.errors.password}
-            helperText={formik.errors.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            {...register("password")}
+            error={!!formState.errors.password}
+            helperText={formState.errors.password?.message}
             variant="outlined"
             fullWidth
             inputProps={{
@@ -136,8 +134,8 @@ export const LoginPage = () => {
             variant="contained"
             fullWidth
             data-testid="submit-btn"
-            disabled={!formik.isValid}
-            onClick={formik.submitForm}
+            disabled={!formState.isValid || formState.isSubmitting}
+            type="submit"
           >
             {loading ? "Carregando..." : "Entrar"}
           </Material.LoginButton>
