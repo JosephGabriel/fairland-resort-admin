@@ -14,10 +14,7 @@ import {
 import { LocalStorageService } from "@services/local-storage";
 import { useUserContext } from "@contexts/user";
 
-import {
-  LoginUserInput,
-  useLoginUserMutation,
-} from "@services/apollo/generated/hooks";
+import { LoginUserInput, useLoginUserMutation } from "@services/apollo/hooks";
 
 import { LoginSchema, TLoginSchema } from "./utils";
 

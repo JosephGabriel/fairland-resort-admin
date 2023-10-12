@@ -1,6 +1,6 @@
 import { ApolloCache, Reference } from "@apollo/client";
 
-import { CreateRoomMutation } from "@services/apollo/generated/hooks";
+import { CreateRoomMutation } from "@services/apollo/hooks";
 
 type MutationResult<T> = T | null | undefined;
 

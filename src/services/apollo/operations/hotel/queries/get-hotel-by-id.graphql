@@ -1,14 +1,11 @@
 query GetHotelById($id: ID!) {
   hotel(id: $id) {
-    id
     name
-    rating
     summary
     description
     images
     thumbnail
     logo
-    slug
     longitude
     latitude
     address

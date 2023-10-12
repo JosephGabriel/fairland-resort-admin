@@ -5,10 +5,10 @@ import * as Material from "./styles";
 
 interface Props {
   images: string[];
-  // onRemoveItems: (index: number) => void;
+  onRemoveItem: (index: number) => void;
 }
 
-export const MultipleImageItem = ({ images }: Props) => {
+export const MultipleImageItem = ({ images, onRemoveItem }: Props) => {
   const [currentImage, setCurrentIndex] = useState(0);
 
   const nextImage = () => {
@@ -19,9 +19,15 @@ export const MultipleImageItem = ({ images }: Props) => {
     setCurrentIndex((prev) => prev - 1);
   };
 
+  const onRemove = () => {
+    onRemoveItem(currentImage);
+
+    setCurrentIndex(0);
+  };
+
   return (
     <Material.ImageContainer>
-      <Material.RemoveImageButton>
+      <Material.RemoveImageButton onClick={onRemove}>
         <Close />
       </Material.RemoveImageButton>
 

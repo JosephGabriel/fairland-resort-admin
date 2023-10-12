@@ -1,5 +1,4 @@
-import { useRef, useState } from "react";
-import { Form, Formik, FormikProps } from "formik";
+import { useState } from "react";
 import { useSnackbar } from "notistack";
 
 import {
@@ -14,23 +13,26 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStepModal } from "@components/basic-information-step-add-hotel-modal";
-import { SearchAddressStep } from "@components/search-address-step-add-hotel-modal";
+import { BasicInformationStep } from "@components/basic-information-step";
+import { SearchAddressStep } from "@components/search-address-step";
 import { ImageUploadStep } from "@components/image-upload-step";
-import { Loader } from "@components/loader";
 
-import {
-  InitialValues,
-  fields,
-  imagesFields,
-  initialValues,
-  validationSchema,
-} from "./utils";
+import { Loader } from "@components/loader";
 
 import {
   useGetHotelByIdQuery,
   useUpdateHotelMutation,
-} from "@services/apollo/generated/hooks";
+} from "@services/apollo/hooks";
+
+import {
+  BasicHotelInfoSchema,
+  ImagesSchema,
+  TBasicHotelInfoSchema,
+  TImagesSchema,
+  TUpdateHotelSchema,
+  fields,
+  imagesFields,
+} from "./utils";
 
 import * as Material from "./styles";
 
@@ -45,6 +47,12 @@ const steps = ["Informações básicas", "Localização", "Imagens"];
 export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
 
+  const [formValues, setFormValues] = useState<TUpdateHotelSchema>(
+    {} as TUpdateHotelSchema
+  );
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const [updateHotel, { loading }] = useUpdateHotelMutation();
 
   const { loading: isLoading } = useGetHotelByIdQuery({
@@ -52,20 +60,19 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
       id: hotelId,
     },
     onCompleted(data) {
-      Object.keys(initialValues).map((key) => {
-        formikRef.current?.setFieldValue(
-          key,
-          data.hotel[key as keyof typeof data.hotel]
-        );
-      });
+      const values = { ...data.hotel };
+
+      delete values.__typename;
+
+      setFormValues(values);
     },
   });
 
-  const { enqueueSnackbar } = useSnackbar();
-
-  const formikRef = useRef<FormikProps<InitialValues> | null>(null);
-
   const nextStep = () => {
+    if (activeStep === 2) {
+      onSubmit();
+    }
+
     setActiveStep((prev) => prev + 1);
   };
 
@@ -78,6 +85,15 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
     setActiveStep((prev) => prev - 1);
   };
 
+  const onSubmitStep = (values: Partial<TUpdateHotelSchema>) => {
+    setFormValues((prev) => ({
+      ...prev,
+      ...values,
+    }));
+
+    nextStep();
+  };
+
   const onCloseModal = () => {
     if (loading || activeStep === 3) {
       return;
@@ -87,9 +103,9 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
     onClose();
   };
 
-  const onSubmit = async (values: InitialValues) => {
+  const onSubmit = async () => {
     await updateHotel({
-      variables: { data: values, id: hotelId },
+      variables: { data: formValues, id: hotelId },
       onError(error) {
         if (error.graphQLErrors) {
           error.graphQLErrors.map((error) => {
@@ -111,78 +127,62 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
     });
   };
 
-  const onRemoveImage = (name: string) => {
-    formikRef.current?.setFieldValue(name, "");
-  };
-
-  const onImageUploaded = (url: string, name: string) => {
-    formikRef.current?.setFieldValue(name, url);
-  };
-
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-      innerRef={formikRef}
-    >
-      {(formik) => (
-        <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
-          <Loader variant="linear" isLoading={isLoading} />
+    <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
+      <Loader variant="linear" isLoading={isLoading} />
 
-          <DialogTitle>Editar um hotel</DialogTitle>
+      <DialogTitle>Editar um hotel</DialogTitle>
 
-          <DialogContent>
-            <Material.DialogText>
-              Preencha os campos abaixo para Editar um hotel
-            </Material.DialogText>
+      <DialogContent>
+        <Material.DialogText>
+          Preencha os campos abaixo para Editar um hotel
+        </Material.DialogText>
 
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((step) => (
-                <Step key={step}>
-                  <StepLabel>{step}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map((step) => (
+            <Step key={step}>
+              <StepLabel>{step}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-            <Form onSubmit={formik.handleSubmit}>
-              {activeStep === 0 && (
-                <BasicInformationStepModal fields={fields} />
-              )}
+        {activeStep === 0 && (
+          <BasicInformationStep<TBasicHotelInfoSchema>
+            fields={fields}
+            schema={BasicHotelInfoSchema}
+            onSubmit={onSubmitStep}
+            defaultValues={formValues}
+          />
+        )}
 
-              {activeStep === 1 && <SearchAddressStep formik={formik} />}
+        {activeStep === 1 && (
+          <SearchAddressStep
+            defaultValues={formValues}
+            onSelectAddress={onSubmitStep}
+          />
+        )}
 
-              {activeStep === 2 && (
-                <ImageUploadStep
-                  formik={formik}
-                  onRemoveImage={onRemoveImage}
-                  onImageUploaded={onImageUploaded}
-                  fields={imagesFields}
-                />
-              )}
+        {activeStep === 2 && (
+          <ImageUploadStep<TImagesSchema>
+            fields={imagesFields}
+            schema={ImagesSchema}
+            defaultValues={formValues}
+            onSubmit={onSubmitStep}
+          />
+        )}
 
-              {activeStep === 3 && (
-                <Material.LoadingContainer>
-                  <CircularProgress />
-                </Material.LoadingContainer>
-              )}
-            </Form>
-          </DialogContent>
+        {activeStep === 3 && (
+          <Material.LoadingContainer>
+            <CircularProgress />
+          </Material.LoadingContainer>
+        )}
+      </DialogContent>
 
-          <DialogActions>
-            <Button onClick={prevStep}>
-              {activeStep === 0 ? "Cancelar" : "Voltar"}
-            </Button>
-
-            <Button
-              onClick={activeStep === 2 ? formik.submitForm : nextStep}
-              disabled={activeStep === 3 || !formik.isValid}
-            >
-              {activeStep === 2 ? "Editar" : "Próximo"}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-    </Formik>
+      <DialogActions>
+        <Button onClick={prevStep}>
+          {activeStep === 0 ? "Cancelar" : "Voltar"}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

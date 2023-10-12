@@ -1,4 +1,4 @@
-import * as Graphql from "../src/services/apollo/generated/documents";
+import * as Graphql from "../src/services/apollo/documents";
 
 import { graphql } from "msw";
 

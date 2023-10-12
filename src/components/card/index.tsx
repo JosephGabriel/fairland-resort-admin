@@ -1,7 +1,14 @@
-import React from "react";
+import { useState, MouseEvent } from "react";
 import { MoreVert } from "@mui/icons-material";
+import { enqueueSnackbar } from "notistack";
 
 import { CardContent, Grid, Menu, MenuItem, Typography } from "@mui/material";
+
+import { EditHotelModal } from "@components/edit-hotel-modal";
+
+import { useDeleteHotelMutation } from "@services/apollo/hooks";
+
+import { HotelRepository } from "@repositories/hotel";
 
 import * as Material from "./styles";
 
@@ -13,13 +20,9 @@ interface Props {
   city?: string;
   state?: string;
   isLink: boolean;
-  onEdit?: (id: string) => void;
-  onRemove?: (id: string) => void;
 }
 
-export const Card = ({
-  onEdit,
-  onRemove,
+export const Card: React.FC<Props> = ({
   id,
   name,
   summary,
@@ -27,10 +30,16 @@ export const Card = ({
   city,
   state,
   isLink,
-}: Props) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+}) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+
+  const [deleteHotel] = useDeleteHotelMutation();
+
+  const repository = new HotelRepository();
+
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -39,22 +48,41 @@ export const Card = ({
   };
 
   const handleDelete = () => {
-    if (onRemove) {
-      onRemove(id);
-    }
-    handleClose();
+    onDeleteHotel().then(handleClose);
+  };
+
+  const onCloseEditModal = () => {
+    setIsOpenEdit(false);
   };
 
   const handleEdit = () => {
-    if (onEdit) {
-      onEdit(id);
-    }
+    setIsOpenEdit(true);
 
     handleClose();
+  };
+
+  const onDeleteHotel = async () => {
+    await deleteHotel({
+      variables: { id },
+      update: (cache, { data }) => {
+        repository.onDeleteHotel(String(data?.deleteHotel.id), cache);
+      },
+      onCompleted: () => {
+        enqueueSnackbar("Hótel apagado com sucesso", {
+          variant: "success",
+        });
+      },
+    });
   };
 
   return (
     <Material.CardContainer>
+      <EditHotelModal
+        hotelId={id}
+        isOpen={isOpenEdit}
+        onClose={onCloseEditModal}
+      />
+
       <Material.CardImage image={thumbnail} title={name} />
 
       <Menu
@@ -97,7 +125,7 @@ export const Card = ({
         {city && state && (
           <Grid container alignItems={"center"}>
             <Material.IconGrid item md={"auto"}>
-              <Material.RoomIcon fontSize="small" />
+              <Material.RoomIcon fontSize="large" />
             </Material.IconGrid>
 
             <Grid item>

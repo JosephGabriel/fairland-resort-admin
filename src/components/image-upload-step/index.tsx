@@ -1,36 +1,63 @@
-import { FormikProps } from "formik";
+import { Button, Grid } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ZodSchema } from "zod";
+
+import {
+  Control,
+  Controller,
+  DefaultValues,
+  FieldValues,
+  useForm,
+} from "react-hook-form";
 
 import { ImageInputUpload } from "@components/image-input-upload";
-import { InitialValues } from "@components/add-hotel-modal/utils";
 
 import * as Material from "./styles";
 
-interface Props {
-  formik: FormikProps<InitialValues>;
-  fields: Partial<InitialValues>;
+interface Props<T> {
+  defaultValues: DefaultValues<T> | undefined;
+  schema: ZodSchema<T>;
+  onSubmit: (data: T) => void;
+
+  fields: MappedImageField<T>;
 }
 
-export const ImageUploadStep = ({ fields, formik }: Props) => {
-  const onRemoveImage = (name: string) => {
-    formik.setFieldValue(name, "");
-  };
+export function ImageUploadStep<T extends FieldValues>(props: Props<T>) {
+  const { defaultValues, fields, schema, onSubmit } = props;
 
-  const onImageUploaded = (url: string, name: string) => {
-    formik.setFieldValue(name, url);
-  };
+  const { handleSubmit, formState, control } = useForm<T>({
+    resolver: zodResolver(schema),
+    defaultValues,
+    mode: "onChange",
+  });
 
   return (
     <Material.Container container spacing={2} alignItems={"stretch"}>
-      {Object.keys(fields).map((name, idx) => (
-        <ImageInputUpload
-          name={name}
+      {Object.keys(fields).map((label, idx) => (
+        <Controller
           key={idx}
-          // @ts-expect-error ...
-          value={formik.values[name]}
-          onRemoveImage={onRemoveImage}
-          onImageUploaded={onImageUploaded}
+          name={label}
+          control={control as Control<FieldValues>}
+          render={({ field: { name, value, onChange, onBlur } }) => (
+            <ImageInputUpload
+              name={name}
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
+          )}
         />
       ))}
+
+      <Grid item md={12} sx={{ marginTop: "2rem" }}>
+        <Button
+          disabled={!formState.isValid}
+          variant="contained"
+          onClick={handleSubmit(onSubmit)}
+        >
+          Próximo
+        </Button>
+      </Grid>
     </Material.Container>
   );
-};
+}

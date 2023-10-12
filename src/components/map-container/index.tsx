@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import { LatLngTuple } from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 
-import { NominatimResult } from "@services/api";
-
 interface RecenterProps {
   coordinates: LatLngTuple;
 }
 
 interface Props {
-  selectedAddress: NominatimResult | undefined;
+  latitude: string | undefined;
+  longitude: string | undefined;
+  displayName: string | undefined;
 }
 
 const Recenter = ({ coordinates }: RecenterProps) => {
@@ -27,19 +27,19 @@ const Recenter = ({ coordinates }: RecenterProps) => {
   return null;
 };
 
-export const CustomMap = ({ selectedAddress }: Props) => {
+export const CustomMap = ({ latitude, longitude, displayName }: Props) => {
   const coordinates = [
-    parseFloat(selectedAddress?.lat ?? "0"),
-    parseFloat(selectedAddress?.lon ?? "0"),
+    parseFloat(latitude ?? "0"),
+    parseFloat(longitude ?? "0"),
   ] as LatLngTuple;
 
   return (
     <MapContainer id="map" center={coordinates}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {selectedAddress && (
+      {displayName && (
         <>
           <Marker position={coordinates}>
-            <Popup>{selectedAddress.display_name}</Popup>
+            <Popup>{displayName}</Popup>
           </Marker>
 
           <Recenter coordinates={coordinates} />

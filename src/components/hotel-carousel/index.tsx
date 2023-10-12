@@ -3,25 +3,16 @@ import { Grid } from "@mui/material";
 import { CustomSkeleton } from "@components/skeleton";
 import { Card } from "@components/card";
 
-import { GetHotelsByAdminQuery } from "@services/apollo/generated/hooks";
-
 import * as Material from "./styles";
 
 interface Props {
   isLoading: boolean;
   hotels: GetHotelsByAdminQuery["hotelsByAdmin"]["nodes"] | undefined;
-  onEditModal: (id: string) => void;
-  onDeleteHotel: (id: string) => void;
 }
 
-export const HotelCarousel = ({
-  isLoading,
-  hotels,
-  onDeleteHotel,
-  onEditModal,
-}: Props) => {
+export const HotelCarousel: React.FC<Props> = ({ isLoading, hotels }) => {
   return (
-    <Grid container spacing={4}>
+    <Grid container alignItems={"stretch"} spacing={4}>
       {isLoading && (
         <>
           {new Array(4).fill(" ").map((_, idx) => (
@@ -41,8 +32,8 @@ export const HotelCarousel = ({
                 name={hotel.name}
                 thumbnail={hotel.thumbnail}
                 summary={hotel.summary}
-                onEdit={onEditModal}
-                onRemove={onDeleteHotel}
+                city={hotel.city}
+                state={hotel.state}
                 isLink={true}
               />
             </Grid>

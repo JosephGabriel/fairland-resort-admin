@@ -458,83 +458,6 @@ export enum UserRole {
   User = 'USER'
 }
 
-export type CreateHotelMutationVariables = Exact<{
-  data: CreateHotelInput;
-}>;
-
-
-export type CreateHotelMutation = { __typename?: 'Mutation', createHotel: { __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, city: string, state: string } };
-
-export type DeleteHotelMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DeleteHotelMutation = { __typename?: 'Mutation', deleteHotel: { __typename?: 'Hotel', id: string } };
-
-export type UpdateHotelMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-  data: UpdateHotelInput;
-}>;
-
-
-export type UpdateHotelMutation = { __typename?: 'Mutation', updateHotel: { __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, city: string, state: string } };
-
-export type GetHotelByIdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetHotelByIdQuery = { __typename?: 'Query', hotel: { __typename?: 'Hotel', id: string, name: string, rating: number, summary: string, description: string, images: Array<string>, thumbnail: string, logo: string, slug: string, longitude: number, latitude: number, address: string, addressNumber: string, zipCode: string, neighborhood: string, state: string, city: string } };
-
-export type GetHotelBySlugQueryVariables = Exact<{
-  slug: Scalars['String']['input'];
-}>;
-
-
-export type GetHotelBySlugQuery = { __typename?: 'Query', hotelBySlug: { __typename?: 'Hotel', id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, slug: string, latitude: number, longitude: number, address: string, addressNumber: string, zipCode: string } };
-
-export type GetHotelsByAdminQueryVariables = Exact<{
-  options?: InputMaybe<Options>;
-}>;
-
-
-export type GetHotelsByAdminQuery = { __typename?: 'Query', hotelsByAdmin: { __typename?: 'HotelsPayload', count: number, nodes: Array<{ __typename?: 'Hotel', id: string, name: string, summary: string, thumbnail: string, city: string, state: string }> } };
-
-export type GetAllHotelsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllHotelsQuery = { __typename?: 'Query', hotels: Array<{ __typename?: 'Hotel', id: string, name: string, rating: number, summary: string, description: string, thumbnail: string, images: Array<string>, logo: string, latitude: number, slug: string, address: string, addressNumber: string, zipCode: string }> };
-
-export type CreateRoomMutationVariables = Exact<{
-  data: CreateRoomInput;
-}>;
-
-
-export type CreateRoomMutation = { __typename?: 'Mutation', createRoom: { __typename?: 'Room', id: string, name: string, summary: string, description: string, thumbnail: string, images?: Array<string> | null, price: number, rating?: number | null, createdAt: Date } };
-
-export type DeleteRoomMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DeleteRoomMutation = { __typename?: 'Mutation', deleteRoom: string };
-
-export type GetRoomsByHotelQueryVariables = Exact<{
-  hotelId: Scalars['ID']['input'];
-  options?: InputMaybe<Options>;
-}>;
-
-
-export type GetRoomsByHotelQuery = { __typename?: 'Query', roomsByHotel: { __typename?: 'RoomPayload', count: number, nodes: Array<{ __typename?: 'Room', id: string, name: string, summary: string, thumbnail: string, createdAt: Date }> } };
-
-export type LoginUserMutationVariables = Exact<{
-  data: LoginUserInput;
-}>;
-
-
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
-
 
 export const CreateHotelDocument = gql`
     mutation CreateHotel($data: CreateHotelInput!) {
@@ -649,15 +572,12 @@ export type UpdateHotelMutationOptions = Apollo.BaseMutationOptions<UpdateHotelM
 export const GetHotelByIdDocument = gql`
     query GetHotelById($id: ID!) {
   hotel(id: $id) {
-    id
     name
-    rating
     summary
     description
     images
     thumbnail
     logo
-    slug
     longitude
     latitude
     address
@@ -756,6 +676,7 @@ export const GetHotelsByAdminDocument = gql`
       thumbnail
       city
       state
+      createdAt
     }
   }
 }

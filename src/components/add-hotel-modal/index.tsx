@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Form, Formik } from "formik";
 import { useSnackbar } from "notistack";
+import { faker } from "@faker-js/faker";
 
 import {
   Button,
@@ -14,18 +14,23 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStepModal } from "@components/basic-information-step-add-hotel-modal";
-import { SearchAddressStep } from "@components/search-address-step-add-hotel-modal";
+import { BasicInformationStep } from "@components/basic-information-step";
+import { SearchAddressStep } from "@components/search-address-step";
 import { ImageUploadStep } from "@components/image-upload-step";
 
-import { fields, imagesFields, initialValues, validationSchema } from "./utils";
+import { HotelRepository } from "@repositories/hotel";
+
+import { useCreateHotelMutation } from "@services/apollo/hooks";
 
 import {
-  CreateHotelInput,
-  useCreateHotelMutation,
-} from "@services/apollo/generated/hooks";
-
-import { HotelRepository } from "@repositories/hotel";
+  fields,
+  imagesFields,
+  ImagesSchema,
+  BasicHotelInfoSchema,
+  TAddHotelSchema,
+  TBasicHotelInfoSchema,
+  TImagesSchema,
+} from "./utils";
 
 import * as Material from "./styles";
 
@@ -36,8 +41,29 @@ interface Props {
 
 const steps = ["Informações básicas", "Localização", "Imagens"];
 
-export const AddHotelModal = ({ isOpen, onClose }: Props) => {
+export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
+
+  const [formValues, setFormValues] = useState<TAddHotelSchema>({
+    name: faker.company.name(),
+    summary: faker.company.catchPhrase(),
+    description: faker.lorem.paragraphs(2),
+
+    address: faker.location.streetAddress(),
+    addressNumber: faker.helpers
+      .rangeToNumber({ min: 100, max: 1000 })
+      .toString(),
+    city: faker.location.city(),
+    latitude: faker.location.latitude(),
+    longitude: faker.location.longitude(),
+    neighborhood: faker.location.county(),
+    state: faker.location.state(),
+    zipCode: faker.location.zipCode(),
+
+    images: [faker.image.urlPicsumPhotos(), faker.image.urlLoremFlickr()],
+    logo: faker.image.unsplash.people(),
+    thumbnail: faker.image.urlPicsumPhotos(),
+  });
 
   const [createHotel, { loading }] = useCreateHotelMutation();
 
@@ -45,7 +71,20 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
 
   const repository = new HotelRepository();
 
+  const onSubmitStep = (values: Partial<TAddHotelSchema>) => {
+    setFormValues((prev) => ({
+      ...prev,
+      ...values,
+    }));
+
+    nextStep();
+  };
+
   const nextStep = () => {
+    if (activeStep === 2) {
+      onSubmit();
+    }
+
     setActiveStep((prev) => prev + 1);
   };
 
@@ -67,9 +106,9 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
     onClose();
   };
 
-  const onSubmit = async (values: CreateHotelInput) => {
+  const onSubmit = async () => {
     await createHotel({
-      variables: { data: values },
+      variables: { data: formValues as TAddHotelSchema },
       update: (cache, { data }) => {
         repository.onCreateHotel(data, cache);
       },
@@ -79,6 +118,12 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
             enqueueSnackbar(error.message, {
               variant: "error",
             });
+          });
+        }
+
+        if (error.networkError) {
+          enqueueSnackbar("Erro de conexão, tente novamente mais tarde", {
+            variant: "error",
           });
         }
 
@@ -95,61 +140,59 @@ export const AddHotelModal = ({ isOpen, onClose }: Props) => {
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {(formik) => (
-        <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
-          <DialogTitle>Adicionar um hotel</DialogTitle>
+    <Dialog open={isOpen} onClose={onCloseModal} fullWidth maxWidth={"md"}>
+      <DialogTitle>Adicionar um hotel</DialogTitle>
 
-          <DialogContent>
-            <Material.DialogText>
-              Preencha os campos abaixo para adicionar um hotel
-            </Material.DialogText>
+      <DialogContent>
+        <Material.DialogText>
+          Preencha os campos abaixo para adicionar um hotel
+        </Material.DialogText>
 
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((step) => (
-                <Step key={step}>
-                  <StepLabel>{step}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map((step) => (
+            <Step key={step}>
+              <StepLabel>{step}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-            <Form onSubmit={formik.handleSubmit}>
-              {activeStep === 0 && (
-                <BasicInformationStepModal fields={fields} />
-              )}
+        {activeStep === 0 && (
+          <BasicInformationStep<TBasicHotelInfoSchema>
+            fields={fields}
+            schema={BasicHotelInfoSchema}
+            onSubmit={onSubmitStep}
+            defaultValues={formValues}
+          />
+        )}
 
-              {activeStep === 1 && <SearchAddressStep formik={formik} />}
+        {activeStep === 1 && (
+          <SearchAddressStep
+            defaultValues={formValues}
+            onSelectAddress={onSubmitStep}
+          />
+        )}
 
-              {activeStep === 2 && (
-                <ImageUploadStep formik={formik} fields={imagesFields} />
-              )}
+        {activeStep === 2 && (
+          <ImageUploadStep<TImagesSchema>
+            fields={imagesFields}
+            schema={ImagesSchema}
+            defaultValues={formValues}
+            onSubmit={onSubmitStep}
+          />
+        )}
 
-              {activeStep === 3 && (
-                <Material.LoadingContainer>
-                  <CircularProgress />
-                </Material.LoadingContainer>
-              )}
-            </Form>
-          </DialogContent>
+        {activeStep === 3 && (
+          <Material.LoadingContainer>
+            <CircularProgress />
+          </Material.LoadingContainer>
+        )}
+      </DialogContent>
 
-          <DialogActions>
-            <Button onClick={prevStep}>
-              {activeStep === 0 ? "Cancelar" : "Voltar"}
-            </Button>
-
-            <Button
-              onClick={activeStep === 2 ? formik.submitForm : nextStep}
-              disabled={activeStep === 3 || !formik.isValid}
-            >
-              {activeStep === 2 ? "Adicionar" : "Próximo"}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-    </Formik>
+      <DialogActions>
+        <Button onClick={prevStep}>
+          {activeStep === 0 ? "Cancelar" : "Voltar"}
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

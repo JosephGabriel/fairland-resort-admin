@@ -1,6 +1,49 @@
-import * as yup from "yup";
+import { z } from "zod";
 
-export const fields = {
+export const imagesFields = {
+  logo: "",
+  thumbnail: "",
+  images: [""],
+};
+
+export const BasicHotelInfoSchema = z.object({
+  name: z.string().trim(),
+  summary: z.string().trim(),
+  description: z.string().trim(),
+});
+
+export const SearchAddressSchema = z.object({
+  address: z.string().trim(),
+  zipCode: z.string().trim(),
+  neighborhood: z.string().trim(),
+  addressNumber: z.string().trim(),
+  state: z.string().trim(),
+  city: z.string().trim(),
+  longitude: z.number(),
+  latitude: z.number(),
+});
+
+export const ImagesSchema = z.object({
+  thumbnail: z.string().trim(),
+  logo: z.string().trim(),
+  images: z.array(z.string().trim()),
+});
+
+export const UpdateHotelSchema = z.union([
+  BasicHotelInfoSchema,
+  SearchAddressSchema,
+  ImagesSchema,
+]);
+
+export type TBasicHotelInfoSchema = z.infer<typeof BasicHotelInfoSchema>;
+export type TSearchAddressSchema = z.infer<typeof SearchAddressSchema>;
+export type TImagesSchema = z.infer<typeof ImagesSchema>;
+
+export type TUpdateHotelSchema = TBasicHotelInfoSchema &
+  TSearchAddressSchema &
+  TImagesSchema;
+
+export const fields: MappedCustomField<TBasicHotelInfoSchema> = {
   name: {
     label: "Nome",
   },
@@ -9,52 +52,6 @@ export const fields = {
   },
   description: {
     label: "Descrição",
-    multline: true,
+    multiline: true,
   },
 };
-
-export const imagesFields = {
-  thumbnail: "",
-  logo: "",
-  images: [""],
-};
-
-export const initialValues = {
-  name: "",
-  summary: "",
-  description: "",
-
-  address: "",
-  zipCode: "",
-  neighborhood: "",
-  state: "",
-  city: "",
-  addressNumber: "",
-  longitude: 0,
-  latitude: 0,
-
-  thumbnail: "",
-  images: ["", "", ""],
-  logo: "",
-};
-
-export const validationSchema = yup.object().shape({
-  name: yup.string().required(),
-  summary: yup.string().required(),
-  description: yup.string().required(),
-
-  address: yup.string().required(),
-  zipCode: yup.string().required(),
-  neighborhood: yup.string().required(),
-  addressNumber: yup.string().required(),
-  state: yup.string().required(),
-  city: yup.string().required(),
-  longitude: yup.number().required(),
-  latitude: yup.number().required(),
-
-  thumbnail: yup.string().required(),
-  images: yup.array(yup.string().required()).required(),
-  logo: yup.string().required(),
-});
-
-export type InitialValues = typeof initialValues;

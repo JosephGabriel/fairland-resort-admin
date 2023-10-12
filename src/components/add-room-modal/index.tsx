@@ -13,7 +13,7 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStepModal } from "@components/basic-information-step-add-hotel-modal";
+import { BasicInformationStep } from "@components/basic-information-step";
 import { RoomImageUploadStep } from "@components/room-image-step";
 
 import {
@@ -23,7 +23,7 @@ import {
   validationSchema,
 } from "./utils";
 
-import { useCreateRoomMutation } from "@services/apollo/generated/hooks";
+import { useCreateRoomMutation } from "@services/apollo/hooks";
 import { RoomRepository } from "@repositories/room";
 
 import * as Material from "./styles";
@@ -109,7 +109,7 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
 
             <Form onSubmit={formik.handleSubmit}>
               {activeStep === 0 && (
-                <BasicInformationStepModal fields={fields.text} />
+                <BasicInformationStep fields={fields.text} />
               )}
 
               {activeStep === 1 && <RoomImageUploadStep formik={formik} />}

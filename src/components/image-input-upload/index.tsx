@@ -1,4 +1,5 @@
 import { Fragment, useRef } from "react";
+import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import { Photo, Close } from "@mui/icons-material";
 
 import { MultipleImageItem } from "@components/multiple-image-item";
@@ -10,65 +11,87 @@ import * as Material from "./styles";
 interface Props {
   name: string;
   value: string | string[];
-  onRemoveImage: (name: string) => void;
-  onImageUploaded: (url: string, name: string) => void;
+  onChange: (e: unknown) => void;
+  onBlur: (e: unknown) => void;
 }
 
-export const ImageInputUpload = ({
-  name,
-  value,
-  onRemoveImage,
-  onImageUploaded,
-}: Props) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+export function ImageInputUpload(props: Props) {
+  const { name, value, onBlur, onChange } = props;
 
-  const isMultiple = typeof value === "string";
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onClick = () => {
     inputRef.current?.click();
   };
 
-  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const _onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;
     }
 
     const { url } = (await uploadImages(e.target.files)) as { url: string };
 
-    onImageUploaded(url, name);
+    onChange(url);
   };
 
   const _onRemoveImage = () => {
-    onRemoveImage(name);
+    onChange("");
   };
+
+  const onRemoveImageItem = (index: number) => {
+    if (value instanceof Array) {
+      value.splice(index, 1);
+
+      onChange(value);
+    }
+  };
+
+  if (value instanceof Array) {
+    return (
+      <Material.GridItem item md={4}>
+        <Material.UploadItem>
+          {value.length && (
+            <Fragment>
+              <MultipleImageItem
+                onRemoveItem={onRemoveImageItem}
+                images={value}
+              />
+            </Fragment>
+          )}
+        </Material.UploadItem>
+
+        <Material.LabelText variant="body2" color="textSecondary">
+          {name}
+        </Material.LabelText>
+      </Material.GridItem>
+    );
+  }
 
   return (
     <Material.GridItem item md={4}>
       <Material.UploadItem>
-        {value.length ? (
+        {value.length && (
           <Fragment>
-            {value instanceof Array ? (
-              <MultipleImageItem images={value} />
-            ) : (
-              <Fragment>
-                <Material.RemoveImageButton onClick={_onRemoveImage}>
-                  <Close />
-                </Material.RemoveImageButton>
+            <Material.RemoveImageButton onClick={_onRemoveImage}>
+              <Close />
+            </Material.RemoveImageButton>
 
-                <Material.Image src={value} />
-              </Fragment>
-            )}
+            <Material.Image src={value} />
           </Fragment>
-        ) : (
+        )}
+
+        {!value.length && (
           <Material.UploadButton onClick={onClick}>
             <input
               type="file"
               hidden
-              multiple={isMultiple}
+              multiple={name !== "images"}
               accept="image/*"
               name={name}
+              value={value}
+              onChange={_onChange}
+              onBlur={onBlur}
               ref={(ref) => (inputRef.current = ref)}
-              onChange={onChange}
             />
             <Photo />
           </Material.UploadButton>
@@ -80,4 +103,4 @@ export const ImageInputUpload = ({
       </Material.LabelText>
     </Material.GridItem>
   );
-};
+}

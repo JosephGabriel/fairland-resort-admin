@@ -8,6 +8,7 @@ query GetHotelsByAdmin($options: Options) {
       thumbnail
       city
       state
+      createdAt
     }
   }
 }

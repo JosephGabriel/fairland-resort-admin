@@ -10,7 +10,7 @@ import { CustomSelectInput } from "@components/custom-select-input";
 import { ImageGridCarousel as ImageGridCarousel } from "@components/image-grid-viewer";
 import { Loader } from "@components/loader";
 
-import { OrderBy } from "@services/apollo/generated/hooks";
+import { OrderBy } from "@services/apollo/hooks";
 
 import { Props } from "./utils";
 

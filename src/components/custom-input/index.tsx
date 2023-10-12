@@ -1,4 +1,3 @@
-import { useField } from "formik";
 import { TextFieldProps } from "@mui/material";
 
 import * as Material from "./styles";
@@ -8,20 +7,8 @@ type Props = TextFieldProps & {
   label: string;
 };
 
-export const CustomInput = ({ name, label, ...props }: Props) => {
-  const [field, meta] = useField({
-    name,
-  });
-
+export const CustomInput = ({ label, ...props }: Props) => {
   return (
-    <Material.Input
-      variant="outlined"
-      fullWidth
-      {...field}
-      {...props}
-      label={label}
-      error={!!meta.error}
-      helperText={meta.error}
-    />
+    <Material.Input variant="outlined" fullWidth label={label} {...props} />
   );
 };

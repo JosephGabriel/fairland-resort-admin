@@ -1,9 +1,5 @@
 import { ApolloCache, Reference } from "@apollo/client";
 
-import { CreateHotelMutation } from "@services/apollo/generated/hooks";
-
-type MutationResult<T> = T | null | undefined;
-
 export class HotelRepository {
   onCreateHotel(
     data: MutationResult<CreateHotelMutation>,
@@ -19,7 +15,7 @@ export class HotelRepository {
       fields: {
         hotelsByAdmin: (previous, { toReference }) => {
           return {
-            count: previous.count.length + 1,
+            count: previous.count + 1,
             nodes: [...previous.nodes, toReference(String(id))],
           };
         },
@@ -32,7 +28,7 @@ export class HotelRepository {
       fields: {
         hotelsByAdmin: (previous, { readField }) => {
           return {
-            count: previous.count.length - 1,
+            count: previous.count - 1,
             nodes: previous.nodes.filter(
               (ref: Reference) => hotelId !== readField("id", ref)
             ),
