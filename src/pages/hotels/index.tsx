@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, Fragment } from "react";
 import { Grid, Pagination, SelectChangeEvent } from "@mui/material";
 
 import { AddHotelModal } from "@src/components/add-hotel-modal";
@@ -76,11 +76,11 @@ export const HotelsPage = () => {
   };
 
   return (
-    <>
+    <Fragment>
       <Loader variant="linear" isLoading={loading} />
 
       <Material.Container>
-        <AddHotelModal isOpen={isOpen} onClose={onCloseAddModal} />
+        {isOpen && <AddHotelModal isOpen={isOpen} onClose={onCloseAddModal} />}
 
         <Grid container justifyContent={"space-between"} alignItems={"center"}>
           <Grid item md={"auto"}>
@@ -137,6 +137,6 @@ export const HotelsPage = () => {
           </Grid>
         </Grid>
       </Material.Container>
-    </>
+    </Fragment>
   );
 };

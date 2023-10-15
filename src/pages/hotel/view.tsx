@@ -21,11 +21,13 @@ export const HotelView = (props: Props) => {
     <Material.Container>
       <Loader variant="backdrop" isLoading={props.isDeleting} />
 
-      <AddRoomModal
-        hotelId={props.hotelId}
-        isOpen={props.isOpen}
-        onClose={props.onCloseModal}
-      />
+      {props.isOpen && (
+        <AddRoomModal
+          hotelId={props.hotelId}
+          isOpen={props.isOpen}
+          onClose={props.onCloseModal}
+        />
+      )}
 
       <Material.ThumbnailImage src={props.hotel?.thumbnail} />
 
