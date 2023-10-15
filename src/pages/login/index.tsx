@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,13 +10,11 @@ import {
   LinearProgress,
 } from "@mui/material";
 
-import { LocalStorageService } from "@src/services/local-storage";
-import { useUserContext } from "@src/contexts/user";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import {
-  LoginUserInput,
-  useLoginUserMutation,
-} from "@src/services/apollo/hooks";
+import { LocalStorageService } from "@src/services/local-storage";
+import { useLoginUserMutation } from "@src/services/apollo/hooks";
+import { useUserContext } from "@src/contexts/user";
 
 import { LoginSchema, TLoginSchema } from "./utils";
 

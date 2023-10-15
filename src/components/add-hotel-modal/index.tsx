@@ -3,11 +3,13 @@ import { useSnackbar } from "notistack";
 import { faker } from "@faker-js/faker";
 
 import {
+  Box,
   Button,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Step,
   StepLabel,
@@ -26,13 +28,13 @@ import {
   fields,
   imagesFields,
   ImagesSchema,
-  BasicHotelInfoSchema,
-  TAddHotelSchema,
-  TBasicHotelInfoSchema,
   TImagesSchema,
+  TAddHotelSchema,
+  BasicHotelInfoSchema,
+  TBasicHotelInfoSchema,
 } from "./utils";
 
-import * as Material from "./styles";
+import "./styles.scss";
 
 interface Props {
   isOpen: boolean;
@@ -108,7 +110,7 @@ export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const onSubmit = async () => {
     await createHotel({
-      variables: { data: formValues as TAddHotelSchema },
+      variables: { data: formValues },
       update: (cache, { data }) => {
         repository.onCreateHotel(data, cache);
       },
@@ -144,9 +146,9 @@ export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <DialogTitle>Adicionar um hotel</DialogTitle>
 
       <DialogContent>
-        <Material.DialogText>
+        <DialogContentText className="dialog__text">
           Preencha os campos abaixo para adicionar um hotel
-        </Material.DialogText>
+        </DialogContentText>
 
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((step) => (
@@ -182,9 +184,9 @@ export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
         )}
 
         {activeStep === 3 && (
-          <Material.LoadingContainer>
+          <Box className="dialog__loading-container">
             <CircularProgress />
-          </Material.LoadingContainer>
+          </Box>
         )}
       </DialogContent>
 
