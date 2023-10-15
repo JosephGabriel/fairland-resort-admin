@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
 import { setContext } from "@apollo/client/link/context";
 
-import { LocalStorageService } from "@services/local-storage";
+import { LocalStorageService } from "@src/services/local-storage";
 
 import { TypedTypePolicies } from "./type-policies";
 

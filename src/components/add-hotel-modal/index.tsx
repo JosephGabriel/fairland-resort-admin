@@ -14,13 +14,13 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStep } from "@components/basic-information-step";
-import { SearchAddressStep } from "@components/search-address-step";
-import { ImageUploadStep } from "@components/image-upload-step";
+import { BasicInformationStep } from "@src/components/basic-information-step";
+import { SearchAddressStep } from "@src/components/search-address-step";
+import { ImageUploadStep } from "@src/components/image-upload-step";
 
-import { HotelRepository } from "@repositories/hotel";
+import { HotelRepository } from "@src/repositories/hotel";
 
-import { useCreateHotelMutation } from "@services/apollo/hooks";
+import { useCreateHotelMutation } from "@src/services/apollo/hooks";
 
 import {
   fields,

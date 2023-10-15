@@ -11,10 +11,13 @@ import {
   LinearProgress,
 } from "@mui/material";
 
-import { LocalStorageService } from "@services/local-storage";
-import { useUserContext } from "@contexts/user";
+import { LocalStorageService } from "@src/services/local-storage";
+import { useUserContext } from "@src/contexts/user";
 
-import { LoginUserInput, useLoginUserMutation } from "@services/apollo/hooks";
+import {
+  LoginUserInput,
+  useLoginUserMutation,
+} from "@src/services/apollo/hooks";
 
 import { LoginSchema, TLoginSchema } from "./utils";
 

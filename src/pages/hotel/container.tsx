@@ -2,14 +2,14 @@ import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SelectChangeEvent } from "@mui/material";
 
-import { RoomRepository } from "@repositories/room";
+import { RoomRepository } from "@src/repositories/room";
 
 import {
   OrderBy,
   useDeleteRoomMutation,
   useGetHotelByIdQuery,
   useGetRoomsByHotelQuery,
-} from "@services/apollo/hooks";
+} from "@src/services/apollo/hooks";
 
 import { HotelView } from "./view";
 

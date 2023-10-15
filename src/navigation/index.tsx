@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 
-import { ProtectedRoute } from "@components/protected-route";
-import { NonProtectedRoute } from "@components/non-protected-route";
+import { ProtectedRoute } from "@src/components/protected-route";
+import { NonProtectedRoute } from "@src/components/non-protected-route";
 
-import { LoginPage } from "@pages/login";
-import { HotelsPage } from "@pages/hotels";
-import { DashBoardPage } from "@pages/dashboard";
-import { HotelPage } from "@pages/hotel";
-import { BookingsPage } from "@pages/bookings";
+import { LoginPage } from "@src/pages/login";
+import { HotelsPage } from "@src/pages/hotels";
+import { DashBoardPage } from "@src/pages/dashboard";
+import { HotelPage } from "@src/pages/hotel";
+import { BookingsPage } from "@src/pages/bookings";
 
 export const Navigation = () => {
   return (

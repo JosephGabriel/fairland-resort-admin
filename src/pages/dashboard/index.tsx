@@ -2,7 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import ReactApexChart from "react-apexcharts";
 
 import * as Material from "./styles";
-import { useUserContext } from "@contexts/user";
+import { useUserContext } from "@src/contexts/user";
 
 const series = [
   {

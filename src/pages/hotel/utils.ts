@@ -5,7 +5,7 @@ import {
   GetHotelByIdQuery,
   GetRoomsByHotelQuery,
   OrderBy,
-} from "@services/apollo/hooks";
+} from "@src/services/apollo/hooks";
 
 export const selectOptions = [
   { label: "Decrescente", value: OrderBy.Desc },

@@ -5,15 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { enqueueSnackbar } from "notistack";
 import { Grid, Autocomplete, Button } from "@mui/material";
 
-import { CustomMap } from "@components/map-container";
+import { CustomMap } from "@src/components/map-container";
 
 import {
   SearchAddressSchema,
   TAddHotelSchema,
   TSearchAddressSchema,
-} from "@components/add-hotel-modal/utils";
+} from "@src/components/add-hotel-modal/utils";
 
-import { searchAddress, NominatimResult } from "@services/api";
+import { searchAddress, NominatimResult } from "@src/services/api";
 
 import * as Material from "./styles";
 

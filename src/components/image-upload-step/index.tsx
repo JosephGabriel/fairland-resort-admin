@@ -10,7 +10,7 @@ import {
   useForm,
 } from "react-hook-form";
 
-import { ImageInputUpload } from "@components/image-input-upload";
+import { ImageInputUpload } from "@src/components/image-input-upload";
 
 import * as Material from "./styles";
 

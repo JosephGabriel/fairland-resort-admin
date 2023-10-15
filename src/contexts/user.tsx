@@ -7,8 +7,8 @@ import {
   useState,
 } from "react";
 
-import { LoginUserMutation } from "@services/apollo/hooks";
-import { LocalStorageService } from "@services/local-storage";
+import { LoginUserMutation } from "@src/services/apollo/hooks";
+import { LocalStorageService } from "@src/services/local-storage";
 
 type User = LoginUserMutation["loginUser"]["user"];
 

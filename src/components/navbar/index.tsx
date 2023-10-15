@@ -17,7 +17,7 @@ import {
 import { Gite, Menu, Logout, Explore, Luggage } from "@mui/icons-material";
 
 import * as Material from "./styles";
-import { useUserContext } from "@contexts/user";
+import { useUserContext } from "@src/contexts/user";
 
 const drawerItems = [
   {

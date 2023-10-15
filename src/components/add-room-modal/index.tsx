@@ -13,8 +13,8 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStep } from "@components/basic-information-step";
-import { RoomImageUploadStep } from "@components/room-image-step";
+import { BasicInformationStep } from "@src/components/basic-information-step";
+import { RoomImageUploadStep } from "@src/components/room-image-step";
 
 import {
   InitialValues,
@@ -23,8 +23,8 @@ import {
   validationSchema,
 } from "./utils";
 
-import { useCreateRoomMutation } from "@services/apollo/hooks";
-import { RoomRepository } from "@repositories/room";
+import { useCreateRoomMutation } from "@src/services/apollo/hooks";
+import { RoomRepository } from "@src/repositories/room";
 
 import * as Material from "./styles";
 

@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 
-import { CustomSkeleton } from "@components/skeleton";
-import { Card } from "@components/card";
+import { CustomSkeleton } from "@src/components/skeleton";
+import { Card } from "@src/components/card";
 
 import * as Material from "./styles";
 

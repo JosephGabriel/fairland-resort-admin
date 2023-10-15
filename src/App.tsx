@@ -3,11 +3,11 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ApolloProvider } from "@apollo/client";
 import { SnackbarProvider } from "notistack";
 
-import { Navigation } from "@navigation/.";
+import { Navigation } from "@src/navigation/.";
 
-import { client } from "@services/apollo";
+import { client } from "@src/services/apollo";
 
-import { UserContextProvider } from "@contexts/user";
+import { UserContextProvider } from "@src/contexts/user";
 
 import "react-photo-view/dist/react-photo-view.css";
 

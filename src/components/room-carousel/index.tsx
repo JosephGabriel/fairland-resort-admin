@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 
-import { CustomSkeleton } from "@components/skeleton";
-import { Card } from "@components/card";
+import { CustomSkeleton } from "@src/components/skeleton";
+import { Card } from "@src/components/card";
 
-import { GetRoomsByHotelQuery } from "@services/apollo/hooks";
+import { GetRoomsByHotelQuery } from "@src/services/apollo/hooks";
 
 import * as Material from "./styles";
 

@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 
-import BookingsTable from "@components/bookings-table";
+import BookingsTable from "@src/components/bookings-table";
 
 import * as Material from "./styles";
 

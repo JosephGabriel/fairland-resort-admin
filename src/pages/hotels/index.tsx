@@ -1,12 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import { Grid, Pagination, SelectChangeEvent } from "@mui/material";
 
-import { AddHotelModal } from "@components/add-hotel-modal";
-import { CustomSelectInput } from "@components/custom-select-input";
-import { HotelCarousel } from "@components/hotel-carousel";
-import { Loader } from "@components/loader";
+import { AddHotelModal } from "@src/components/add-hotel-modal";
+import { CustomSelectInput } from "@src/components/custom-select-input";
+import { HotelCarousel } from "@src/components/hotel-carousel";
+import { Loader } from "@src/components/loader";
 
-import { OrderBy, useGetHotelsByAdminQuery } from "@services/apollo/hooks";
+import { OrderBy, useGetHotelsByAdminQuery } from "@src/services/apollo/hooks";
 
 import { perPageOptions, selectOptions } from "./utils";
 

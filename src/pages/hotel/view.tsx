@@ -4,13 +4,13 @@ import { Grid, Pagination, Typography } from "@mui/material";
 
 import { Star, StarOutline } from "@mui/icons-material";
 
-import { AddRoomModal } from "@components/add-room-modal";
-import { RoomCarousel } from "@components/room-carousel";
-import { CustomSelectInput } from "@components/custom-select-input";
-import { ImageGridCarousel as ImageGridCarousel } from "@components/image-grid-viewer";
-import { Loader } from "@components/loader";
+import { AddRoomModal } from "@src/components/add-room-modal";
+import { RoomCarousel } from "@src/components/room-carousel";
+import { CustomSelectInput } from "@src/components/custom-select-input";
+import { ImageGridCarousel as ImageGridCarousel } from "@src/components/image-grid-viewer";
+import { Loader } from "@src/components/loader";
 
-import { OrderBy } from "@services/apollo/hooks";
+import { OrderBy } from "@src/services/apollo/hooks";
 
 import { Props } from "./utils";
 

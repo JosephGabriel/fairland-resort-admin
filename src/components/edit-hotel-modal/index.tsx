@@ -13,16 +13,16 @@ import {
   Stepper,
 } from "@mui/material";
 
-import { BasicInformationStep } from "@components/basic-information-step";
-import { SearchAddressStep } from "@components/search-address-step";
-import { ImageUploadStep } from "@components/image-upload-step";
+import { BasicInformationStep } from "@src/components/basic-information-step";
+import { SearchAddressStep } from "@src/components/search-address-step";
+import { ImageUploadStep } from "@src/components/image-upload-step";
 
-import { Loader } from "@components/loader";
+import { Loader } from "@src/components/loader";
 
 import {
   useGetHotelByIdQuery,
   useUpdateHotelMutation,
-} from "@services/apollo/hooks";
+} from "@src/services/apollo/hooks";
 
 import {
   BasicHotelInfoSchema,

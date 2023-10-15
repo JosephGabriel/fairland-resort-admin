@@ -4,11 +4,11 @@ import { enqueueSnackbar } from "notistack";
 
 import { CardContent, Grid, Menu, MenuItem, Typography } from "@mui/material";
 
-import { EditHotelModal } from "@components/edit-hotel-modal";
+import { EditHotelModal } from "@src/components/edit-hotel-modal";
 
-import { useDeleteHotelMutation } from "@services/apollo/hooks";
+import { useDeleteHotelMutation } from "@src/services/apollo/hooks";
 
-import { HotelRepository } from "@repositories/hotel";
+import { HotelRepository } from "@src/repositories/hotel";
 
 import * as Material from "./styles";
 
