@@ -1,17 +1,10 @@
-import { FieldValues, Path, useForm, DefaultValues } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ZodSchema } from "zod";
 import { Button } from "@mui/material";
+import { FieldValues, Path, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import * as Material from "./styles";
+import { Props } from "./utils";
 
-interface Props<T> {
-  schema: ZodSchema<T>;
-  onSubmit: (values: T) => void;
-  defaultValues?: DefaultValues<T> | undefined;
-
-  fields: MappedCustomField<T>;
-}
+import Material from "./styles.ts";
 
 export function BasicInformationStep<T extends FieldValues>(props: Props<T>) {
   const { fields, schema, onSubmit, defaultValues } = props;

@@ -5,6 +5,8 @@ export const Container = styled(Box)(({ theme }) => ({
   marginBottom: 0,
 }));
 
-export const Input = styled(TextField)(() => ({
-  marginBottom: "1rem",
+export const Input = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(1),
 }));
+
+export default { Container, Input };
