@@ -1,20 +1,8 @@
-import { InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { InputLabel, MenuItem, Select } from "@mui/material";
 
-import * as Material from "./styles";
+import { Props } from "./utils";
 
-interface Option {
-  label: string;
-  value: string;
-}
-
-interface Props<T> {
-  value: T;
-  label: string;
-  labelId: string;
-  id: string;
-  options: Option[];
-  onChange: (event: SelectChangeEvent<T>) => void;
-}
+import Material from "./styles.ts";
 
 export const CustomSelectInput = <T,>({
   label,
@@ -25,7 +13,7 @@ export const CustomSelectInput = <T,>({
   onChange,
 }: Props<T>) => {
   return (
-    <Material.InputContainer variant="outlined">
+    <Material.InputContainer variant="outlined" className="form-control">
       <InputLabel id={labelId}>{label}</InputLabel>
 
       <Select
