@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const steps = ["Informações básicas", "Localização", "Imagens"];
+
+export interface Props {
+  hotelId: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 export const imagesFields = {
   logo: "",
   thumbnail: "",

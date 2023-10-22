@@ -16,7 +16,6 @@ import {
 import { BasicInformationStep } from "@src/components/basic-information-step";
 import { SearchAddressStep } from "@src/components/search-address-step";
 import { ImageUploadStep } from "@src/components/image-upload-step";
-
 import { Loader } from "@src/components/loader";
 
 import {
@@ -32,22 +31,20 @@ import {
   TUpdateHotelSchema,
   fields,
   imagesFields,
+  steps,
+  Props,
 } from "./utils";
 
-import * as Material from "./styles";
+import Material from "./styles.ts";
 
-interface Props {
-  hotelId: string;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const steps = ["Informações básicas", "Localização", "Imagens"];
-
-export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
+export const EditHotelModal: React.FC<Props> = ({
+  hotelId,
+  isOpen,
+  onClose,
+}) => {
   const [activeStep, setActiveStep] = useState(0);
 
-  const [formValues, setFormValues] = useState<TUpdateHotelSchema>(
+  const [formFields, setFormFields] = useState<TUpdateHotelSchema>(
     {} as TUpdateHotelSchema
   );
 
@@ -64,7 +61,7 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
 
       delete values.__typename;
 
-      setFormValues(values);
+      setFormFields(values);
     },
   });
 
@@ -86,7 +83,7 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
   };
 
   const onSubmitStep = (values: Partial<TUpdateHotelSchema>) => {
-    setFormValues((prev) => ({
+    setFormFields((prev) => ({
       ...prev,
       ...values,
     }));
@@ -105,7 +102,7 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
 
   const onSubmit = async () => {
     await updateHotel({
-      variables: { data: formValues, id: hotelId },
+      variables: { data: formFields, id: hotelId },
       onError(error) {
         if (error.graphQLErrors) {
           error.graphQLErrors.map((error) => {
@@ -114,17 +111,13 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
             });
           });
         }
-
-        onCloseModal();
       },
       onCompleted() {
         enqueueSnackbar("Hotel atualizado com sucesso", {
           variant: "success",
         });
-
-        onCloseModal();
       },
-    });
+    }).finally(onCloseModal);
   };
 
   return (
@@ -151,13 +144,13 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
             fields={fields}
             schema={BasicHotelInfoSchema}
             onSubmit={onSubmitStep}
-            defaultValues={formValues}
+            defaultValues={formFields}
           />
         )}
 
         {activeStep === 1 && (
           <SearchAddressStep
-            defaultValues={formValues}
+            defaultValues={formFields}
             onSelectAddress={onSubmitStep}
           />
         )}
@@ -166,7 +159,7 @@ export const EditHotelModal = ({ hotelId, isOpen, onClose }: Props) => {
           <ImageUploadStep<TImagesSchema>
             fields={imagesFields}
             schema={ImagesSchema}
-            defaultValues={formValues}
+            defaultValues={formFields}
             onSubmit={onSubmitStep}
           />
         )}
