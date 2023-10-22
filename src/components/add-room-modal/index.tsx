@@ -2,13 +2,11 @@ import { useState } from "react";
 import { faker } from "@faker-js/faker/locale/pt_BR";
 
 import {
-  Box,
   Button,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Step,
   StepLabel,
@@ -23,24 +21,18 @@ import { useCreateRoomMutation } from "@src/services/apollo/hooks";
 import { RoomRepository } from "@src/repositories/room";
 
 import {
+  steps,
   fields,
+  imagesFields,
   RoomBasicInfoSchema,
   RoomImagesSchema,
   TAddRoomSchema,
   TRoomBasicInfoSchema,
   TRoomImagesSchema,
-  imagesFields,
+  Props,
 } from "./utils";
 
-import "./styles.scss";
-
-interface Props {
-  hotelId: string;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const steps = ["Informações", "Imagens"];
+import Material from "./styles.ts";
 
 export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -120,9 +112,9 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
       <DialogTitle>Adicionar um hotel</DialogTitle>
 
       <DialogContent>
-        <DialogContentText>
+        <Material.DialogText>
           Preencha os campos abaixo para adicionar um hotel
-        </DialogContentText>
+        </Material.DialogText>
 
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((step) => (
@@ -152,9 +144,9 @@ export const AddRoomModal = ({ isOpen, onClose, hotelId }: Props) => {
         )}
 
         {activeStep === 2 && (
-          <Box className="dialog__loading-container">
+          <Material.LoadingContainer>
             <CircularProgress />
-          </Box>
+          </Material.LoadingContainer>
         )}
       </DialogContent>
 

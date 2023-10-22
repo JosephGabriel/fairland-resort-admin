@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const steps = ["Informações", "Imagens"];
+
+export interface Props {
+  hotelId: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 export const RoomBasicInfoSchema = z.object({
   name: z.string().nonempty(),
   summary: z.string().nonempty(),
