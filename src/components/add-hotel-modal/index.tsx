@@ -3,13 +3,11 @@ import { useSnackbar } from "notistack";
 import { faker } from "@faker-js/faker";
 
 import {
-  Box,
   Button,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Step,
   StepLabel,
@@ -26,22 +24,17 @@ import { useCreateHotelMutation } from "@src/services/apollo/hooks";
 
 import {
   fields,
+  steps,
   imagesFields,
   ImagesSchema,
   TImagesSchema,
   TAddHotelSchema,
   BasicHotelInfoSchema,
   TBasicHotelInfoSchema,
+  Props,
 } from "./utils";
 
-import "./styles.scss";
-
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const steps = ["Informações básicas", "Localização", "Imagens"];
+import Material from "./styles.ts";
 
 export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [activeStep, setActiveStep] = useState(0);
@@ -146,9 +139,9 @@ export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
       <DialogTitle>Adicionar um hotel</DialogTitle>
 
       <DialogContent>
-        <DialogContentText className="dialog__text">
+        <Material.DialogText>
           Preencha os campos abaixo para adicionar um hotel
-        </DialogContentText>
+        </Material.DialogText>
 
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((step) => (
@@ -184,9 +177,9 @@ export const AddHotelModal: React.FC<Props> = ({ isOpen, onClose }) => {
         )}
 
         {activeStep === 3 && (
-          <Box className="dialog__loading-container">
+          <Material.LoadingContainer>
             <CircularProgress />
-          </Box>
+          </Material.LoadingContainer>
         )}
       </DialogContent>
 

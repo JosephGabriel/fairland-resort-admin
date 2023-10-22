@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+export interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const steps = ["Informações básicas", "Localização", "Imagens"];
+
 export const imagesFields = {
   logo: "",
   thumbnail: "",
