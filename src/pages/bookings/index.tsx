@@ -1,28 +1,52 @@
-import { Grid } from "@mui/material";
+import { Fragment } from "react";
+import { Grid, InputAdornment, TextField, Typography } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
-import BookingsTable from "@src/components/bookings-table";
+import { BookingsTable } from "@src/components/bookings-table";
+import { Loader } from "@src/components/loader";
 
-import * as Material from "./styles";
+import { useGetAllBookingsQuery } from "@src/services/apollo/hooks";
+
+import Material from "./styles";
 
 export const BookingsPage = () => {
+  const { data, loading } = useGetAllBookingsQuery();
+
   return (
-    <Material.Container>
-      <Grid container justifyContent={"space-between"} alignItems={"center"}>
-        <Grid item md={"auto"}>
-          <Material.Title variant="h4">
-            Gerenciamento de Reservas
-          </Material.Title>
-          {/* <Material.Subtitle variant="body1">
-            aqui você poderá adicionar, atualizar e apagar hotéis
-          </Material.Subtitle>
+    <Fragment>
+      <Loader isLoading={loading} variant="linear" />
 
-          <Material.AddButton variant="contained" onClick={openAddModal}>
-            Adicionar Hotel
-          </Material.AddButton> */}
-        </Grid>
+      <Material.Container>
+        <Material.GridHeader
+          container
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <Grid item md={6}>
+            <Material.Title variant="h4">
+              Gerenciamento de Reservas
+            </Material.Title>
+            <Typography variant="body1">
+              aqui você poderá adicionar, atualizar e apagar hotéis
+            </Typography>
+          </Grid>
 
-        <BookingsTable />
-      </Grid>
-    </Material.Container>
+          <Material.GridSearchItem item md={6}>
+            <TextField
+              label="Pesquisar"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Material.GridSearchItem>
+        </Material.GridHeader>
+
+        {data?.bookings ? <BookingsTable data={data.bookings} /> : null}
+      </Material.Container>
+    </Fragment>
   );
 };

@@ -1,0 +1,17 @@
+query GetAllBookings {
+  bookings {
+    id
+    price
+    paid
+    bookingDate
+    dateIn
+    dateOut
+    room {
+      name
+    }
+    user {
+      firstName
+      lastName
+    }
+  }
+}

@@ -455,6 +455,11 @@ enum UserRole {
   User = 'USER'
 }
 
+type GetAllBookingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+type GetAllBookingsQuery = { __typename?: 'Query', bookings: Array<{ __typename?: 'Booking', id: string, price: number, paid: boolean, bookingDate: string, dateIn: string, dateOut: string, room: { __typename?: 'Room', name: string }, user: { __typename?: 'User', firstName: string, lastName: string } }> };
+
 type CreateHotelMutationVariables = Exact<{
   data: CreateHotelInput;
 }>;

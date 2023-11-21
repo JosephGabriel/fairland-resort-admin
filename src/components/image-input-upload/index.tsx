@@ -1,5 +1,4 @@
 import { Fragment, useRef } from "react";
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 import { Photo, Close } from "@mui/icons-material";
 
 import { MultipleImageItem } from "@src/components/multiple-image-item";

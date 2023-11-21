@@ -459,6 +459,52 @@ export enum UserRole {
 }
 
 
+export const GetAllBookingsDocument = gql`
+    query GetAllBookings {
+  bookings {
+    id
+    price
+    paid
+    bookingDate
+    dateIn
+    dateOut
+    room {
+      name
+    }
+    user {
+      firstName
+      lastName
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllBookingsQuery__
+ *
+ * To run a query within a React component, call `useGetAllBookingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllBookingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllBookingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllBookingsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllBookingsQuery, GetAllBookingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllBookingsQuery, GetAllBookingsQueryVariables>(GetAllBookingsDocument, options);
+      }
+export function useGetAllBookingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBookingsQuery, GetAllBookingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllBookingsQuery, GetAllBookingsQueryVariables>(GetAllBookingsDocument, options);
+        }
+export type GetAllBookingsQueryHookResult = ReturnType<typeof useGetAllBookingsQuery>;
+export type GetAllBookingsLazyQueryHookResult = ReturnType<typeof useGetAllBookingsLazyQuery>;
+export type GetAllBookingsQueryResult = Apollo.QueryResult<GetAllBookingsQuery, GetAllBookingsQueryVariables>;
 export const CreateHotelDocument = gql`
     mutation CreateHotel($data: CreateHotelInput!) {
   createHotel(data: $data) {

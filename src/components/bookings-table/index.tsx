@@ -12,13 +12,17 @@ import {
   TableRow,
 } from "@mui/material";
 
-const BookingsTable = () => {
+interface Props {
+  data: GetAllBookingsQuery["bookings"];
+}
+
+export const BookingsTable: React.FC<Props> = ({ data }) => {
   return (
-    <TableContainer component={Paper} sx={{ marginTop: "2rem" }}>
-      <Table stickyHeader>
+    <TableContainer component={Paper}>
+      <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Id</TableCell>
+            <TableCell colSpan={2}>Id</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Preço</TableCell>
             <TableCell>Usuário</TableCell>
@@ -29,25 +33,32 @@ const BookingsTable = () => {
         </TableHead>
 
         <TableBody>
-          <TableRow>
-            <TableCell>cfectggtg</TableCell>
-            <TableCell>Pago</TableCell>
-            <TableCell>R$499,99</TableCell>
-            <TableCell>Jonh Doe</TableCell>
-            <TableCell>Quarto Azul</TableCell>
-            <TableCell>15/20/2002</TableCell>
-            <TableCell>
-              <IconButton>
-                <ChevronRight />
-              </IconButton>
-            </TableCell>
-          </TableRow>
+          {data.map((booking) => (
+            <TableRow key={booking.id}>
+              <TableCell colSpan={2}>{booking.id}</TableCell>
+              <TableCell>{booking.paid ? "Pago" : "Pendente"}</TableCell>
+              <TableCell>R${booking.price}</TableCell>
+              <TableCell>{`${booking.user.firstName} ${booking.user.lastName}`}</TableCell>
+              <TableCell>{booking.room.name}</TableCell>
+              <TableCell>{new Date(booking.bookingDate).toString()}</TableCell>
+              <TableCell>
+                <IconButton>
+                  <ChevronRight />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
 
-        <TablePagination rowsPerPageOptions={[10, 50]} />
+        <TablePagination
+          component={Paper}
+          count={data.length}
+          onPageChange={() => null}
+          page={1}
+          rowsPerPage={10}
+          rowsPerPageOptions={[10, 50]}
+        />
       </Table>
     </TableContainer>
   );
 };
-
-export default BookingsTable;

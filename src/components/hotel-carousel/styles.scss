@@ -1,0 +1,13 @@
+.carousel {
+  &__no-content {
+    padding: 10rem;
+
+    &-text {
+      text-align: center;
+    }
+  }
+
+  &__item {
+    flex: 1;
+  }
+}

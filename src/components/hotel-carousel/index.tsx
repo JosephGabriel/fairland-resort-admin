@@ -1,33 +1,31 @@
-import { Grid } from "@mui/material";
+import { Fragment } from "react";
+import { Grid, Paper, Typography } from "@mui/material";
 
 import { CustomSkeleton } from "@src/components/skeleton";
-import { Card } from "@src/components/card";
+import { HotelCard } from "@src/components/hotel-card";
 
-import * as Material from "./styles";
+import { Props } from "./utils";
 
-interface Props {
-  isLoading: boolean;
-  hotels: GetHotelsByAdminQuery["hotelsByAdmin"]["nodes"] | undefined;
-}
+import "./styles.scss";
 
 export const HotelCarousel: React.FC<Props> = ({ isLoading, hotels }) => {
   return (
     <Grid container alignItems={"stretch"} spacing={4}>
       {isLoading && (
-        <>
+        <Fragment>
           {new Array(4).fill(" ").map((_, idx) => (
-            <Material.GridItemCard item md={3} key={idx}>
+            <Grid className="carousel__item" item md={3} key={idx}>
               <CustomSkeleton variant="card" />
-            </Material.GridItemCard>
+            </Grid>
           ))}
-        </>
+        </Fragment>
       )}
 
       {!isLoading && hotels?.length !== 0 && (
-        <>
+        <Fragment>
           {hotels?.map((hotel) => (
             <Grid item md={3} key={hotel.id}>
-              <Card
+              <HotelCard
                 id={hotel.id}
                 name={hotel.name}
                 thumbnail={hotel.thumbnail}
@@ -38,16 +36,16 @@ export const HotelCarousel: React.FC<Props> = ({ isLoading, hotels }) => {
               />
             </Grid>
           ))}
-        </>
+        </Fragment>
       )}
 
       {!isLoading && hotels?.length === 0 && (
         <Grid item md={12}>
-          <Material.NoHotelPaper>
-            <Material.NoHotelPaperText variant="body1">
-              Nenhum quarto adicionado
-            </Material.NoHotelPaperText>
-          </Material.NoHotelPaper>
+          <Paper className="carousel__no-content">
+            <Typography className="carousel__no-content-text" variant="body1">
+              Nenhum hotel adicionado
+            </Typography>
+          </Paper>
         </Grid>
       )}
     </Grid>

@@ -1,19 +1,16 @@
 import { Grid } from "@mui/material";
 
 import { CustomSkeleton } from "@src/components/skeleton";
-import { Card } from "@src/components/card";
-
-import { GetRoomsByHotelQuery } from "@src/services/apollo/hooks";
+import { HotelCard } from "@src/components/hotel-card";
 
 import * as Material from "./styles";
 
 interface Props {
   isLoading: boolean;
   rooms: GetRoomsByHotelQuery["roomsByHotel"]["nodes"] | undefined;
-  onDeleteRoom: (id: string) => void;
 }
 
-export const RoomCarousel = ({ isLoading, rooms, onDeleteRoom }: Props) => {
+export const RoomCarousel = ({ isLoading, rooms }: Props) => {
   return (
     <Grid container spacing={4}>
       {isLoading && (
@@ -30,12 +27,11 @@ export const RoomCarousel = ({ isLoading, rooms, onDeleteRoom }: Props) => {
         <>
           {rooms?.map((room) => (
             <Grid item md={3} key={room.id}>
-              <Card
+              <HotelCard
                 id={room.id}
                 name={room.name}
                 thumbnail={room.thumbnail}
                 summary={room.summary}
-                onRemove={onDeleteRoom}
                 isLink={false}
               />
             </Grid>
