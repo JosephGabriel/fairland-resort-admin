@@ -12,6 +12,7 @@ const scalars = {
   Password: "string",
   PostalCode: "string",
   DateTime: "Date",
+  File: "File",
 };
 
 const config: CodegenConfig = {

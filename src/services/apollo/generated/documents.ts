@@ -15,6 +15,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   DateTime: { input: Date; output: Date; }
   EmailAddress: { input: string; output: string; }
+  File: { input: File; output: File; }
   Latitude: { input: number; output: number; }
   Longitude: { input: number; output: number; }
   Password: { input: string; output: string; }
@@ -82,12 +83,13 @@ export type CreateRoomInput = {
 };
 
 export type CreateUserInput = {
-  avatar?: InputMaybe<Scalars['String']['input']>;
+  avatar: Scalars['File']['input'];
   email: Scalars['EmailAddress']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
   password: Scalars['Password']['input'];
   passwordConfirm: Scalars['Password']['input'];
+  role: UserRole;
   userName: Scalars['String']['input'];
 };
 
@@ -150,8 +152,6 @@ export type LoginUserInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Usada para criar um admin */
-  createAdmin: AuthPayload;
   /** Usada para fazer uma reserva */
   createBooking: Booking;
   /** Usada para criar um hotel */
@@ -180,11 +180,6 @@ export type Mutation = {
   updateUserPassword: AuthPayload;
   /** Usada para verificar um usuário */
   verifyUser: AuthPayload;
-};
-
-
-export type MutationCreateAdminArgs = {
-  data: CreateUserInput;
 };
 
 
@@ -426,7 +421,7 @@ export type User = {
   /** Mostra se o usuário esta ativo ou não */
   active: Scalars['Boolean']['output'];
   /** Url da imagem de perfil de cada usuário */
-  avatar?: Maybe<Scalars['String']['output']>;
+  avatar: Scalars['String']['output'];
   /** Reservas do usúario */
   bookings?: Maybe<Array<Booking>>;
   /** Email único de cada usuário */
@@ -531,7 +526,7 @@ export type LoginUserMutationVariables = Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, role: UserRole, avatar?: string | null, active: boolean, firstName: string, lastName: string, verified: boolean } } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, role: UserRole, avatar: string, active: boolean, firstName: string, lastName: string, verified: boolean } } };
 
 
 export const CreateHotelDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateHotel"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateHotelInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createHotel"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"summary"}},{"kind":"Field","name":{"kind":"Name","value":"thumbnail"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}}]}}]} as unknown as DocumentNode<CreateHotelMutation, CreateHotelMutationVariables>;

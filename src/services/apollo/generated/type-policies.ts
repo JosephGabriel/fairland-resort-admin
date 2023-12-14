@@ -43,9 +43,8 @@ export type HotelsPayloadFieldPolicy = {
 	count?: FieldPolicy<any> | FieldReadFunction<any>,
 	nodes?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('createAdmin' | 'createBooking' | 'createHotel' | 'createRoom' | 'createUser' | 'deactivateUser' | 'deleteBooking' | 'deleteHotel' | 'deleteRoom' | 'loginUser' | 'updateHotel' | 'updateRoom' | 'updateUser' | 'updateUserPassword' | 'verifyUser' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('createBooking' | 'createHotel' | 'createRoom' | 'createUser' | 'deactivateUser' | 'deleteBooking' | 'deleteHotel' | 'deleteRoom' | 'loginUser' | 'updateHotel' | 'updateRoom' | 'updateUser' | 'updateUserPassword' | 'verifyUser' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
-	createAdmin?: FieldPolicy<any> | FieldReadFunction<any>,
 	createBooking?: FieldPolicy<any> | FieldReadFunction<any>,
 	createHotel?: FieldPolicy<any> | FieldReadFunction<any>,
 	createRoom?: FieldPolicy<any> | FieldReadFunction<any>,
